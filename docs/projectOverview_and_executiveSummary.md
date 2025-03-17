@@ -1,4 +1,4 @@
-# Algorithmic Stablecoin with Governance
+# Project Overview and Executive Summary Document
 
 ## 1. Executive Summary
 
