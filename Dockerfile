@@ -1,4 +1,4 @@
-FROM node:22
+FROM node:22 AS base
 
 # Install the required packages
 RUN apt-get update && apt-get install -y \
@@ -20,8 +20,17 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port the app runs on
+# Default build - for development and basic testing
+FROM base AS dev
+# Expose the port
 EXPOSE 3000
-
-# Default command
+# Start the application
 CMD ["npm", "run", "dev"]
+
+# Security tools build - for security testing
+FROM base AS security
+# Install security tools
+RUN apt-get update && apt-get install -y python3-pip && \
+    pip3 install slither-analyzer mythril && \
+    rm -rf /var/lib/apt/lists/*
+

@@ -1,0 +1,98 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image (dev stage)
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          target: dev
+          push: false
+          load: true
+          tags: stablecoin:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Lint code
+        run: docker run stablecoin:latest npm run lint
+
+      - name: Compile contracts
+        run: docker run stablecoin:latest npx hardhat compile
+
+      - name: Run tests
+        run: docker run stablecoin:latest npx hardhat test
+
+      - name: Run coverage
+        run: docker run stablecoin:latest npx hardhat coverage
+
+      - name: Extract coverage reports
+        run: |
+          container_id=$(docker create stablecoin:latest)
+          docker cp $container_id:/app/coverage ./coverage
+          docker rm $container_id
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./coverage
+
+  security-scan:
+    needs: build-and-test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image (security stage)
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          target: security
+          push: false
+          load: true
+          tags: stablecoin-security:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Slither
+        run: docker run stablecoin-security:latest slither /app/contracts --json slither-report.json
+
+      - name: Run Mythril
+        run: docker run stablecoin-security:latest myth analyze /app/contracts --solc-json mythril.config.json -o json > mythril-report.json
+
+      - name: Extract security reports
+        run: |
+          container_id=$(docker create stablecoin-security:latest)
+          docker cp $container_id:/app/slither-report.json ./slither-report.json
+          docker cp $container_id:/app/mythril-report.json ./mythril-report.json
+          docker rm $container_id
+
+      - name: Upload Slither report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ./slither-report.json
+
+      - name: Upload Mythril report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ./mythril-report.json
