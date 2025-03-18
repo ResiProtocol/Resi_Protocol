@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: dev
     ports:
       - "3000:3000"
     volumes:
@@ -19,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: dev
     command: npx hardhat node
     ports:
       - "8545:8545"
