@@ -1,0 +1,9 @@
+[profile.default]
+solc_version = "0.8.28"
+fuzz_runs = 1000
+verbosity = 3
+src = "../contracts"
+out = "out"
+libs = ["lib"]
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
