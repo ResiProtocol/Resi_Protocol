@@ -2,75 +2,107 @@
 
 ## 1. Overview
 
-This document provides a high-level overview of the system architecture for the Algorithmic Stablecoin with Governance project. It outlines the major components, their responsibilities, and the interactions that enable the hybrid collateral system, robust oracle aggregation, and adaptive governance mechanism. The goal is to provide a clear picture of how the various modules work together to achieve stability, security, and decentralization.
+This document presents a high-level overview of the system architecture for the RESI Protocol. The architecture is designed to ensure system stability, robust security, and privacy by integrating zero-knowledge proofs (ZKPs) into key modules—ranging from stablecoin mechanics and collateral management to oracle data aggregation and governance processes.
 
 ## 2. High-Level Architecture
 
-At a glance, the system is composed of several key layers:
+The system is structured into several interdependent layers:
 
-### 2.1 Stablecoin & Collateral Layer
+### Stablecoin & Collateral Layer
 
-- **Stablecoin Contract**: Manages minting and burning of the stablecoin based on market conditions.
-- **Collateral Pool**: Maintains diversified assets (e.g., BTC, ETH, stablecoins, LP tokens) to back the stablecoin.
-- **Automated Stability Reserve**: Acts as an on-chain treasury that automatically deploys capital during volatility events.
+- **Stablecoin Contract**:
+  - Manages minting and burning operations based on collateral deposits and market conditions. ZKPs are used to verify that minting/burning operations adhere to protocol rules without revealing sensitive data.
+- **Collateral Pool & Automated Stability Reserve**:
+  - Supports a diversified asset pool (BTC, ETH, stablecoins, LP tokens) and deploys capital in volatile conditions. ZKPs provide confidential proofs that collateral is sufficient and that reserves meet protocol thresholds.
 
-### 2.2 Oracle Aggregation Layer
+### Oracle Aggregation & Data Validation Layer
 
-- **Multi-Oracle Integration**: Aggregates price data from several sources (Chainlink, Band, API3).
-- **Data Cross-Validation**: Uses on-chain mechanisms to validate and reconcile oracle feeds, including anomaly detection and weighted consensus.
+- **Multi-Oracle Integration**:
+  - Aggregates price data from multiple sources (Chainlink, Band, API3) to ensure accurate market feeds.
+- **ZKP-Enhanced Price Feeds**:
+  - Oracle operators submit confidential data along with proofs (using PLONK-based zk-SNARKs) that validate price ranges without disclosing raw numbers. Aggregation proofs ensure that the final reported price is correct.
 
-### 2.3 Governance Layer
+### Governance Layer
 
-- **Governance Token**: An ERC-20 token that enables participation and voting rights.
-- **DAO Contract & Adaptive Governance**: Facilitates proposal submission, voting (using a mix of Quadratic and Conviction Voting), and execution of approved changes.
-- **Governance Dashboard**: Provides real-time visual feedback on proposals, vote counts, and governance metrics.
+- **Governance Token & DAO**:
+  - A governance token (ERC-20 based) empowers token holders to participate in decision-making.
+- **Confidential Governance Process**:
+  - ZKPs are integrated to enforce eligibility for proposal creation, enable private voting (hiding individual balances and choices), and securely tally votes while ensuring each vote is unique and compliant with one-person-one-vote rules.
 
-### 2.4 User Interface (dApp) Layer
+### User Interface (dApp) Layer
 
-- **dApp Front-End**: A web application (built with Next.js) that allows users to interact with the protocol—mint/redeem stablecoins, deposit collateral, and participate in governance.
-- **Wallet Integration**: Supports common wallets (e.g., MetaMask) for secure user authentication and transaction signing.
+- **Web-Based dApp**:
+  - Provides a seamless interface for users to interact with the protocol—depositing collateral, minting/redeeming stablecoins, and engaging in confidential governance.
+- **ZKP Integration in UI**:
+  - The front-end facilitates generation and verification of ZK proofs, offering real-time feedback on transaction and governance status while keeping sensitive data private.
 
 ## 3. Component Interactions & Data Flow
 
-### 3.1 Stablecoin & Collateral System
+### 3.1 Stablecoin & Collateral Operations
 
 - **Minting/Burning Flow**:
-  - Users deposit collateral through the dApp, triggering the stablecoin contract to mint new tokens if conditions are met.
-  - In adverse market conditions, the contract burns tokens to maintain the peg, referencing real-time price data from the oracle layer.
-- **Stability Reserve Activation**:
-  - When volatility exceeds predefined thresholds, the Automated Stability Reserve automatically deploys capital to stabilize the system.
+  - Users deposit collateral through the dApp, which triggers the stablecoin contract to mint or burn tokens.
+- **ZKP Verification**:
+  - During minting, a ZKP confirms that the collateral meets the necessary collateralization requirements without revealing exact amounts.
+- **Reserve Activation**:
+  - The stability reserve uses ZK proofs to verify that deployed capital is in line with the protocol's risk thresholds.
 
-### 3.2 Oracle Aggregation & Price Validation
+### 3.2 Oracle Data Aggregation & Validation
 
-- **Data Collection**:
-  - The system collects price feeds from multiple oracles.
-- **Cross-Verification**:
-  - On-chain logic compares the feeds using statistical methods (e.g., median or weighted consensus) to filter out anomalies.
-- **Decision-Making**:
-  - Validated price data is then used to adjust mint/burn operations and trigger stability reserve actions if needed.
+- **Data Collection & Aggregation**:
+  - Multiple oracles feed price data into the aggregation module.
+- **Confidential Reporting**:
+  - Each oracle submits a ZKP to prove the reported price lies within acceptable limits.
+- **Consensus Mechanism**:
+  - The system aggregates these proofs (using statistical methods like median or weighted averages) and generates a final ZKP confirming the aggregated price's validity.
 
-### 3.3 Governance Process
+### 3.3 Governance Processes
 
-- **Proposal Lifecycle**:
-  - Community members propose changes through the DAO contract.
-  - The proposal is then voted on using an adaptive mechanism that combines Quadratic and Conviction Voting.
-- **Execution & Updates**:
-  - Approved proposals are executed, updating parameters such as collateral ratios, interest rates, or mint/burn rates.
-- **Transparency**:
-  - The Governance Dashboard provides real-time insights into proposal status, vote distribution, and historical decisions.
+- **Proposal Lifecycle & Voting**:
+  - **Proposal Creation**:
+    - Eligible participants generate a ZKP to confirm their eligibility for creating proposals without revealing their identity.
+  - **Private Voting**:
+    - Voters cast their ballots with ZK proofs that validate token holdings and voting uniqueness while keeping their choices and balances hidden.
+  - **Confidential Tally**:
+    - The final vote count is produced via a ZKP, ensuring transparency in the outcome without exposing individual vote details.
 
 ### 3.4 User Interactions
 
-- **Access & Navigation**:
-  - The dApp offers intuitive navigation for depositing collateral, minting stablecoins, checking oracle data, and participating in governance.
-- **Feedback & Notifications**:
-  - Users receive real-time updates on transactions, market status, and governance outcomes, ensuring transparency and trust in the system.
+- **dApp Interface**:
+  - **Secure Transactions**:
+    - The UI handles user interactions, initiating smart contract calls that include ZK proofs for confidential collateral deposits, minting, burning, and governance activities.
+  - **Real-Time Feedback**:
+    - Users receive notifications on proof verifications, transaction statuses, and governance outcomes without compromising privacy.
 
 ## 4. Technology Stack & Tools
 
-- **Smart Contract Development**: Solidity (leveraging OpenZeppelin libraries for security and standard implementations).
-- **Development & Testing Frameworks**: Hardhat for development, testing, and deployment.
-- **Oracles**: Integration with Chainlink, Band, API3 for multi-oracle feeds.
-- **Governance**: Custom DAO implementation potentially built on top of OpenZeppelin’s Governor framework.
-- **Front-End Development**: Next.js for the dApp, with wallet integration using libraries like Ethers.js.
-- **Security Tools**: Slither, MythX for static analysis and vulnerability scanning.
+- **Smart Contract Development**:
+  - Solidity, utilizing OpenZeppelin libraries for standard implementations and security best practices.
+- **Zero-Knowledge Proofs**:
+  - PLONK-based zk-SNARKs for compact proofs with a universal trusted setup.
+- **Oracle Integration**:
+  - Chainlink, Band, and API3 for multi-source data feeds.
+- **Governance Framework**:
+  - Custom DAO contracts incorporating Quadratic and Conviction Voting, with ZKP enhancements.
+- **Front-End Development**:
+  - Next.js, integrated with Ethers.js for blockchain interactions.
+- **Development & Testing Tools**:
+  - Hardhat for smart contract deployment and testing
+  - Foundry for comprehensive smart contract testing
+- **Security Analysis Tools**:
+  - Slither for static analysis and vulnerability detection
+  - Mythril for symbolic execution and security verification
+  - Certora for formal verification of smart contract correctness
+- **Zero-Knowledge Proof Frameworks**:
+  - Dedicated ZKP circuit frameworks such as Circom or ZoKrates
+
+## 5. Diagrammatic Representation (Conceptual)
+
+Imagine the architecture as a multi-layered system:
+
+- **Top Layer (User Interface)**:
+  - dApp and Governance Dashboard with integrated ZKP functionalities.
+- **Middle Layer (Core Protocol)**:
+  - Smart contracts for the stablecoin, collateral pool, oracle aggregator, and DAO, each augmented with ZKP verification modules.
+- **Bottom Layer (External Integrations)**:
+  - Multiple oracles and ZKP circuit verifiers that feed confidential data into the protocol.

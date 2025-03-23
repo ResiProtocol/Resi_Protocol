@@ -4,188 +4,190 @@
 
 ### 1.1 Purpose
 
-This document defines the requirements for the development of an algorithmic stablecoin with integrated governance. The goal is to deliver a decentralized financial system that addresses three critical problems:
-
-- Depegging and Stability Risks
-- Oracle Vulnerabilities & Price Manipulation
-- Ineffective Governance
+This document defines the requirements for building the RESI Protocol - an algorithmic stablecoin with integrated governance that leverages advanced zero-knowledge proofs (ZKPs) to enhance privacy, security, and trust. The project addresses key challenges including depegging risks, oracle manipulation, and centralized governance, while adding an extra layer of confidentiality through ZKP-enabled features.
 
 ### 1.2 Scope
 
 The system will include:
 
-- A stablecoin mechanism with minting and burning capabilities.
-- A hybrid collateral system with diversified assets.
-- An Automated Stability Reserve to deploy capital during market volatility.
-- A multi-oracle aggregation mechanism with anti-manipulation protocols.
-- An adaptive governance framework using a combination of Quadratic and Conviction Voting.
-- A user-friendly dApp interface for end-user interaction and governance participation.
+- A stablecoin mechanism with minting and burning capabilities enhanced by confidential ZKP validations.
+- A hybrid collateral system with diversified assets and ZKP-based collateral proofs.
+- An Automated Stability Reserve that deploys capital during market volatility.
+- A multi-oracle aggregation mechanism using ZKPs for private, verifiable data feeds.
+- An adaptive governance framework with confidential voting and proposal processes via ZKPs.
+- A user-friendly dApp interface for interacting with both the core protocol and ZKP components.
+
+### 1.3 Definitions & Acronyms
+
+- **MVP**: Minimum Viable Product.
+- **DAO**: Decentralized Autonomous Organization.
+- **dApp**: Decentralized Application.
+- **ZKP**: Zero-Knowledge Proof.
+- **PLONK**: A universal zk-SNARK protocol that uses a universal trusted setup.
+- **LP Tokens**: Liquidity Provider Tokens.
+- **ERC-20**: A standard for fungible tokens on Ethereum.
 
 ## 2. Functional Requirements
 
 ### 2.1 Stablecoin & Collateral System
 
-**Mint/Burn Mechanism**
+#### Mint/Burn Mechanism:
 
-- Smart contract logic that automatically mints stablecoins when collateral increases or burns tokens when the peg is threatened.
-- Real-time adjustments based on market conditions.
+- **Standard Logic**:
+  - Implement smart contract functions to mint stablecoins when collateral is deposited and burn stablecoins during redemption, maintaining the peg based on real-time market conditions.
+- **ZKP Integration**:
+  - _Confidential Minting_:
+    - Users generate a ZKP that confirms they have deposited sufficient collateral and meet the collateralization requirements—without revealing the exact amount.
+  - _Burn Validations_:
+    - Proofs that tokens are burned only according to the protocol's rules (peg maintenance, collateral ratios) are generated and verified on-chain.
 
-**Hybrid Collateral System**
+#### Hybrid Collateral System:
 
-- Support for diversified collateral assets (e.g., BTC, ETH, stablecoins, decentralized LP tokens).
-- Integration of collateral valuation mechanisms.
+- **Multi-Asset Support**:
+  - Accept various assets (e.g., BTC, ETH, stablecoins, decentralized LP tokens) as collateral.
+- **ZKP-Based Collateral Proofs**:
+  - _Collateral Sufficiency Proofs_:
+    - Vaults or liquidity pools generate ZKPs to prove they are collateralized without exposing the exact values.
+  - _Collateral Ownership Privacy_:
+    - Users can prove contribution to a pool while keeping their wallet details and exact amounts confidential.
 
-**Automated Stability Reserve**
+#### Automated Stability Reserve:
 
-- On-chain treasury that deploys capital during extreme volatility.
-- Automated triggers based on predefined stability thresholds.
+- **Reserve Activation**:
+  - On-chain treasury that deploys capital based on predefined thresholds.
+- **ZKP Audits**:
+  - Periodically generate proofs that reserves meet or exceed required thresholds without revealing specific wallet balances or reserve compositions.
 
-### 2.2 Oracle System
+### 2.2 Oracle Aggregation System
 
-**Multi-Oracle Aggregation**
+#### Multi-Oracle Integration:
 
-- Integration with multiple oracle providers (e.g., Chainlink, Band, API3) to fetch real-time price data.
+- Integrate multiple data feeds (e.g., Chainlink, Band, API3) to aggregate asset price data.
 
-**On-chain Redundancy & Cross-Validation**
+#### ZKP-Enhanced Price Feeds:
 
-- Mechanisms to compare and validate data from different oracles.
-
-**Anti-Manipulation Protocol**
-
-- Statistical anomaly detection and weighted consensus methods (e.g., median calculation) to detect manipulated feeds.
-- Automated isolation of any anomalous data sources.
+- **Private Data Submission**:
+  - Oracle operators submit confidential data along with a ZKP that the reported price lies within an acceptable range.
+- **Aggregation Proofs**:
+  - When aggregating data (e.g., via median or weighted average), generate a ZKP that confirms the final reported price is correct without revealing individual data points.
+- **Selective Disclosure**:
+  - For cases involving regulatory or KYC data, ZKPs can verify compliance without disclosing personal details.
 
 ### 2.3 Governance System
 
-**Governance Token**
+#### Governance Token:
 
-- ERC-20 based token that grants voting rights.
-- Mechanisms for token distribution (e.g., staking rewards, liquidity mining).
+- **Standard Functionality**:
+  - Implement an ERC-20 based token that grants voting rights and incentivizes participation.
 
-**DAO Governance Process**
+#### DAO Governance Process:
 
-- Proposal creation, voting (blending Quadratic and Conviction Voting), and execution.
-- A real-time governance dashboard for transparent tracking of proposals and votes.
+- **Proposal Creation**:
+  - Use ZKPs to verify that only eligible, whitelisted participants can submit proposals without exposing their identity or wallet addresses.
 
-**Tokenized Governance Incentives**
+#### Private Voting:
 
-- Reward system to encourage active participation.
-- Penalization mechanisms for vote-buying or malicious activities.
+- **Confidential Vote Casting**:
+  - Voters generate proofs that they hold the required tokens and that each vote is unique, while keeping individual voting details and token balances hidden.
+- **One-Person-One-Vote**:
+  - In scenarios where voting is identity-based, ZKPs prove uniqueness without exposing real-world identities.
+- **Vote Tally**:
+  - Conduct confidential tallying where only the final outcome is revealed, ensuring individual votes remain private.
+- **Sybil Resistance**:
+  - Implement ZKPs to verify that each vote is unique and not duplicated, reinforcing the integrity of the voting process.
 
 ### 2.4 User Interface & Interactions
 
-**dApp Interface**
+#### dApp Interface:
 
-- Wallet integration (e.g., MetaMask) for secure access.
-- Functional screens for collateral deposit, minting, burning, and redemption.
-- Interfaces for viewing market data, stability reserve status, and governance proposals.
+- A web-based interface for users to:
+  - Deposit collateral, mint/redeem stablecoins, and interact with governance proposals.
+  - Generate or verify ZK proofs as part of secure, private transactions.
 
-**User Experience**
+#### Wallet Integration:
 
-- Clear, intuitive navigation with real-time feedback on transactions and voting status.
+- Ensure secure connection to user wallets (e.g., MetaMask) that can handle ZKP-related transactions.
+
+#### Real-Time Feedback:
+
+- Provide instant feedback and visualizations (e.g., status of ZK proofs, governance vote outcomes) without exposing sensitive details.
 
 ### 2.5 Testing & Simulation Requirements
 
-**Market Condition Simulations**
-
-- Tools to simulate extreme market conditions (e.g., rapid price crashes) to validate the peg maintenance mechanism.
-
-**Oracle Manipulation Simulations**
-
-- Test scenarios to simulate oracle feed manipulation and validate the anti-manipulation protocols.
-
-**Governance Scenario Testing**
-
-- Simulated voting scenarios to ensure that the adaptive governance mechanism encourages engagement and fairness.
+- **Simulation of Extreme Scenarios**:
+  - Test minting, burning, and collateral deposit operations under simulated market stress.
+- **Oracle Manipulation Testing**:
+  - Introduce manipulated data scenarios to verify that ZKPs correctly validate and filter out anomalies.
+- **Governance Process Testing**:
+  - Run controlled simulations of proposal creation, confidential voting, and vote tallying to validate ZKP integrations.
+- **End-to-End ZKP Validation**:
+  - Ensure that proofs for collateral, reserves, and transaction validations are correctly generated, submitted, and verified on-chain.
 
 ## 3. Non-Functional Requirements
 
 ### 3.1 Security
 
-**Smart Contract Security**
-
-- Follow best practices (e.g., using OpenZeppelin libraries) to prevent vulnerabilities like reentrancy, overflow/underflow, and flash loan exploits.
-
-**Threat Model Compliance**
-
-- Implementation of mitigation strategies based on a detailed threat model (covering oracle attacks, governance manipulation, etc.).
-
-**Audit & Penetration Testing**
-
-- Regular internal audits and third-party security reviews.
+- **Smart Contract Security**:
+  - Follow best practices (e.g., using OpenZeppelin libraries) to avoid vulnerabilities like reentrancy, overflow/underflow, and flash loan exploits.
+- **ZKP Security**:
+  - Use PLONK-based zk-SNARKs for efficiency and minimized trusted setup requirements.
+  - Ensure the ZKP circuits are thoroughly audited and tested for correctness and performance.
+- **Oracle & Governance Security**:
+  - Implement rigorous validation and anomaly detection mechanisms alongside ZKP proofs to maintain system integrity.
 
 ### 3.2 Performance & Scalability
 
-**Low Latency**
-
-- Quick oracle data aggregation and on-chain processing to ensure timely stability adjustments.
-
-**Scalability**
-
-- Architecture designed to support an increasing number of users and transactions without degradation in performance.
+- **Efficient ZKP Verification**:
+  - Optimize circuits and verification processes to minimize on-chain computation and gas costs.
+- **Scalable Architecture**:
+  - Ensure that the system can handle increasing numbers of users, transactions, and ZKP validations without performance degradation.
 
 ### 3.3 Reliability & Availability
 
-**System Uptime**
-
-- High availability of both smart contracts and the dApp interface.
-
-**Fault Tolerance**
-
-- Backup and recovery plans for critical contract state and treasury data.
+- **High Uptime**:
+  - Design the system for maximum uptime for both smart contracts and the dApp interface.
+- **Fault Tolerance**:
+  - Implement backup and recovery procedures, particularly for ZKP generation and validation processes.
 
 ### 3.4 Usability & Accessibility
 
-**User-Friendly dApp**
-
-- Intuitive design with clear instructions and real-time feedback.
-
-**Documentation & Support**
-
-- Comprehensive user manuals, FAQs, and developer guides.
+- **Intuitive dApp**:
+  - Ensure the user interface is clear and easy to use, providing guidance on ZKP-related actions.
+- **Comprehensive Documentation**:
+  - Provide thorough guides on how ZKP features work within the system for both end-users and developers.
 
 ### 3.5 Maintainability & Extensibility
 
-**Modular Architecture**
+- **Modular Code Design**:
+  - Separate core logic from ZKP verification modules to allow independent updates and improvements.
+- **Version Control & Change Management**:
+  - Maintain a clear change log and update process for both smart contracts and ZKP circuits.
 
-- Clearly defined interfaces between the stablecoin, oracle, and governance modules.
+### 3.6 Regulatory & Compliance
 
-**Version Control & Change Management**
-
-- Systematic tracking of changes and updates for continuous improvement.
-
-**Future Enhancements**
-
-- Design considerations for adding new collateral types, oracle sources, and governance features.
-
-### 3.6 Compliance & Regulatory Considerations
-
-**Legal Requirements**
-
-- Ensure adherence to any relevant regulatory guidelines for stablecoins and decentralized financial systems.
-
-**Transparency & Reporting**
-
-- Mechanisms for transparent reporting to stakeholders, including audit trails for governance decisions.
+- **Data Privacy**:
+  - Use ZKPs to comply with privacy regulations by ensuring sensitive user data is never exposed on-chain.
+- **Transparent Auditing**:
+  - Provide verifiable ZKP audits of reserves, collateral, and governance processes to maintain stakeholder trust.
 
 ## 4. Acceptance Criteria
 
-**Stability**
+- **Stability & Peg Maintenance**:
+  - The stablecoin must maintain its peg under simulated market conditions, with ZKP proofs verifying proper collateralization and mint/burn operations.
+- **Oracle Resilience**:
+  - The oracle system must effectively validate data using ZKPs, with manipulated feeds correctly identified and excluded.
+- **Confidential Governance**:
+  - Voting and proposal processes must demonstrate that ZKPs successfully hide individual voter details while confirming eligibility and uniqueness.
+- **User Experience**:
+  - The dApp interface should facilitate seamless interactions with ZKP components, providing clear feedback without compromising privacy.
+- **Security Audits**:
+  - No critical vulnerabilities should be found during internal and third-party audits, including tests on the ZKP circuits and integrations.
 
-- The stablecoin maintains its peg under simulated extreme market conditions.
+## 5. Additional Notes
 
-**Oracle Robustness**
-
-- The oracle system effectively detects and neutralizes manipulated data feeds.
-
-**Governance Effectiveness**
-
-- The governance model demonstrates increased voter engagement and reduced centralization in test scenarios.
-
-**User Experience**
-
-- The dApp interface is intuitive and functions smoothly across supported platforms.
-
-**Security**
-
-- No critical vulnerabilities identified during internal and third-party security audits.
+- **Interdependencies**:
+  - Clearly define the dependencies between ZKP modules and core smart contract functions.
+- **Milestones & Timeline**:
+  - Outline milestones for integrating and testing ZKP components alongside traditional DeFi functionalities.
+- **Risk Management**:
+  - Identify potential risks associated with ZKP performance and trusted setups, and outline mitigation strategies such as fallback procedures and periodic audits.

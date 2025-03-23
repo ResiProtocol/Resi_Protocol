@@ -4,239 +4,282 @@
 
 ### 1.1 Purpose
 
-This document provides an in-depth technical overview of the design and implementation of an algorithmic stablecoin with an integrated governance mechanism. The aim is to create a system that not only maintains its peg through a dynamic, hybrid collateral model but also ensures security via multi-oracle data aggregation and robust on-chain governance.
+This document provides an in-depth technical overview of the design and implementation for RESI Protocol - an algorithmic stablecoin system enhanced with governance and integrated zero-knowledge proofs (ZKPs). The aim is to create a secure, private, and robust decentralized financial system that maintains a stable peg, resists oracle manipulation, and executes confidential governance processes—all while preserving user privacy.
 
 ### 1.2 Scope
 
-The document covers:
+The document covers the following areas:
 
-- **Smart Contracts**: Stablecoin, collateral pool, automated stability reserve, oracle aggregator, and governance contracts.
-- **Data Structures & Interfaces**: Detailed breakdown of internal states, functions, and inter-contract communication.
-- **Security Considerations**: Threat model, countermeasures, and testing strategies.
-- **Deployment & Integration**: How the contracts interact in a live environment, including user interface considerations.
+- **Smart Contracts**: Stablecoin logic, collateral management, automated stability reserve, oracle aggregation, and governance contracts.
+- **Zero-Knowledge Proof Integration**: Detailed design of ZKP circuits for confidential validations across various operations.
+- **Data Structures & Interfaces**: Internal states, function interfaces, and inter-contract communication, with special emphasis on how ZKP proofs are generated, submitted, and verified.
+- **Security & Threat Mitigation**: Integration of ZKP mechanisms alongside standard smart contract security practices.
+- **Testing & Deployment**: Unit, integration, and simulation tests including extreme scenarios and ZKP-specific validations.
 
-## 2. System Components Overview
+### 1.3 Definitions & Acronyms
+
+- **MVP**: Minimum Viable Product
+- **DAO**: Decentralized Autonomous Organization
+- **dApp**: Decentralized Application
+- **ZKP**: Zero-Knowledge Proof
+- **PLONK**: A universal zk-SNARK protocol with a universal trusted setup
+- **ERC-20**: A standard for fungible tokens on Ethereum
+- **LP Tokens**: Liquidity Provider Tokens
+
+## 2. System Components
 
 ### 2.1 Stablecoin Contract
 
 #### 2.1.1 Data Structures
 
-- **State Variables**:
-  - `uint256 totalSupply;` – Total stablecoins in circulation.
-  - `mapping(address => uint256) balances;` – User balances.
-  - `uint256 pegTarget;` – Target price (e.g., $1).
-  - `uint256 collateralRatio;` – Dynamic collateral ratio based on market conditions.
-- **Events**:
-  - `Mint(address indexed user, uint256 amount);`
-  - `Burn(address indexed user, uint256 amount);`
+**State Variables:**
+
+- `uint256 totalSupply;` – Total stablecoins in circulation.
+- `mapping(address => uint256) balances;` – User balances.
+- `uint256 pegTarget;` – Target price (e.g., $1).
+- `uint256 collateralRatio;` – Dynamic collateral ratio.
+
+**Events:**
+
+- `Mint(address indexed user, uint256 amount);`
+- `Burn(address indexed user, uint256 amount);`
+- `ZKPVerified(bytes proofData);` – Emitted upon successful ZKP verification.
 
 #### 2.1.2 Functions and Interfaces
 
-- **Mint/Burn Functions**:
-  - `function mint(uint256 collateralAmount) external returns (uint256 tokensMinted);`
-    - Checks collateral deposited.
-    - Verifies against oracle price data.
-  - `function burn(uint256 tokenAmount) external returns (uint256 collateralReturned);`
-    - Adjusts total supply and collateral ratio.
-- **Peg Maintenance Functions**:
-  - `function adjustPeg() external;`
-    - Called by automated triggers to maintain peg using oracle inputs.
-- **Interfaces**:
-  - Interacts with the collateral pool contract for collateral deposits/withdrawals.
-  - Calls the oracle aggregator contract to fetch current market prices.
+**Mint/Burn Functions:**
 
-#### 2.1.3 Interactions
+- `function mint(uint256 collateralAmount, bytes calldata zkProof) external returns (uint256 tokensMinted);`
+  - Verifies ZKP that collateral meets collateralization rules without revealing the exact amount.
+  - Uses oracle price data to compute if conditions are met.
+- `function burn(uint256 tokenAmount, bytes calldata zkProof) external returns (uint256 collateralReturned);`
+  - Confirms via ZKP that the burn operation complies with algorithmic rules.
 
-- **Collateral Pool**:
-  - Receives collateral deposits to back minted stablecoins.
-- **Oracle Aggregation**:
-  - Fetches validated market price data to determine mint/burn triggers.
-- **Stability Reserve**:
-  - Triggers actions (like capital deployment) when volatility exceeds thresholds.
+**Peg Maintenance:**
+
+- `function adjustPeg(bytes calldata zkProof) external;`
+  - Invoked by automated triggers using ZKP validations ensuring operations follow protocol rules.
+
+**Interfaces:**
+
+- Calls to the collateral pool for deposit/withdrawal.
+- Integration with the oracle aggregator for current market prices.
 
 ### 2.2 Collateral Pool and Automated Stability Reserve
 
 #### 2.2.1 Data Structures
 
-- **Collateral Registry**:
-  - `mapping(address => uint256) public collateralBalances;`
-    - Tracks multiple collateral assets (e.g., BTC, ETH, stablecoins, LP tokens).
-- **Reserve Variables**:
-  - `uint256 stabilityReserve;` – Amount of capital in reserve.
-- **Events**:
-  - `CollateralDeposited(address indexed user, address token, uint256 amount);`
-  - `ReserveDeployed(uint256 amount);`
+**Collateral Registry:**
+
+- `mapping(address => uint256) public collateralBalances;`
+
+**Reserve Variables:**
+
+- `uint256 stabilityReserve;`
+
+**Events:**
+
+- `CollateralDeposited(address indexed user, address token, uint256 amount);`
+- `ReserveDeployed(uint256 amount);`
+- `CollateralZKPVerified(bytes proofData);`
 
 #### 2.2.2 Core Logic
 
-- **Collateral Management**:
-  - Functions to deposit, withdraw, and value collateral using current market prices.
-- **Reserve Activation**:
-  - Automated triggers based on volatility metrics.
-  - Integration with the stablecoin contract to deploy or absorb collateral dynamically.
-- **Rebalancing**:
-  - Logic to adjust the collateral ratio in real time as market conditions change.
+**Collateral Management:**
+
+- Functions to deposit, withdraw, and value collateral, each integrated with ZKP-based proofs:
+  - Collateral Sufficiency Proofs: ZKP circuits validate that a vault or pool remains collateralized without revealing exact balances.
+
+**Reserve Activation:**
+
+- Triggers based on market volatility, with ZKP proofs verifying that deployment is according to protocol thresholds.
+
+**Rebalancing:**
+
+- Logic for periodic rebalancing using confidential proofs that aggregate collateral data.
 
 ### 2.3 Oracle Aggregation Module
 
 #### 2.3.1 Integration with Multiple Oracles
 
-- **Supported Oracles**:
-  - Chainlink, Band, API3 (and possibly more in the future).
-- **Data Collection**:
-  - Each oracle has a dedicated interface that feeds into a common aggregator contract.
+**Supported Oracles:**
 
-#### 2.3.2 Data Validation and Aggregation
+- Chainlink, Band, API3.
 
-- **Aggregation Logic**:
-  - Utilizes algorithms such as median or weighted averages to determine the most accurate price.
-- **Cross-Validation**:
-  - Compares inputs from different oracles.
-  - Applies statistical anomaly detection to flag outliers.
-- **Interfaces**:
-  - Exposes a function `function getValidatedPrice() external view returns (uint256 price);` for the stablecoin and collateral pool contracts.
+**Data Collection:**
 
-#### 2.3.3 Anomaly Detection
+- Each oracle submits data along with a ZKP proving that the reported price is within a valid range.
 
-- **Mechanism**:
-  - Implements threshold-based and variance checks.
-  - Automatically isolates data from any feed that significantly deviates from the consensus.
+**Data Validation & Aggregation:**
+
+- **Aggregation Logic:**
+  - Uses statistical methods (e.g., median or weighted average) and generates a ZKP that confirms the final aggregated price is correct.
+- **Cross-Validation:**
+  - ZKP-based anomaly detection filters out manipulated feeds.
+
+**Interfaces:**
+
+- `function getValidatedPrice() external view returns (uint256 price, bytes memory zkProof);`
 
 ### 2.4 Governance and DAO Module
 
 #### 2.4.1 Governance Token
 
-- **ERC-20 Implementation**:
-  - Standard token with additional governance functions.
-  - Token distribution via staking rewards and liquidity mining.
-- **State Variables**:
-  - `mapping(address => uint256) public votingPower;` – Tracks adjusted voting weights.
+**Implementation:**
+
+- An ERC-20 token with additional governance functions.
+
+**Voting Power:**
+
+- State variables track voting power and incorporate ZKP-enhanced adjustments.
+
+**ZKP-Enhanced Token Functions:**
+
+- Prove eligibility and validate token holdings for confidential voting without revealing the balance.
 
 #### 2.4.2 DAO Contract & Voting Mechanisms
 
-- **Proposal Lifecycle**:
-  - **Creation**: `function proposeChange(bytes calldata proposalData) external returns (uint256 proposalId);`
-  - **Voting**:
-    - Combines Quadratic Voting (reduces large-token-holder influence) and Conviction Voting (weights long-term participation).
-  - **Execution**:
-    - Approved proposals trigger parameter updates in the stablecoin or collateral contracts.
-- **Governance Dashboard Integration**:
-  - Real-time visualization of active proposals, vote counts, and historical decisions.
+**Proposal Lifecycle:**
+
+- **Proposal Creation:**
+  - Function `proposeChange(bytes calldata proposalData, bytes calldata zkProof)` ensures only eligible users can submit proposals through ZKP verification.
+- **Voting:**
+  - Voters cast votes with attached ZK proofs confirming they hold the required tokens and that each vote is unique.
+- **Confidential Tally:**
+  - A function tallies votes using ZKPs that hide individual vote details while proving overall correctness.
+
+**Governance Dashboard:**
+
+- Real-time interface showing proposal statuses and vote outcomes without exposing sensitive details.
 
 #### 2.4.3 Tokenized Governance Incentives
 
-- **Incentive Mechanism**:
-  - Rewards active participants.
-  - Penalizes vote-buying attempts or malicious behavior through reputation scoring.
-- **Smart Contract Logic**:
-  - Periodically recalculates voting weights based on activity and stake duration.
+**Incentives:**
+
+- Active participation rewards verified by ZK proofs.
+- Penalties for malicious behavior, verified through confidential reputation scores.
 
 ### 2.5 User Interface (dApp)
 
 #### 2.5.1 Front-End Technologies
 
-- **Framework**:
-  - Built with Next.js.
-- **Wallet Integration**:
-  - Supports MetaMask and other Web3 wallets via libraries like Ethers.js.
+**Framework:**
 
-#### 2.5.2 Interaction Flows
+- Built with Next.js.
 
-- **Minting/Burning Flow**:
-  - Users deposit collateral, view current peg status, and initiate mint/burn transactions.
-- **Governance Flow**:
-  - Dashboard to view proposals, cast votes, and track the outcomes of governance actions.
-- **Collateral Management**:
-  - UI for depositing/withdrawing collateral and viewing current balances.
-- **Real-Time Updates**:
-  - Integration with on-chain events to provide instant feedback on transactions and market data.
+**Wallet Integration:**
+
+- Integration with MetaMask via Ethers.js, supporting ZKP transaction submission.
+
+**Interaction Flows:**
+
+- **Minting/Burning Flow:**
+  - Users deposit collateral and initiate mint or burn operations, with the UI handling the generation and submission of ZK proofs.
+- **Governance Flow:**
+  - Users submit proposals and cast votes using confidential ZK proofs.
+- **Collateral Management:**
+  - UI provides visual feedback on collateral deposit, reserve status, and ZKP verification outcomes.
+
+**Real-Time Updates:**
+
+- Integration with on-chain events to display ZKP validation statuses and transaction confirmations.
 
 ## 3. Integration Details
 
 ### 3.1 Inter-Contract Communication
 
-- **Stablecoin ↔ Collateral Pool**:
-  - Direct function calls to deposit/withdraw collateral and adjust mint/burn amounts.
-- **Stablecoin ↔ Oracle Aggregator**:
-  - Fetch current price data before mint/burn operations.
-- **Governance ↔ Other Modules**:
-  - Upon proposal approval, the DAO contract triggers parameter changes in the stablecoin, collateral pool, or oracle modules.
+- **Stablecoin ↔ Collateral Pool:**
+  - Direct calls to deposit/withdraw collateral, with ZKP proofs ensuring confidential validations.
+- **Stablecoin ↔ Oracle Aggregator:**
+  - Fetch current price data and ZKP-validated proofs to trigger minting or burning.
+- **Governance ↔ Other Modules:**
+  - Approved proposals trigger parameter updates across stablecoin and collateral contracts via DAO, with ZKP proofs ensuring authenticity.
 
 ### 3.2 Data Flow Examples
 
-- **Minting Process**:
+- **Minting Process:**
   1. User deposits collateral via the dApp.
-  2. Collateral Pool validates and locks the asset.
-  3. Stablecoin contract requests current price data from the Oracle Aggregator.
-  4. If conditions are met, stablecoin is minted and recorded.
-- **Governance Process**:
-  1. Proposal is created and broadcast on the DAO contract.
-  2. Users vote using their governance tokens.
-  3. Upon reaching the required consensus, approved changes are executed on relevant contracts.
+  2. Collateral pool verifies deposit and generates a ZKP for collateralization.
+  3. Stablecoin contract retrieves the current price and validates the minting process with a ZKP.
+  4. Stablecoins are minted, and the transaction is recorded along with proof logs.
+- **Governance Process:**
+  1. A proposal is submitted with an attached ZKP proving eligibility.
+  2. Votes are cast with individual ZK proofs that validate the vote's uniqueness and the voter's token holding.
+  3. The final tally is computed and verified using a confidential ZKP, ensuring the process is transparent yet private.
 
 ## 4. Security and Threat Model
 
 ### 4.1 Threat Model Overview
 
-- **Reentrancy and Overflow/Underflow**:
-  - Mitigated using OpenZeppelin libraries and Solidity’s built-in checks.
-- **Oracle Manipulation**:
-  - Addressed by multi-oracle aggregation and statistical anomaly detection.
-- **Governance Attacks**:
-  - Countered through adaptive voting mechanisms and tokenized incentives.
-- **Collateral and Reserve Risks**:
-  - Regular rebalancing and automated stability reserve activation to handle extreme market conditions.
+- **Smart Contract Vulnerabilities:**
+  - Mitigated using OpenZeppelin libraries, nonReentrant modifiers, and safe arithmetic.
+- **Oracle Manipulation:**
+  - Addressed with multi-oracle aggregation and ZKP-based data validations.
+- **Governance Attacks:**
+  - Countered with adaptive voting mechanisms, confidential vote verification, and ZKP-enhanced eligibility proofs.
+- **Collateral & Reserve Risks:**
+  - Regular rebalancing and ZKP audits ensure transparency in collateral and reserve management.
+- **ZKP-Specific Risks:**
+  - Potential issues with circuit design and performance; mitigated via rigorous testing and audits.
 
 ### 4.2 Mitigation Strategies
 
-- **Code Audits**:
-  - Conduct both internal and external audits.
-- **Static and Dynamic Analysis**:
-  - Use tools like Slither, MythX, and automated test suites.
-- **Continuous Monitoring**:
-  - Implement logging and alert systems for unusual activity on critical functions.
+- **Code Audits:**
+  - Both internal and external audits with a focus on ZKP circuits and integration points.
+- **Static and Dynamic Analysis:**
+  - Tools like Slither, MythX, and specialized ZKP circuit analyzers.
+- **Continuous Monitoring:**
+  - On-chain logging of ZKP validations and contract operations, with automated alerts for anomalies.
 
 ## 5. Testing Strategy
 
 ### 5.1 Unit and Integration Testing
 
-- **Smart Contract Testing**:
-  - Use Hardhat for unit tests covering all contract functions.
-- **Integration Testing**:
+- **Smart Contract Testing:**
+  - Use Foundry and Hardhat to run comprehensive unit tests for each function, including ZKP verification functions.
+  - Implement formal verification with Certora to prove correctness of critical smart contract properties.
+- **Static Analysis:**
+  - Regular scanning with Slither to detect vulnerabilities and enforce best practices.
+  - Utilize Mythril for deeper symbolic analysis to identify complex security issues.
+- **Integration Testing:**
   - Simulate interactions between stablecoin, collateral, oracle, and governance contracts.
+- **ZKP Validation Testing:**
+  - Test each ZKP circuit independently to ensure proofs are generated and verified correctly.
 
 ### 5.2 Simulation of Extreme Scenarios
 
-- **Market Volatility Simulations**:
-  - Test the mint/burn logic under simulated rapid price fluctuations.
-- **Oracle Attack Simulations**:
-  - Deliberately introduce manipulated oracle data to verify the anti-manipulation protocols.
-- **Governance Stress Tests**:
-  - Simulate high volume voting and attack scenarios to validate adaptive voting mechanics.
+- **Market Volatility:**
+  - Simulate rapid price fluctuations to test the mint/burn logic and automated reserve deployment.
+- **Oracle Manipulation:**
+  - Introduce manipulated data feeds to ensure ZKP-based validations correctly filter out anomalies.
+- **Governance Stress Testing:**
+  - Simulate high-volume confidential voting scenarios to validate the performance and integrity of ZKP-enhanced processes.
 
 ## 6. Deployment Strategy
 
 ### 6.1 Environment Setup
 
-- **Testnet Deployment**:
-  - Deploy contracts on a testnet (e.g., Goerli, Sepolia, or Polygon Mumbai) for live testing.
-- **Upgradeability**:
-  - Use of proxy patterns (e.g., OpenZeppelin’s Upgradeable Contracts) for future updates.
+- **Testnet Deployment:**
+  - Deploy contracts on networks like Goerli or Polygon Mumbai for live testing.
+- **Upgradeability:**
+  - Consider proxy patterns (using OpenZeppelin's Upgradeable Contracts) for future updates.
+- **ZKP Circuit Deployment:**
+  - Integrate ZKP circuits with off-chain generation and on-chain verification hooks.
 
 ### 6.2 Operational Considerations
 
-- **Monitoring**:
-  - Deploy monitoring dashboards for real-time contract activity.
-- **Maintenance**:
-  - Establish procedures for emergency interventions (e.g., pausing contracts in the event of a detected vulnerability).
+- **Monitoring:**
+  - Deploy dashboards to monitor contract interactions, ZKP validations, and oracle data feeds.
+- **Maintenance:**
+  - Establish procedures for rapid deployment of fixes, particularly for any discovered vulnerabilities in ZKP circuits.
 
-## 7. Future Enhancements
+## 8. Future Enhancements
 
-- **Expansion of Collateral Options**:
-  - Integrate additional asset types and adjust valuation logic accordingly.
-- **Advanced AI-Driven Adjustments**:
-  - Refine the dynamic stability mechanism with more sophisticated machine learning models.
-- **Enhanced User Experience**:
-  - Iterative improvements to the dApp based on user feedback and usability studies.
-- **Scalability Enhancements**:
-  - Consider layer-2 solutions or cross-chain interoperability to handle increased transaction loads.
+- **Advanced ZKP Integration:**
+  - Further optimization of circuits, including exploring alternative ZKP protocols where beneficial.
+- **Expanded Collateral Options:**
+  - Integration of additional asset types and dynamic valuation models.
+- **Enhanced Governance Features:**
+  - Iterative improvements to voting mechanisms and real-time governance analytics.
+- **Cross-Chain Interoperability:**
+  - Consideration for layer-2 solutions or cross-chain deployments to handle increased transaction loads.
