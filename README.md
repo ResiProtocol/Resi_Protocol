@@ -1,15 +1,41 @@
-# Algorithmic Stablecoin with Governance
+# RESI Protocol
 
 ## Overview
 
-**Algorithmic Stablecoin with Governance** is a decentralized finance (DeFi) project that aims to address critical challenges in current stablecoin models, including depegging risks, oracle vulnerabilities, and ineffective governance. Our solution combines:
+**RESI Protocol** - an algorithmic Stablecoin with Governance and ZKP Integration - is a next-generation DeFi project that combines a robust algorithmic stablecoin mechanism with advanced on-chain governance—all enhanced with state-of-the-art zero-knowledge proofs (ZKPs) for confidentiality and security. Our solution addresses key challenges such as depegging, oracle manipulation, and centralized control while ensuring that sensitive data (e.g., user balances, vote details, and collateral amounts) remains private.
 
-- A **Hybrid Collateral System** with diversified assets (BTC, ETH, stablecoins, decentralized LP tokens) and an Automated Stability Reserve.
-- A **Dynamic Stability Mechanism** driven by real-time, AI-powered adjustments.
-- **Multi-Oracle Aggregation** with cross-validation and anti-manipulation protocols.
-- An **Adaptive Governance Model** that blends Quadratic and Conviction Voting, ensuring decentralization and community-driven decision-making.
+Key features include:
+
+- **Hybrid Collateral & Dynamic Stability:**  
+  A diversified collateral system backed by an Automated Stability Reserve with AI-driven dynamic adjustments. Confidential ZK proofs validate collateral sufficiency and mint/burn operations.
+- **Robust Multi-Oracle Aggregation:**  
+  Integration of multiple oracle feeds (Chainlink, Band, API3) with ZKP-enhanced validations to ensure that asset prices are within valid ranges—without exposing raw data.
+- **Confidential Governance:**  
+  A decentralized governance framework utilizing Quadratic Voting, Conviction Voting, and Adaptive Weighting. ZKPs guarantee eligibility for proposal creation and enable private, verifiable voting with confidential tallying.
+- **Privacy-Preserving Tokenomics:**  
+  An ERC-20 governance token with staking rewards, lock-up periods, and token burn mechanisms—supported by ZK proofs to maintain privacy while incentivizing long-term participation.
 
 This repository contains the source code and initial documentation for the MVP version of the project.
+
+## Features
+
+- **Algorithmic Stablecoin Mechanics:**  
+  Minting and burning functions maintain a stable peg using real-time oracle data and confidential collateral proofs.
+
+- **Hybrid Collateral System:**  
+  Supports multiple asset types (BTC, ETH, stablecoins, LP tokens) with ZKP-validated collateral sufficiency.
+
+- **Automated Stability Reserve:**  
+  On-chain treasury that deploys capital during market volatility, with periodic ZKP audits confirming reserve levels.
+
+- **Multi-Oracle Integration:**  
+  Aggregates price feeds from several oracles, using ZK proofs to ensure the accuracy and integrity of data without exposing raw values.
+
+- **Advanced Governance & Voting:**  
+  Confidential proposal creation and private voting using a combination of Quadratic Voting, Conviction Voting, and Adaptive Weighting, all enforced with zero-knowledge proofs for eligibility, uniqueness, and correctness.
+
+- **Privacy-Preserving Tokenomics:**  
+  Governance token functionalities that include staking, rewards, and dynamic adjustments—verified by ZKPs to protect user privacy.
 
 ## Documentation
 
@@ -24,13 +50,31 @@ The project is currently documented with the following core documents:
 
 ## Future Enhancements
 
-- **Enhanced Oracle Integration**: Adding more oracle providers and refining data validation logic.
-- **Improved Governance Features**: Expanding the adaptive voting mechanism and enhancing the governance dashboard.
-- **Additional Collateral Options**: Integrating more asset types and advanced collateral valuation models.
-- **User Experience Improvements**: Iterative front-end enhancements based on user feedback.
+- **Expanded Collateral Options:**  
+   Integrate additional asset types and dynamic valuation models.
+
+- **Advanced AI/ML Integration:**  
+   Further optimize the dynamic stability mechanism with robust AI/ML models and secure integration techniques.
+
+- **Enhanced Governance Models:**  
+   Refine voting models and adaptive weighting algorithms, and explore additional ZKP-based voting enhancements.
+
+- **Cross-Chain Interoperability:**  
+   Explore layer-2 solutions or cross-chain bridges for increased scalability.
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature/bugfix.
+3. Make your changes and commit them.
+4. Open a pull request describing your changes.
+
+For major changes, please open an issue first to discuss your ideas.
 
 ## License
 
 This project is licensed under the [MIT License](/LICENSE).
 
-_Note: This README is a living document. Further updates will be added as the project evolves._
+_Note: This README is a living document. Further updates will be added as the project evolves. For detailed technical and architectural insights, refer to the documentation in the docs/ folder._
