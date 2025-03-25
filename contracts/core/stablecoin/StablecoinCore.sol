@@ -2,12 +2,10 @@
 pragma solidity ^0.8.28;
 
 // Importing the necessary libraries
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol"; // Importing the ERC20 standard from OpenZeppelin
-import "@openzeppelin/contracts/access/Ownable.sol"; // Importing the Ownable contract from OpenZeppelin
 // Importing the ReentrancyGuard contract from OpenZeppelin
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol"; 
-// Importing the Pausable contract from OpenZeppelin
-import "@openzeppelin/contracts/utils/Pausable.sol"; // Importing the Pausable contract from OpenZeppelin
+// Importing the ERC20Pausable contract from OpenZeppelin
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 
 // Import all the interfaces required for the stablecoin
 import "../../interfaces/ICollateralPool.sol"; // Importing the Collateral Pool interface
@@ -18,7 +16,11 @@ import "../../interfaces/IPegMechanism.sol"; // Importing the Peg Mechanism inte
 import "../../interfaces/IVolumeController.sol"; // Importing the Volume Controller interface
 import "../../interfaces/IAccessController.sol"; // Importing the Access Controller interface
 
-contract StablecoinCore is ERC20, Ownable, ReentrancyGuard, Pausable {
+contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
+    // State variables
+    address public pendingAccessController; // Address of the pending access controller
+    uint256 public accessControllerChangeTime; // Time remaining for access controller change
+    
     // Module interfaces
     IFeeManager public feeManager; // Fee Manager interface
     IPegMechanism public pegMechanism; // Peg Mechanism interface
@@ -92,9 +94,16 @@ contract StablecoinCore is ERC20, Ownable, ReentrancyGuard, Pausable {
      */
     event VolumeControllerSet(address indexed volumeController);
 
+    /**
+     * @notice Emitted when an access controller change is proposed
+     * @param proposedController The address of the proposed controller
+     * @param effectiveTime The timestamp when the change can be confirmed
+     */
+    event AccessControllerChangeProposed(address indexed proposedController, uint256 effectiveTime);
+
     /** 
      * @notice Emitted when the access controller address is set
-     * @dev This is fired during the setAccessController function
+     * @dev This is fired during the confirmAccessControllerChange function
      * @param accessController The address of the new access controller
      */
     event AccessControllerSet(address indexed accessController);
@@ -110,7 +119,7 @@ contract StablecoinCore is ERC20, Ownable, ReentrancyGuard, Pausable {
         address _pegMechanism,
         address _volumeController,
         address _accessController
-    ) ERC20(name_, symbol_) Ownable(msg.sender){
+    ) ERC20(name_, symbol_) {
         // Check whether the provided addresses are valid
         require(_collateralPool != address(0), "Invalid collateral pool address");
         require(_oracleAggregator != address(0), "Invalid oracle aggregator address");
@@ -147,7 +156,8 @@ contract StablecoinCore is ERC20, Ownable, ReentrancyGuard, Pausable {
     * @dev Updates the address of the fee manager
     * @param _newFeeManager The address of the new fee manager
     */
-    function setFeeManager(address _newFeeManager) external onlyOwner {
+    function setFeeManager(address _newFeeManager) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         require(_newFeeManager != address(0), "Invalid fee manager address");
         feeManager = IFeeManager(_newFeeManager);
         emit FeeManagerSet(_newFeeManager);
@@ -157,7 +167,8 @@ contract StablecoinCore is ERC20, Ownable, ReentrancyGuard, Pausable {
     * @dev Updates the address of the peg mechanism
     * @param _newPegMechanism The address of the new peg mechanism
     */
-    function setPegMechanism(address _newPegMechanism) external onlyOwner {
+    function setPegMechanism(address _newPegMechanism) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         require(_newPegMechanism != address(0), "Invalid peg mechanism address");
         pegMechanism = IPegMechanism(_newPegMechanism);
         emit PegMechanismSet(_newPegMechanism);
@@ -167,20 +178,47 @@ contract StablecoinCore is ERC20, Ownable, ReentrancyGuard, Pausable {
     * @dev Updates the address of the volume controller
     * @param _newVolumeController The address of the new volume controller
     */
-    function setVolumeController(address _newVolumeController) external onlyOwner {
+    function setVolumeController(address _newVolumeController) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         require(_newVolumeController != address(0), "Invalid volume controller address");
         volumeController = IVolumeController(_newVolumeController);
         emit VolumeControllerSet(_newVolumeController);
     }
 
     /**
-    * @dev Updates the address of the access controller
-    * @param _newAccessController The address of the new access controller
+    * @notice Proposes a new access controller
+    * @dev Initiates a timelock before the new controller can be activated
+    * @param _newAccessController The address of the proposed access controller
     */
-    function setAccessController(address _newAccessController) external onlyOwner {
+    function proposeAccessControllerChange(address _newAccessController) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
+        // Check if the new access controller is valid
         require(_newAccessController != address(0), "Invalid access controller address");
-        accessController = IAccessController(_newAccessController);
-        emit AccessControllerSet(_newAccessController);
+
+        pendingAccessController = _newAccessController; // Set the pending access controller
+        // Set the time for the access controller change
+        accessControllerChangeTime = block.timestamp + 2 days;
+        emit AccessControllerChangeProposed(_newAccessController, accessControllerChangeTime);
+    }
+
+    /**
+    * @notice Confirms a previously proposed access controller change after timelock
+    * @dev Can only be executed after the timelock period has passed
+    */
+    function confirmAccessControllerChange() external {
+        require(pendingAccessController != address(0), "No pending controller");
+        require(block.timestamp >= accessControllerChangeTime, "Timelock not expired");
+
+        // Update the access controller
+        accessController = IAccessController(pendingAccessController);
+        
+        // Update the access controller in all modules
+        feeManager.setAccessController(pendingAccessController);
+        pegMechanism.setAccessController(pendingAccessController);
+        volumeController.setAccessController(pendingAccessController);
+        
+        emit AccessControllerSet(pendingAccessController);
+        pendingAccessController = address(0);
     }
 
     // Functions to update the external contract addresses (useful when external contracts need to be updated)
@@ -189,7 +227,8 @@ contract StablecoinCore is ERC20, Ownable, ReentrancyGuard, Pausable {
     * @dev Updates the address of the collateral pool
     * @param _newCollateralPool The address of the new collateral pool
     */
-    function setCollateralPool(address _newCollateralPool) external onlyOwner {
+    function setCollateralPool(address _newCollateralPool) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         require(_newCollateralPool != address(0), "Invalid collateral pool address");
         collateralPool = ICollateralPool(_newCollateralPool);
         emit CollateralPoolSet(_newCollateralPool);
@@ -199,7 +238,8 @@ contract StablecoinCore is ERC20, Ownable, ReentrancyGuard, Pausable {
     * @dev Updates the address of the oracle aggregator
     * @param _newOracleAggregator The address of the new oracle aggregator
     */
-    function setOracleAggregator(address _newOracleAggregator) external onlyOwner {
+    function setOracleAggregator(address _newOracleAggregator) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         require(_newOracleAggregator != address(0), "Invalid oracle aggregator address");
         oracleAggregator = IOracleAggregator(_newOracleAggregator);
         emit OracleAggregatorSet(_newOracleAggregator);
@@ -212,7 +252,8 @@ contract StablecoinCore is ERC20, Ownable, ReentrancyGuard, Pausable {
     * @dev Updates the address of the stability reserve
     * @param _newStabilityReserve The address of the new stability reserve
     */
-    function setStabilityReserve(address _newStabilityReserve) external onlyOwner {
+    function setStabilityReserve(address _newStabilityReserve) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         require(_newStabilityReserve != address(0), "Invalid stability reserve address");
         stabilityReserve = IStabilityReserve(_newStabilityReserve);
         emit StabilityReserveSet(_newStabilityReserve);

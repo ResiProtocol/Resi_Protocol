@@ -41,6 +41,12 @@ interface IAccessController {
      */
     function canEmergencyShutdown(address caller) external view returns (bool);
 
+    /** 
+     * @dev This function returns true if the caller has the ADMIN_ROLE
+     * @param caller The address of the caller
+     * @return bool True if setting parameters is allowed, false otherwise
+     */
+    function canSetParams(address caller) external view returns (bool);
 
     /**
     * @dev Pause or start minting

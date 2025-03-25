@@ -20,6 +20,12 @@ interface IPegMechanism {
     */
     function collateralRatio() external view returns (uint256);
 
+    /**
+    * @dev Updates the address of the access controller
+    * @param _newAccessController The address of the new access controller
+    */
+    function setAccessController(address _newAccessController) external;
+
     /** 
      * @dev Calculate the mint amount based on the collateral value.
      * @param collateralValue The value of the collateral.

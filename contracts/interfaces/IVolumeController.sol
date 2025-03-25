@@ -21,6 +21,12 @@ interface IVolumeController {
     function burnVolumeLimit() external view returns (uint256);
 
     /**
+    * @dev Updates the address of the access controller
+    * @param _newAccessController The address of the new access controller
+    */
+    function setAccessController(address _newAccessController) external;
+
+    /**
      * @dev This function checks and updates the mint volume for the system and the user
      * @param user The address of the user whose mint volume is being checked
      * @param amount The amount of mint volume to check

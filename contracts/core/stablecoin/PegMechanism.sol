@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-// Importing the necessary libraries
-import "@openzeppelin/contracts/access/Ownable.sol"; // Importing the Ownable contract from OpenZeppelin
+// Import the AccessController interface to manage access control
+import "../../interfaces/IAccessController.sol";
 
 // Import all the interfaces required for the stablecoin
 import "../../interfaces/IOracleAggregator.sol"; // Importing the Oracle Aggregator interface
@@ -12,7 +12,7 @@ import "../../interfaces/IStabilityReserve.sol"; // Importing the Stability Rese
  * @title PegMechanism
  * @dev This contract manages the peg mechanism for the stablecoin.
 */
-contract PegMechanism is Ownable {
+contract PegMechanism {
     // State variables for the PegMechanism contract
     uint256 public pegTarget; // The target peg value for the stablecoin (e.g., 1e18 for $1)
     uint256 public collateralRatio; // Dynamic collateral ratio (in basis points: 10000 = 100%)
@@ -22,12 +22,16 @@ contract PegMechanism is Ownable {
     uint256 public lowerPegThreshold; // Lower threshold for peg adjustment
     uint256 public emergencyPegThreshold; // Emergency threshold for peg 
     uint256 public lastAdjustmentTime; // Last time the peg was adjusted
+    address public stablecoinCore; // Address of the stablecoin core contract
 
     // Constants
     uint256 private constant BASIS_POINTS = 10000; // Basis points constant for calculations
     uint256 private constant PRICE_PRECISION = 1e18; // Price precision constant for calculations
     // Cooldown period for peg adjustments (to prevent market turbulence)
     uint256 public constant ADJUSTMENT_COOLDOWN = 6 hours;
+
+    // Access control interface
+    IAccessController public accessController; // Access controller instance
 
     // Events
 
@@ -82,7 +86,7 @@ contract PegMechanism is Ownable {
     IStabilityReserve public stabilityReserve; // Stability Reserve interface
 
     // Constructor to initialize the PegMechanism contract
-    constructor(uint256 _initialPegTarget) Ownable(msg.sender){
+    constructor(uint256 _initialPegTarget, address _accessController) {
         pegTarget = _initialPegTarget; // Set the initial peg target
         collateralRatio = 10000; // Set the initial collateral ratio to 100%
         minCollateralRatio = 8000; // Set the minimum collateral ratio to 80%
@@ -90,13 +94,47 @@ contract PegMechanism is Ownable {
         upperPegThreshold = 10500; // Set the upper peg threshold to 105%
         lowerPegThreshold = 9500; // Set the lower peg threshold to 95%
         emergencyPegThreshold = 9000; // Set the emergency peg threshold to 90%
+        accessController = IAccessController(_accessController); // Set the access controller instance
+    }
+
+    /**
+     * @dev sets the address of the stablecoin core contract
+     * This function is only used once during deployment to avoid circular dependencies
+     * @param _stablecoinCore The address of the stablecoin core contract
+    */
+    function setStablecoinCore(address _stablecoinCore) external {
+        // Only allow this to be set once
+        require(stablecoinCore == address(0), "StablecoinCore already set");
+        // Check if the caller is authorized to set the stablecoin core address
+        // This is a security measure to ensure that only authorized addresses can set the core address
+        require(accessController.canSetParams(msg.sender), "Not authorized");
+        // Check if the new stablecoin core address is valid
+        require(_stablecoinCore != address(0), "Invalid address");
+        stablecoinCore = _stablecoinCore;
+    }
+
+    /**
+    * @dev Updates the address of the access controller
+    * @param _newAccessController The address of the new access controller
+    */
+    function setAccessController(address _newAccessController) external {
+        // Only StablecoinCore OR admin (before StablecoinCore is set) can update
+        require(
+            msg.sender == stablecoinCore || 
+            (stablecoinCore == address(0) && accessController.canSetParams(msg.sender)),
+            "Not authorized"
+        );
+        // Check if the new access controller address is valid
+        require(_newAccessController != address(0), "Invalid access controller address");
+        accessController = IAccessController(_newAccessController);
     }
 
     /**
      * @dev Set the oracle aggregator contract
      * @param _oracleAggregator Address of the oracle aggregator contract
     */
-    function setOracleAggregator(address _oracleAggregator) external onlyOwner {
+    function setOracleAggregator(address _oracleAggregator) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         require(_oracleAggregator != address(0), "Invalid oracle aggregator address"); // Check if the address is valid
         oracleAggregator = IOracleAggregator(_oracleAggregator); // Set the oracle aggregator contract
         emit OracleAggregatorSet(_oracleAggregator); // Emit the event
@@ -106,7 +144,8 @@ contract PegMechanism is Ownable {
      * @dev Set the stability reserve contract
      * @param _stabilityReserve Address of the stability reserve contract
     */
-    function setStabilityReserve(address _stabilityReserve) external onlyOwner {
+    function setStabilityReserve(address _stabilityReserve) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         require(_stabilityReserve != address(0), "Invalid stability reserve address"); // Check if the address is valid
         stabilityReserve = IStabilityReserve(_stabilityReserve); // Set the stability reserve contract
         emit StabilityReserveSet(_stabilityReserve); // Emit the event
@@ -124,7 +163,8 @@ contract PegMechanism is Ownable {
     * @dev Update the peg target value
     * @param _newPegTarget New peg target value
     */
-    function updatePegTarget(uint256 _newPegTarget) external onlyOwner {
+    function updatePegTarget(uint256 _newPegTarget) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         // Check if the new peg target is valid
         require(_newPegTarget > 0, "Invalid peg target value - must be greater than 0");
         // Check if the new peg target is different from the current peg target
@@ -138,7 +178,8 @@ contract PegMechanism is Ownable {
     * @dev Update the collateral ratio
     * @param _newCollateralRatio New collateral ratio (in basis points)
     */
-    function updateCollateralRatio(uint256 _newCollateralRatio) external onlyOwner {
+    function updateCollateralRatio(uint256 _newCollateralRatio) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         // Check if the new collateral ratio is valid (>0) and is at least 50% (5000 basis points)
         require(_newCollateralRatio > 5000, "Collateral ratio must be greater than 50%");
         // Check if the new collateral ratio is different from the current collateral ratio
@@ -157,7 +198,8 @@ contract PegMechanism is Ownable {
     * @param _emergencyPegThreshold New emergency peg threshold 
     */
     function updatePegThresholds(uint256 _upperPegThreshold, uint256 _lowerPegThreshold, uint256 _emergencyPegThreshold)
-    external onlyOwner {
+    external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         // Check if the new peg thresholds are valid (>0)
         require(_upperPegThreshold > 0 && _lowerPegThreshold > 0 && _emergencyPegThreshold > 0, 
         "Peg thresholds must be greater than 0");
@@ -178,7 +220,7 @@ contract PegMechanism is Ownable {
     */
     function adjustPeg() external returns (bool) {
         require(
-            msg.sender == address(stabilityReserve) || msg.sender == owner(),
+            msg.sender == address(stabilityReserve) || accessController.canSetParams(msg.sender),
             "Unauthorized caller"
         );
         require(block.timestamp >= lastAdjustmentTime + ADJUSTMENT_COOLDOWN, "Cooldown period not met");

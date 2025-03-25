@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-// Importing the necessary libraries
-import "@openzeppelin/contracts/access/Ownable.sol"; // Importing the Ownable contract from OpenZeppelin
+// Import the AccessController interface to manage access control
+import "../../interfaces/IAccessController.sol";
 
 /**
  * @title VolumeController
  * @dev This contract manages the volume control for the stablecoin system. Helps prevent flash loan attacks
  */
- contract VolumeController is Ownable {
+ contract VolumeController {
     // State variables of the contract
     uint256 public mintVolumeLimit; // Maximum mint volume limit
     uint256 public burnVolumeLimit; // Maximum burn volume limit
@@ -17,6 +17,7 @@ import "@openzeppelin/contracts/access/Ownable.sol"; // Importing the Ownable co
     uint256 public mintVolumeInPeriod; // Total mint volume in the current period
     uint256 public burnVolumeInPeriod; // Total burn volume in the current period
     uint256 public accountVolumeLimitPercentage = 2000; // 20% of the total mint/burn volume limit
+    address public stablecoinCore; // Address of the stablecoin core contract
     // Mapping for user volume limits
     mapping(address => uint256) public userMintVolume; // User mint volume tracking
     mapping(address => uint256) public userBurnVolume; // User burn volume tracking
@@ -28,6 +29,9 @@ import "@openzeppelin/contracts/access/Ownable.sol"; // Importing the Ownable co
     // Cooldown period for minting and burning volume resets
     uint256 public constant VOLUME_RESET_COOLDOWN = 1 hours;
 
+    // Access control interface
+    IAccessController public accessController; // Access controller instance
+
     /** 
     * @notice Emitted when the mint/burn volume limits are updated
     * @dev This is fired during the updateVolumeLimits function
@@ -37,9 +41,42 @@ import "@openzeppelin/contracts/access/Ownable.sol"; // Importing the Ownable co
     event VolumeLimitsUpdated(uint256 mintVolumeLimit, uint256 burnVolumeLimit);
 
     // Constructor to initialize the volume controller
-    constructor(uint256 _mintVolumeLimit, uint256 _burnVolumeLimit) Ownable(msg.sender) {
+    constructor(uint256 _mintVolumeLimit, uint256 _burnVolumeLimit, address _accessController) {
         mintVolumeLimit = _mintVolumeLimit; // Initialize mint volume limit
         burnVolumeLimit = _burnVolumeLimit; // Initialize burn volume limit
+        accessController = IAccessController(_accessController); // Set the access controller instance
+    }
+
+    /**
+     * @dev sets the address of the stablecoin core contract
+     * This function is only used once during deployment to avoid circular dependencies
+     * @param _stablecoinCore The address of the stablecoin core contract
+    */
+    function setStablecoinCore(address _stablecoinCore) external {
+        // Only allow this to be set once
+        require(stablecoinCore == address(0), "StablecoinCore already set");
+        // Check if the caller is authorized to set the stablecoin core address
+        // This is a security measure to ensure that only authorized addresses can set the core address
+        require(accessController.canSetParams(msg.sender), "Not authorized");
+        // Check if the new stablecoin core address is valid
+        require(_stablecoinCore != address(0), "Invalid address");
+        stablecoinCore = _stablecoinCore;
+    }
+
+    /**
+    * @dev Updates the address of the access controller
+    * @param _newAccessController The address of the new access controller
+    */
+    function setAccessController(address _newAccessController) external {
+        // Only StablecoinCore OR admin (before StablecoinCore is set) can update
+        require(
+            msg.sender == stablecoinCore || 
+            (stablecoinCore == address(0) && accessController.canSetParams(msg.sender)),
+            "Not authorized"
+        );
+        // Check if the new access controller address is valid
+        require(_newAccessController != address(0), "Invalid access controller address");
+        accessController = IAccessController(_newAccessController);
     }
 
     /** 
@@ -113,7 +150,9 @@ import "@openzeppelin/contracts/access/Ownable.sol"; // Importing the Ownable co
     * @param _mintVolumeLimit The new mint volume limit
     * @param _burnVolumeLimit The new burn volume limit
     */
-    function updateVolumeLimits(uint256 _mintVolumeLimit, uint256 _burnVolumeLimit) external onlyOwner {
+    function updateVolumeLimits(uint256 _mintVolumeLimit, uint256 _burnVolumeLimit) external {
+        // Check if the caller is authorized to update the volume limits
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         // Check if the new mint and burn volume limits are greater than 0
         require(_mintVolumeLimit > 0 && _burnVolumeLimit > 0, "Volume limits must be greater than 0");
         // Ensure the new limits are different from the current limits
