@@ -19,6 +19,13 @@ interface IFeeManager {
     */
     function redemptionFee() external view returns (uint256);
 
+
+    /**
+    * @dev Updates the address of the access controller
+    * @param _newAccessController The address of the new access controller
+    */
+    function setAccessController(address _newAccessController) external;
+
     /**
      * @dev Calculate the mint fee (Stability fee) for a given amount.
      * @param amount The amount to mint.

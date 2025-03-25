@@ -1,17 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-// Importing the necessary libraries
-import "@openzeppelin/contracts/access/Ownable.sol"; // Importing the Ownable contract from OpenZeppelin
+// Import the AccessController interface to manage access control
+import "../../interfaces/IAccessController.sol";
 
 /**
  * @title FeeManager
  * @dev This contract manages the fees for a stablecoin system. 
 */
-contract FeeManager is Ownable {
+contract FeeManager {
     // State variables of the contract
     uint256 public stabilityFee; // Fee charged on minting (in basis points)
     uint256 public redemptionFee; // Fee charged on redemption (in basis points)
+    address public stablecoinCore; // Address of the stablecoin core contract
+
+    // Access control interface
+    IAccessController public accessController; // Access controller instance
 
     // Constants
     uint256 private constant BASIS_POINTS = 10000; // Basis points constant for calculations
@@ -31,10 +35,46 @@ contract FeeManager is Ownable {
     event RedemptionFeeUpdated(uint256 newRedemptionFee);
 
     // Constructor to initialize the FeeManager contract
-    constructor() Ownable(msg.sender) {
+    constructor(address _accessController) {
         stabilityFee = 50; // Initial stability fee set to 0.5%
         redemptionFee = 30; // Initial redemption fee set to 0.3%
+
+        // Set the access controller instance
+        accessController = IAccessController(_accessController);
     }
+
+    /**
+     * @dev sets the address of the stablecoin core contract
+     * This function is only used once during deployment to avoid circular dependencies
+     * @param _stablecoinCore The address of the stablecoin core contract
+    */
+    function setStablecoinCore(address _stablecoinCore) external {
+        // Only allow this to be set once
+        require(stablecoinCore == address(0), "StablecoinCore already set");
+        // Check if the caller is authorized to set the stablecoin core address
+        // This is a security measure to ensure that only authorized addresses can set the core address
+        require(accessController.canSetParams(msg.sender), "Not authorized");
+        // Check if the new stablecoin core address is valid
+        require(_stablecoinCore != address(0), "Invalid address");
+        stablecoinCore = _stablecoinCore;
+    }
+
+    /**
+    * @dev Updates the address of the access controller
+    * @param _newAccessController The address of the new access controller
+    */
+    function setAccessController(address _newAccessController) external {
+        // Only StablecoinCore OR admin (before StablecoinCore is set) can update
+        require(
+            msg.sender == stablecoinCore || 
+            (stablecoinCore == address(0) && accessController.canSetParams(msg.sender)),
+            "Not authorized"
+        );
+        // Check if the new access controller address is valid
+        require(_newAccessController != address(0), "Invalid access controller address");
+        accessController = IAccessController(_newAccessController);
+    }
+
 
     /** 
      * @dev Calculate the mint fee (Stability Fee) based on the amount
@@ -62,7 +102,9 @@ contract FeeManager is Ownable {
     * @dev Update the stability fee
     * @param _newStabilityFee New stability fee (in basis points)
     */
-    function updateStabilityFee(uint256 _newStabilityFee) external onlyOwner {
+    function updateStabilityFee(uint256 _newStabilityFee) external {
+        // Check if the caller is authorized to update the stability fee
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         // Check if the new stability fee is valid (>0) and is at most 10% (1000 basis points)
         require(_newStabilityFee > 0 && _newStabilityFee <= 1000, "Stability fee must be between 0 and 10%");
         // Check if the new stability fee is different from the current stability fee
@@ -77,7 +119,9 @@ contract FeeManager is Ownable {
     * @dev Update the redemption fee
     * @param _newRedemptionFee New redemption fee (in basis points)
     */
-    function updateRedemptionFee(uint256 _newRedemptionFee) external onlyOwner {
+    function updateRedemptionFee(uint256 _newRedemptionFee) external {
+        // Check if the caller is authorized to update the redemption fee
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
         // Check if the new redemption fee is valid (>0) and is at most 5% (500 basis points)
         require(_newRedemptionFee > 0 && _newRedemptionFee <= 500, "Redemption fee must be between 0 and 5%");
         // Check if the new redemption fee is different from the current redemption fee
