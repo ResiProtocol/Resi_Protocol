@@ -15,6 +15,8 @@ import "../../interfaces/IFeeManager.sol"; // Importing the Fee Manager interfac
 import "../../interfaces/IPegMechanism.sol"; // Importing the Peg Mechanism interface
 import "../../interfaces/IVolumeController.sol"; // Importing the Volume Controller interface
 import "../../interfaces/IAccessController.sol"; // Importing the Access Controller interface
+import "../../interfaces/IZKPVerifier.sol"; // Importing the ZKP Verifier interface
+
 
 contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
     // State variables
@@ -31,6 +33,7 @@ contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
     ICollateralPool public collateralPool; // Collateral Pool interface
     IOracleAggregator public oracleAggregator; // Oracle Aggregator interface
     IStabilityReserve public stabilityReserve; // Stability Reserve interface
+    IZKPVerifier public zkpVerifier; // ZKP Verifier interface
 
     // Constants
     uint256 private constant BASIS_POINTS = 10000; // Basis points constant for calculations
@@ -108,6 +111,13 @@ contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
      */
     event AccessControllerSet(address indexed accessController);
 
+    /** 
+     * @notice Emitted when the ZKP verifier address is set
+     * @dev This is fired during the setZKPVerifier function
+     * @param zkpVerifier The address of the new ZKP verifier
+     */
+    event ZKPVerifierSet(address indexed zkpVerifier);
+
     // Constructor for the StablecoinCore contract
     constructor(
         string memory name_,
@@ -135,9 +145,6 @@ contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
         stabilityReserve = IStabilityReserve(_stabilityReserve);
 
         // Set the module interfaces
-        feeManager = IFeeManager(_feeManager);
-        pegMechanism = IPegMechanism(_pegMechanism);
-        volumeController = IVolumeController(_volumeController);
         accessController = IAccessController(_accessController);
 
         // Emit events for the set addresses
@@ -262,6 +269,17 @@ contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
         pegMechanism.setStabilityReserve(_newStabilityReserve);
     }
 
+    /**
+    * @dev Updates the address of the ZKP verifier
+    * @param _newZKPVerifier The address of the new ZKP verifier
+    */
+    function setZKPVerifier(address _newZKPVerifier) external {
+        require(accessController.canSetParams(msg.sender), "Not authorized to set parameters");
+        require(_newZKPVerifier != address(0), "Invalid ZKP verifier address");
+        zkpVerifier = IZKPVerifier(_newZKPVerifier);
+        emit ZKPVerifierSet(_newZKPVerifier);
+    }
+
     // Emergency functions
 
     /** 
@@ -324,7 +342,7 @@ contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
     * @param collateralType Address of the collateral token
     * @return amountMinted Amount of stablecoins minted
     */
-    function mint(uint256 collateralAmount, address collateralType)
+    function mint(uint256 collateralAmount, address collateralType, bytes calldata proofData)
         external
         whenNotPaused
         nonReentrant
@@ -333,6 +351,10 @@ contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
         // Check whether minting is allowed
         require(accessController.canMint(msg.sender), "Not authorized to mint");
 
+        if (address(zkpVerifier) != address(0)) {
+            // Verify the proof using the ZKP verifier
+            require(zkpVerifier.verifyMinting(collateralAmount, collateralType, proofData), "ZKP verification failed");
+        }
         // Check if the collateral pool is set
         require(address(collateralPool) != address(0), "Collateral pool not set");
         // Check if the oracle aggregator is set
@@ -385,7 +407,7 @@ contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
     * @param collateralType Address of the collateral token
     * @return collateralRedeemed Amount of collateral redeemed
     */
-    function burn(uint256 stableAmount, address collateralType)
+    function burn(uint256 stableAmount, address collateralType, bytes calldata proofData)
         external
         whenNotPaused
         nonReentrant
@@ -394,6 +416,10 @@ contract StablecoinCore is ERC20Pausable, ReentrancyGuard {
         // Check whether burning is allowed
         require(accessController.canBurn(msg.sender), "Not authorized to burn");
 
+        if (address(zkpVerifier) != address(0)) {
+            // Verify the proof using the ZKP verifier
+            require(zkpVerifier.verifyBurning(stableAmount, collateralType, proofData), "ZKP verification failed");
+        }
         // Check if the collateral pool is set
         require(address(collateralPool) != address(0), "Collateral pool not set");
         // Check if the oracle aggregator is set
