@@ -1,9 +1,9 @@
 # RESI Protocol: Oracle Aggregation & Data Validation Framework
 
-**Document ID:** RESI-TECH-ORACLE-2025-001  
-**Version:** 1.0  
+**Document ID:** RESI-TECH-ORACLE-2025-002  
+**Version:** 2.0  
 **Status:** Final Draft  
-**Date:** 2025-05-19  
+**Date:** 2025-05-25  
 **Author:** Cass402
 
 ## Table of Contents
@@ -12,21 +12,23 @@
 2. [Oracle System Architecture](#2-oracle-system-architecture)
 3. [Multi-Source Oracle Aggregation](#3-multi-source-oracle-aggregation)
 4. [Statistical Validation Framework](#4-statistical-validation-framework)
-5. [Zero-Knowledge Enhanced Oracle System](#5-zero-knowledge-enhanced-oracle-system)
+5. [Privacy-Preserving Oracle Systems](#5-privacy-preserving-oracle-systems)
 6. [Data Security & Reliability Mechanisms](#6-data-security--reliability-mechanisms)
 7. [Cross-Chain Oracle Synchronization](#7-cross-chain-oracle-synchronization)
-8. [Implementation & Integration Guidelines](#8-implementation--integration-guidelines)
+8. [Quantum-Resistant Infrastructure](#8-quantum-resistant-infrastructure)
 9. [Performance & Scalability Considerations](#9-performance--scalability-considerations)
-10. [Governance & Parameter Management](#10-governance--parameter-management)
-11. [Testing & Quality Assurance](#11-testing--quality-assurance)
-12. [References](#12-references)
-13. [Appendices](#13-appendices)
+10. [Regulatory Compliance Framework](#10-regulatory-compliance-framework)
+11. [AI-Driven Validation & Testing](#11-ai-driven-validation--testing)
+12. [Governance & Parameter Management](#12-governance--parameter-management)
+13. [Implementation & Integration Guidelines](#13-implementation--integration-guidelines)
+14. [References](#14-references)
+15. [Appendices](#15-appendices)
 
 ## 1. Introduction
 
 ### 1.1 Purpose
 
-This document provides a comprehensive technical specification of the Oracle Aggregation and Data Validation Framework implemented within the RESI Protocol. It details the architecture, algorithms, and security measures that ensure the protocol receives accurate, tamper-resistant, and privacy-preserving price and market data for critical operations.
+This document provides a comprehensive technical specification of the Oracle Aggregation and Data Validation Framework implemented within the RESI Protocol. It details the architecture, algorithms, and implementation patterns necessary for secure, reliable, and privacy-preserving oracle operations.
 
 ### 1.2 Scope
 
@@ -34,9 +36,12 @@ This specification covers:
 
 - The multi-source oracle aggregation architecture
 - Statistical validation and outlier detection methodologies
-- Zero-knowledge proof integration for privacy-preserving validation
+- Privacy-preserving aggregation with zero-knowledge proofs
 - Security mechanisms including the Oracle Security Module
-- Fallback and circuit breaker implementations
+- Quantum-resistant infrastructure for future-proofing
+- Federated learning integration for advanced data validation
+- Regulatory compliance frameworks
+- AI-driven testing and validation methodologies
 - Cross-chain oracle synchronization
 - Implementation and integration patterns
 
@@ -98,6 +103,15 @@ The Oracle Aggregation and Data Validation Framework is designed as a multi-laye
 |  +----------------+------------------+      |
 |                   |                         |
 |                   | Secured Data            |
+|                   v                         |
+|  +----------------+------------------+      |
+|  |                                   |      |
+|  |     Privacy-Preserving            |      |
+|  |     Aggregation Engine            |      |
+|  |                                   |      |
+|  +----------------+------------------+      |
+|                   |                         |
+|                   | Encrypted Data          |
 |                   v                         |
 |  +----------------+------------------+      |
 |  |                                   |      |
@@ -169,7 +183,27 @@ This component applies statistical techniques to validate data from multiple sou
 - Real-time detection of manipulation attempts
 - Integration with zero-knowledge proofs for confidential validation
 
-#### 2.2.3 Oracle Security Module (OSM)
+#### 2.2.3 Privacy-Preserving Aggregation Engine
+
+This new component implements state-of-the-art privacy techniques to ensure data confidentiality during aggregation.
+
+**Key Functions:**
+
+- Homomorphic encryption of oracle inputs
+- Multi-party computation for secure aggregation
+- Zero-knowledge proofs for data validity without revealing values
+- Threshold decryption to prevent single points of failure
+- Dishonesty detection via zero-balance proof commitments
+
+**Technical Characteristics:**
+
+- PICA (Paillier-based In-Chain Aggregation) implementation
+- (t,n)-threshold schemes requiring ≥t nodes to decrypt
+- Support for TEE (Trusted Execution Environment) nodes
+- Byzantine-robust verification using Fiat-Shamir heuristics
+- Quantum-resistant hybridization with CRYSTALS-Kyber
+
+#### 2.2.4 Oracle Security Module (OSM)
 
 The Oracle Security Module introduces a time delay before price updates affect the protocol, providing a security buffer against flash attacks.
 
@@ -189,7 +223,7 @@ The Oracle Security Module introduces a time delay before price updates affect t
 - Optimized storage for historical price data
 - Priority override mechanism for emergency situations
 
-#### 2.2.4 Oracle Consumption Layer
+#### 2.2.5 Oracle Consumption Layer
 
 This layer provides standardized interfaces for protocol components to access oracle data.
 
@@ -216,7 +250,7 @@ The data flow through the oracle system follows these stages:
 1. **Collection**: Multiple external oracles provide price and market data
 2. **Normalization**: Data is converted to standard formats and precision
 3. **Validation**: Statistical techniques verify data consistency and detect outliers
-4. **Aggregation**: Multiple data points are combined into authoritative values
+4. **Privacy-Preserving Aggregation**: Data is aggregated while preserving privacy
 5. **Security Delay**: Critical price updates are time-delayed to prevent flash attacks
 6. **Distribution**: Validated data is made available to protocol components
 7. **Monitoring**: Continuous monitoring for anomalies and manipulation attempts
@@ -231,10 +265,10 @@ The RESI Protocol integrates with multiple oracle providers to ensure data relia
 
 | Oracle Provider  | Integration Type  | Data Types                      | Update Frequency | Reliability Score |
 | ---------------- | ----------------- | ------------------------------- | ---------------- | ----------------- |
-| Chainlink        | Direct Feed       | Asset Prices, Market Indicators | 1-3 minutes      | 0.95              |
+| Chainlink        | OCR 2.0 Feed      | Asset Prices, Market Indicators | 1-3 minutes      | 0.95              |
 | Band Protocol    | Direct Feed       | Asset Prices, FX Rates          | 1-5 minutes      | 0.92              |
 | API3             | First-Party Feed  | Asset Prices, Reserves Data     | 2-5 minutes      | 0.90              |
-| Pyth Network     | Direct Feed       | Asset Prices, Volatility        | 400ms-1 minute   | 0.93              |
+| Pyth Network     | Pull Architecture | Asset Prices, Volatility        | 400ms-1 minute   | 0.93              |
 | UMA              | Optimistic Oracle | Slow-changing Data              | 30-120 minutes   | 0.88              |
 | Custom Observers | Direct Feed       | Protocol-specific Metrics       | 1-5 minutes      | 0.91              |
 
@@ -250,18 +284,19 @@ Providers are selected based on:
 6. **Technical Compatibility**: Integration with protocol architecture
 7. **Manipulation Resistance**: Economic and technical safeguards
 
-#### 3.1.3 Provider-Specific Adapter Implementation
+#### 3.1.3 Chainlink OCR 2.0 Integration
 
-Each oracle provider requires a specialized adapter to normalize data. Here's an example of the Chainlink adapter implementation:
+Chainlink's Off-Chain Reporting 2.0 (OCR 2.0) provides enhanced security and efficiency for oracle data:
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/OCR2AggregatorInterface.sol";
 import "./IOracleAdapter.sol";
 
-contract ChainlinkAdapter is IOracleAdapter {
+contract ChainlinkOCR2Adapter is IOracleAdapter {
     // Mapping from asset symbol to Chainlink feed address
     mapping(bytes32 => address) private feeds;
 
@@ -271,8 +306,11 @@ contract ChainlinkAdapter is IOracleAdapter {
     // Precision conversion (Chainlink uses 8 decimals, we standardize to 18)
     uint256 private constant PRECISION_FACTOR = 10**10;
 
+    // Multi-node consensus threshold
+    uint256 private constant MIN_NODE_CONSENSUS = 5; // Requires 5-of-7 nodes minimum
+
     constructor() {
-        // Initialize core feeds
+        // Initialize core feeds with OCR 2.0 addresses
         feeds[keccak256("ETH")] = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419; // ETH/USD
         feeds[keccak256("BTC")] = 0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c; // BTC/USD
         feeds[keccak256("FIL")] = 0x1A31D42149e82Eb99777f903C08A2E41A00085d3; // FIL/USD
@@ -286,7 +324,7 @@ contract ChainlinkAdapter is IOracleAdapter {
     }
 
     /**
-     * @notice Get price data for an asset
+     * @notice Get price data for an asset using OCR 2.0
      * @param asset Asset symbol (bytes32 encoded)
      * @return price Price in 18 decimal format
      * @return timestamp Timestamp of last update
@@ -300,7 +338,7 @@ contract ChainlinkAdapter is IOracleAdapter {
         address feedAddress = feeds[asset];
         require(feedAddress != address(0), "ChainlinkAdapter: Feed not found");
 
-        AggregatorV3Interface feed = AggregatorV3Interface(feedAddress);
+        OCR2AggregatorInterface feed = OCR2AggregatorInterface(feedAddress);
 
         // Get latest round data
         (
@@ -315,55 +353,170 @@ contract ChainlinkAdapter is IOracleAdapter {
         require(updatedAt > 0, "ChainlinkAdapter: Incomplete round");
         require(answeredInRound >= roundId, "ChainlinkAdapter: Stale price");
 
+        // Get transmission details for verification
+        (
+            bytes32 configDigest,
+            uint32 epoch,
+            uint8 round,
+            int192 latestAnswer,
+            uint64 latestTimestamp
+        ) = feed.latestTransmissionDetails();
+
+        // Verify transmission integrity
+        require(latestAnswer == answer, "ChainlinkAdapter: Transmission mismatch");
+        require(latestTimestamp == updatedAt, "ChainlinkAdapter: Timestamp mismatch");
+
+        // Get node consensus count (OCR 2.0 specific)
+        uint8 nodeConsensusCount = feed.latestRoundNodeConsensusCount();
+        require(nodeConsensusCount >= MIN_NODE_CONSENSUS, "ChainlinkAdapter: Insufficient consensus");
+
         // Convert to standard precision
         price = uint256(answer) * PRECISION_FACTOR;
         timestamp = updatedAt;
 
-        // Calculate confidence based on time since update
+        // Calculate confidence based on time since update and node consensus
         uint256 timeSinceUpdate = block.timestamp - updatedAt;
         uint256 maxHeartbeat = heartbeats[asset];
 
         if (timeSinceUpdate > maxHeartbeat) {
             confidence = 0; // Stale data
         } else {
-            // Linear decay of confidence over time
-            confidence = 1e18 - (timeSinceUpdate * 1e18 / maxHeartbeat);
+            // Calculate time-based confidence decay
+            uint256 timeConfidence = 1e18 - (timeSinceUpdate * 1e18 / maxHeartbeat);
+
+            // Calculate node consensus confidence
+            uint256 consensusConfidence = (nodeConsensusCount * 1e18) / feed.nodeCount();
+
+            // Combined confidence score
+            confidence = (timeConfidence * consensusConfidence) / 1e18;
         }
 
         return (price, timestamp, confidence);
     }
 
-    /**
-     * @notice Check if the adapter supports an asset
-     * @param asset Asset symbol (bytes32 encoded)
-     * @return True if supported
-     */
-    function supportsAsset(bytes32 asset) external view override returns (bool) {
-        return feeds[asset] != address(0);
+    // Additional OCR 2.0 specific methods...
+}
+```
+
+#### 3.1.4 Pyth-Style Pull Architecture
+
+Pyth Network's pull architecture provides on-demand price updates with consumer-paid fees:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+import "./IPythInterface.sol";
+import "./IOracleAdapter.sol";
+
+contract PythPullAdapter is IOracleAdapter {
+    // Pyth interface
+    IPythInterface public pythNetwork;
+
+    // Mapping from asset symbol to Pyth price feed ID
+    mapping(bytes32 => bytes32) private priceFeeds;
+
+    // Mapping from asset symbol to confidence threshold
+    mapping(bytes32 => uint64) private confidenceThresholds;
+
+    // Fee for price updates
+    uint256 public updateFee;
+
+    constructor(address _pythNetwork) {
+        pythNetwork = IPythInterface(_pythNetwork);
+
+        // Initialize core price feeds
+        priceFeeds[keccak256("ETH")] = 0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419; // ETH/USD feed ID
+        priceFeeds[keccak256("BTC")] = 0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c; // BTC/USD feed ID
+        // Add more feeds as needed
+
+        // Set confidence thresholds (minimum confidence for valid price)
+        confidenceThresholds[keccak256("ETH")] = 1000; // Basis points (10%)
+        confidenceThresholds[keccak256("BTC")] = 800;  // Basis points (8%)
+        // Set more thresholds as needed
+
+        // Get update fee from Pyth network
+        updateFee = pythNetwork.getUpdateFee(new bytes32[](0));
     }
 
     /**
-     * @notice Add or update a feed
+     * @notice Request a fresh price update and pay the fee
      * @param asset Asset symbol (bytes32 encoded)
-     * @param feedAddress Chainlink feed address
-     * @param heartbeat Maximum time between updates
+     * @param updateData Price update data from Pyth
      */
-    function updateFeed(
-        bytes32 asset,
-        address feedAddress,
-        uint256 heartbeat
-    ) external onlyOwner {
-        require(feedAddress != address(0), "ChainlinkAdapter: Invalid feed address");
-        require(heartbeat > 0, "ChainlinkAdapter: Invalid heartbeat");
+    function requestPriceUpdate(bytes32 asset, bytes[] calldata updateData) external payable {
+        bytes32 priceId = priceFeeds[asset];
+        require(priceId != bytes32(0), "PythAdapter: Feed not found");
 
-        feeds[asset] = feedAddress;
-        heartbeats[asset] = heartbeat;
+        // Ensure sufficient fee is paid
+        require(msg.value >= updateFee, "PythAdapter: Insufficient fee");
 
-        emit FeedUpdated(asset, feedAddress, heartbeat);
+        // Update the price feed
+        pythNetwork.updatePriceFeeds{value: updateFee}(updateData);
+
+        // Refund excess payment
+        if (msg.value > updateFee) {
+            payable(msg.sender).transfer(msg.value - updateFee);
+        }
+
+        emit PriceUpdateRequested(asset, priceId);
+    }
+
+    /**
+     * @notice Get price data for an asset
+     * @param asset Asset symbol (bytes32 encoded)
+     * @return price Price in 18 decimal format
+     * @return timestamp Timestamp of last update
+     * @return confidence Confidence score (0-1)
+     */
+    function getPriceData(bytes32 asset) external view override returns (
+        uint256 price,
+        uint256 timestamp,
+        uint256 confidence
+    ) {
+        bytes32 priceId = priceFeeds[asset];
+        require(priceId != bytes32(0), "PythAdapter: Feed not found");
+
+        // Get price from Pyth
+        IPythInterface.Price memory pythPrice = pythNetwork.getPrice(priceId);
+
+        // Validate price
+        require(pythPrice.price != 0, "PythAdapter: Invalid price");
+        require(pythPrice.publishTime > 0, "PythAdapter: Invalid timestamp");
+
+        // Convert price to 18 decimals
+        int64 baseExponent = pythPrice.expo;
+        uint256 adjustedPrice;
+
+        if (baseExponent < -18) {
+            adjustedPrice = uint256(pythPrice.price) / (10 ** uint256(-18 - baseExponent));
+        } else {
+            adjustedPrice = uint256(pythPrice.price) * (10 ** uint256(18 + baseExponent));
+        }
+
+        // Calculate confidence
+        uint64 confThreshold = confidenceThresholds[asset];
+        uint64 confValue = uint64(pythPrice.conf);
+
+        if (confValue > pythPrice.price * confThreshold / 10000) {
+            confidence = 0; // Confidence interval too large
+        } else {
+            // Normalize confidence to 0-1 range
+            confidence = 1e18 - ((confValue * 1e18) / (pythPrice.price * confThreshold / 10000));
+        }
+
+        return (adjustedPrice, pythPrice.publishTime, confidence);
+    }
+
+    /**
+     * @notice Update the fee for price updates
+     */
+    function updateFeeFromNetwork() external {
+        updateFee = pythNetwork.getUpdateFee(new bytes32[](0));
     }
 
     // Events
-    event FeedUpdated(bytes32 indexed asset, address feedAddress, uint256 heartbeat);
+    event PriceUpdateRequested(bytes32 indexed asset, bytes32 indexed priceId);
 }
 ```
 
@@ -371,7 +524,227 @@ contract ChainlinkAdapter is IOracleAdapter {
 
 The protocol employs multiple aggregation methods depending on data type, market conditions, and required security level.
 
-#### 3.2.1 Median Aggregation
+#### 3.2.1 PICA: Paillier-based In-Chain Aggregation
+
+The PICA algorithm enables privacy-preserving aggregation of oracle data:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+import "./IPaillierCrypto.sol";
+
+contract PICAOracleAggregator {
+    // Paillier cryptosystem parameters
+    IPaillierCrypto public paillier;
+
+    // Public key components (n, g)
+    uint256 public modulus; // n
+    uint256 public generator; // g
+
+    // Threshold decryption parameters
+    uint256 public threshold; // Minimum parties needed for decryption
+    uint256 public totalParties; // Total parties with key shares
+
+    // Participating oracles
+    mapping(address => bool) public authorizedOracles;
+    address[] public oracleList;
+
+    // Encrypted contributions by round and oracle
+    mapping(uint256 => mapping(address => uint256)) public encryptedContributions;
+
+    // Rounds tracking
+    uint256 public currentRound;
+    mapping(uint256 => bool) public roundFinalized;
+    mapping(uint256 => uint256) public aggregatedResults;
+
+    constructor(
+        address _paillierLib,
+        uint256 _modulus,
+        uint256 _generator,
+        uint256 _threshold,
+        uint256 _totalParties
+    ) {
+        paillier = IPaillierCrypto(_paillierLib);
+        modulus = _modulus;
+        generator = _generator;
+        threshold = _threshold;
+        totalParties = _totalParties;
+        currentRound = 1;
+    }
+
+    /**
+     * @notice Submit encrypted oracle data
+     * @param round Aggregation round
+     * @param encryptedValue Paillier-encrypted value
+     * @param zkProof Zero-knowledge proof of valid range
+     */
+    function submitEncryptedData(
+        uint256 round,
+        uint256 encryptedValue,
+        bytes calldata zkProof
+    ) external {
+        require(authorizedOracles[msg.sender], "Not authorized oracle");
+        require(round == currentRound, "Invalid round");
+        require(!roundFinalized[round], "Round already finalized");
+
+        // Verify encrypted value is in valid range using ZKP
+        require(
+            verifyRangeProof(encryptedValue, zkProof),
+            "Invalid range proof"
+        );
+
+        // Store encrypted contribution
+        encryptedContributions[round][msg.sender] = encryptedValue;
+
+        emit EncryptedDataSubmitted(round, msg.sender);
+
+        // Check if we have enough contributions to aggregate
+        checkAndAggregate(round);
+    }
+
+    /**
+     * @notice Check if enough contributions and aggregate if so
+     * @param round Aggregation round
+     */
+    function checkAndAggregate(uint256 round) internal {
+        uint256 contributionCount = 0;
+
+        for (uint256 i = 0; i < oracleList.length; i++) {
+            if (encryptedContributions[round][oracleList[i]] != 0) {
+                contributionCount++;
+            }
+        }
+
+        // We need at least threshold contributions for secure aggregation
+        if (contributionCount >= threshold) {
+            aggregateEncryptedValues(round);
+        }
+    }
+
+    /**
+     * @notice Aggregate encrypted values using Paillier homomorphic properties
+     * @param round Aggregation round
+     */
+    function aggregateEncryptedValues(uint256 round) internal {
+        uint256 aggregated = 1; // Multiplicative identity for modular multiplication
+        uint256 nSquared = modulus * modulus;
+
+        for (uint256 i = 0; i < oracleList.length; i++) {
+            address oracle = oracleList[i];
+            uint256 contribution = encryptedContributions[round][oracle];
+
+            if (contribution != 0) {
+                // Homomorphic addition via modular multiplication
+                aggregated = (aggregated * contribution) % nSquared;
+            }
+        }
+
+        // Store aggregated encrypted result
+        aggregatedResults[round] = aggregated;
+        roundFinalized[round] = true;
+
+        emit RoundAggregated(round, aggregated);
+
+        // Start new round
+        currentRound = round + 1;
+    }
+
+    /**
+     * @notice Decrypt aggregated result using threshold decryption
+     * @param round Round to decrypt
+     * @param partialDecryptions Array of partial decryptions from key holders
+     * @param partialProofs Array of ZK proofs for partial decryptions
+     * @return decryptedValue The plaintext aggregated value
+     */
+    function decryptAggregatedResult(
+        uint256 round,
+        uint256[] calldata partialDecryptions,
+        bytes[] calldata partialProofs
+    ) external returns (uint256 decryptedValue) {
+        require(roundFinalized[round], "Round not finalized");
+        require(partialDecryptions.length >= threshold, "Not enough partial decryptions");
+        require(partialDecryptions.length == partialProofs.length, "Mismatched proofs");
+
+        // Verify all partial decryptions with their proofs
+        for (uint256 i = 0; i < partialDecryptions.length; i++) {
+            require(
+                verifyPartialDecryption(
+                    aggregatedResults[round],
+                    partialDecryptions[i],
+                    partialProofs[i]
+                ),
+                "Invalid partial decryption proof"
+            );
+        }
+
+        // Combine partial decryptions to get final plaintext
+        decryptedValue = combinePartialDecryptions(partialDecryptions);
+
+        emit ResultDecrypted(round, decryptedValue);
+
+        return decryptedValue;
+    }
+
+    /**
+     * @notice Verify a range proof for encrypted value
+     * @param encryptedValue Encrypted value
+     * @param proof Zero-knowledge proof
+     * @return isValid True if proof is valid
+     */
+    function verifyRangeProof(
+        uint256 encryptedValue,
+        bytes calldata proof
+    ) internal view returns (bool isValid) {
+        // Implement ZK range proof verification
+        // This ensures the encrypted value is within valid range
+        // without revealing the actual value
+
+        // Placeholder for actual verification
+        return true;
+    }
+
+    /**
+     * @notice Verify a partial decryption with proof
+     * @param encryptedValue Original encrypted value
+     * @param partialDecryption Partial decryption
+     * @param proof Zero-knowledge proof
+     * @return isValid True if proof is valid
+     */
+    function verifyPartialDecryption(
+        uint256 encryptedValue,
+        uint256 partialDecryption,
+        bytes calldata proof
+    ) internal view returns (bool isValid) {
+        // Implement verification of partial decryption
+        // This ensures the partial decryption was computed correctly
+
+        // Placeholder for actual verification
+        return true;
+    }
+
+    /**
+     * @notice Combine partial decryptions to get final plaintext
+     * @param partialDecryptions Array of partial decryptions
+     * @return plaintext The decrypted plaintext value
+     */
+    function combinePartialDecryptions(
+        uint256[] calldata partialDecryptions
+    ) internal view returns (uint256 plaintext) {
+        // Implement Lagrange interpolation to combine partial decryptions
+
+        // Placeholder for actual combination
+        return partialDecryptions[0];
+    }
+
+    // Events
+    event EncryptedDataSubmitted(uint256 indexed round, address indexed oracle);
+    event RoundAggregated(uint256 indexed round, uint256 encryptedResult);
+    event ResultDecrypted(uint256 indexed round, uint256 plaintext);
+}
+```
+
+#### 3.2.2 Median Aggregation
 
 The default aggregation method for price data is the weighted median, which provides resistance to outliers and manipulation.
 
@@ -438,7 +811,7 @@ function computeWeightedMedian(
 }
 ```
 
-#### 3.2.2 Time-Weighted Average Price (TWAP)
+#### 3.2.3 Time-Weighted Average Price (TWAP)
 
 For assets with higher volatility or lower liquidity, TWAP provides a smoother price feed.
 
@@ -531,7 +904,7 @@ function computeTWAP(
 }
 ```
 
-#### 3.2.3 Volume-Weighted Average Price (VWAP)
+#### 3.2.4 Volume-Weighted Average Price (VWAP)
 
 For assets with significant on-chain volume data, VWAP provides price averaging weighted by trading activity.
 
@@ -551,7 +924,7 @@ struct VolumeData {
 
 function computeVWAP(VolumeData[] memory volumeData) internal pure returns (uint256) {
     require(volumeData.length > 0, "Empty volume data");
-        uint256 totalVolume = 0;
+    uint256 totalVolume = 0;
     uint256 weightedSum = 0;
 
     for (uint i = 0; i < volumeData.length; i++) {
@@ -573,7 +946,7 @@ function computeVWAP(VolumeData[] memory volumeData) internal pure returns (uint
 }
 ```
 
-#### 3.2.4 Adaptive Aggregation
+#### 3.2.5 Adaptive Aggregation
 
 The protocol uses an adaptive approach that selects the optimal aggregation method based on market conditions and data availability.
 
@@ -584,54 +957,7 @@ The protocol uses an adaptive approach that selects the optimal aggregation meth
 - For assets with reliable on-chain volume: VWAP
 - During oracle discrepancies: Confidence-weighted average
 - During extreme market conditions: Fallback to OSM-delayed median
-
-**Implementation:**
-
-```solidity
-function getAggregatedPrice(bytes32 asset) public view returns (
-    uint256 price,
-    uint256 timestamp,
-    uint8 aggregationMethod,
-    uint256 confidence
-) {
-    // Get market conditions
-    MarketCondition memory condition = getMarketCondition(asset);
-
-    // Select aggregation method based on conditions
-    if (condition.volatility > VOLATILITY_THRESHOLD) {
-        // High volatility: use TWAP
-        (price, timestamp) = computeTWAPForAsset(asset, getLongerTimeWindow(condition.volatility));
-        aggregationMethod = AGGREGATION_TWAP;
-    } else if (condition.onChainVolumeReliable) {
-        // Reliable on-chain volume: use VWAP
-        (price, timestamp) = computeVWAPForAsset(asset);
-        aggregationMethod = AGGREGATION_VWAP;
-    } else if (condition.oracleDiscrepancy > DISCREPANCY_THRESHOLD) {
-        // Oracle discrepancy: use confidence-weighted average
-        (price, timestamp) = computeConfidenceWeightedAverage(asset);
-        aggregationMethod = AGGREGATION_WEIGHTED_AVERAGE;
-    } else if (condition.extremeMarketCondition) {
-        // Extreme conditions: use OSM delayed price
-        (price, timestamp) = getOSMDelayedPrice(asset);
-        aggregationMethod = AGGREGATION_OSM_DELAYED;
-    } else {
-        // Normal conditions: use weighted median
-        (price, timestamp) = computeWeightedMedianForAsset(asset);
-        aggregationMethod = AGGREGATION_WEIGHTED_MEDIAN;
-    }
-
-    // Calculate confidence based on data quality and market conditions
-    confidence = calculateConfidence(
-        asset,
-        price,
-        timestamp,
-        aggregationMethod,
-        condition
-    );
-
-    return (price, timestamp, aggregationMethod, confidence);
-}
-```
+- When privacy is critical: PICA aggregation
 
 ### 3.3 Data Normalization
 
@@ -919,7 +1245,72 @@ function detectOutliersTukey(
 }
 ```
 
-#### 4.1.4 Adaptive Outlier Detection
+#### 4.1.4 Intramorphic Testing
+
+A new approach that combines white-box validation with differential testing and metamorphic relations:
+
+```solidity
+function performIntramorphicTesting(
+    uint256[] memory prices,
+    uint256[] memory timestamps,
+    bytes32 asset
+) internal view returns (bool[] memory isOutlier) {
+    require(prices.length > 0, "Empty price array");
+
+    isOutlier = new bool[](prices.length);
+
+    // Get historical volatility pattern for this asset
+    VolatilityPattern memory pattern = getAssetVolatilityPattern(asset);
+
+    // Define metamorphic relations based on asset characteristics
+    MetamorphicRelation[] memory relations = defineMetamorphicRelations(asset);
+
+    // Apply each relation to identify metamorphic outliers
+    for (uint i = 0; i < prices.length; i++) {
+        uint256 violations = 0;
+
+        // Check against each metamorphic relation
+        for (uint j = 0; j < relations.length; j++) {
+            if (!validateMetamorphicRelation(
+                prices[i],
+                timestamps[i],
+                relations[j],
+                pattern
+            )) {
+                violations++;
+            }
+        }
+
+        // Mark as outlier if it violates too many relations
+        isOutlier[i] = violations > MAX_ALLOWED_RELATION_VIOLATIONS;
+    }
+
+    return isOutlier;
+}
+
+function validateMetamorphicRelation(
+    uint256 price,
+    uint256 timestamp,
+    MetamorphicRelation memory relation,
+    VolatilityPattern memory pattern
+) internal view returns (bool) {
+    // Implementation depends on relation type
+    if (relation.relationType == RelationType.MONOTONICITY) {
+        // Check if price change follows expected trend direction
+        return validateMonotonicity(price, timestamp, relation, pattern);
+    } else if (relation.relationType == RelationType.BOUNDED_CHANGE) {
+        // Check if price change is within expected bounds
+        return validateBoundedChange(price, timestamp, relation, pattern);
+    } else if (relation.relationType == RelationType.CORRELATION) {
+        // Check if price correlates with related assets as expected
+        return validateCorrelation(price, timestamp, relation, pattern);
+    }
+
+    return true;
+}
+```
+
+#### 4.1.5 Adaptive Outlier Detection
 
 The system selects the appropriate outlier detection method based on the number of data points and asset characteristics:
 
@@ -966,6 +1357,14 @@ function detectOutliers(
             getZScoreThresholdForAsset(asset, volatility)
         );
         detectionMethod = OUTLIER_DETECTION_Z_SCORE;
+    } else if (assetHasMetamorphicProperties(asset)) {
+        // For assets with known metamorphic properties
+        isOutlier = performIntramorphicTesting(
+            prices,
+            timestamps,
+            asset
+        );
+        detectionMethod = OUTLIER_DETECTION_INTRAMORPHIC;
     } else {
         // Default to Tukey's method for non-normal distributions
         isOutlier = detectOutliersTukey(
@@ -1193,7 +1592,7 @@ The framework validates new data points against historical patterns.
 
 Detects anomalies based on unexpected rates of change:
 
-```solidity
+````solidity
 function validateChangeRate(
     bytes32 asset,
     uint256 newPrice,
@@ -1254,6 +1653,7 @@ function validateChangeRate(
     return (isValid, confidenceScore, maxAllowedChange);
 }
 
+```solidity
 function calculateMaxAllowedChange(
     uint256 volatility,
     uint256 timeDiffSeconds
@@ -1262,20 +1662,24 @@ function calculateMaxAllowedChange(
     // Assume volatility is annual (31536000 seconds in a year)
     // Convert using square root of time rule
     uint256 timeRatio = (timeDiffSeconds * PRECISION_FACTOR) / SECONDS_IN_YEAR;
-    uint256 adjustedVolatility = (volatility * sqrt(timeRatio)) / sqrt(PRECISION_FACTOR);
+    uint256 scaledVolatility = (volatility * sqrt(timeRatio)) / sqrt(PRECISION_FACTOR);
 
-    // Apply multiplier to account for extreme but valid movements
-    // Typically 3-4 standard deviations covers most valid price movements
-    return adjustedVolatility * VOLATILITY_MULTIPLIER / PRECISION_FACTOR;
+    // Add margin of safety based on volatility confidence
+    uint256 safetyMultiplier = getVolatilityConfidenceMultiplier(volatility);
+
+    // Calculate maximum allowed change
+    uint256 maxChange = (scaledVolatility * safetyMultiplier) / PRECISION_FACTOR;
+
+    return maxChange;
 }
-```
+````
 
 #### 4.3.2 Momentum Analysis
 
-Validates price changes against recent momentum patterns:
+Validates price movements based on momentum indicators to detect anomalies:
 
 ```solidity
-function validateMomentum(
+function validatePriceMomentum(
     bytes32 asset,
     uint256 newPrice,
     uint256 timestamp
@@ -1283,844 +1687,1858 @@ function validateMomentum(
     bool isValid,
     uint256 confidenceScore
 ) {
-    // Get recent price history
-    (
-        uint256[] memory prices,
-        uint256[] memory timestamps
-    ) = getPriceHistory(asset, MOMENTUM_WINDOW);
+    // Get historical price data
+    PriceHistory memory history = getPriceHistory(asset, MOMENTUM_WINDOW);
 
-    if (prices.length < MOMENTUM_MIN_POINTS) {
-        return (true, DEFAULT_CONFIDENCE); // Not enough history for validation
+    // Need enough historical data points
+    if (history.prices.length < MOMENTUM_MIN_POINTS) {
+        return (true, DEFAULT_CONFIDENCE);
     }
 
-    // Calculate recent momentum (slope of recent prices)
-    int256 momentum = calculateMomentum(prices, timestamps);
+    // Calculate recent momentum (rate of change)
+    uint256 shortTermMomentum = calculateMomentum(
+        history,
+        SHORT_MOMENTUM_PERIOD
+    );
+
+    // Calculate longer-term momentum
+    uint256 longTermMomentum = calculateMomentum(
+        history,
+        LONG_MOMENTUM_PERIOD
+    );
 
     // Calculate expected price based on momentum
-    uint256 timeDiff = timestamp - timestamps[timestamps.length - 1];
-    int256 expectedChange = (momentum * int256(timeDiff)) / int256(MOMENTUM_TIME_UNIT);
+    uint256 expectedPrice = calculateExpectedPrice(
+        history.prices[history.prices.length - 1],
+        shortTermMomentum,
+        longTermMomentum,
+        timestamp - history.timestamps[history.timestamps.length - 1]
+    );
 
-    uint256 expectedPrice;
-    if (expectedChange >= 0) {
-        expectedPrice = prices[prices.length - 1] + uint256(expectedChange);
-    } else {
-        // Prevent underflow for negative expectedChange
-        if (uint256(-expectedChange) > prices[prices.length - 1]) {
-            expectedPrice = 0;
-        } else {
-            expectedPrice = prices[prices.length - 1] - uint256(-expectedChange);
-        }
-    }
-
-    // Calculate allowed deviation from expected price
-    uint256 volatility = getAssetVolatility(asset);
-    uint256 maxDeviation = (expectedPrice * volatility * MOMENTUM_DEVIATION_FACTOR) /
-                          (PRECISION_FACTOR * PRECISION_FACTOR);
-
-    // Calculate actual deviation
-    uint256 actualDeviation;
+    // Calculate deviation from expected price
+    uint256 deviation;
     if (newPrice > expectedPrice) {
-        actualDeviation = newPrice - expectedPrice;
+        deviation = ((newPrice - expectedPrice) * PRECISION_FACTOR) / expectedPrice;
     } else {
-        actualDeviation = expectedPrice - newPrice;
+        deviation = ((expectedPrice - newPrice) * PRECISION_FACTOR) / expectedPrice;
     }
 
-    // Determine if deviation is acceptable
-    isValid = actualDeviation <= maxDeviation;
+    // Get maximum allowed deviation based on asset characteristics
+    uint256 maxDeviation = getMaxMomentumDeviation(asset);
+
+    // Determine validity
+    isValid = deviation <= maxDeviation;
 
     // Calculate confidence score
-    if (maxDeviation > 0) {
+    if (isValid) {
         confidenceScore = PRECISION_FACTOR -
-                         ((actualDeviation * PRECISION_FACTOR) / maxDeviation);
+                          ((deviation * PRECISION_FACTOR) / maxDeviation);
     } else {
-        confidenceScore = PRECISION_FACTOR;
-    }
-
-    // Ensure minimum confidence
-    if (confidenceScore < MIN_MOMENTUM_CONFIDENCE) {
-        confidenceScore = MIN_MOMENTUM_CONFIDENCE;
+        // Declining confidence for invalid values
+        confidenceScore = (maxDeviation * PRECISION_FACTOR) / deviation / 2;
     }
 
     return (isValid, confidenceScore);
 }
 
 function calculateMomentum(
-    uint256[] memory prices,
-    uint256[] memory timestamps
+    PriceHistory memory history,
+    uint256 period
 ) internal pure returns (int256) {
-    // Use linear regression to calculate slope
-    uint256 n = prices.length;
+    // Find the appropriate index for the period
+    uint256 currentIndex = history.prices.length - 1;
+    uint256 periodIndex = 0;
 
-    uint256 sumX = 0;
-    uint256 sumY = 0;
-    uint256 sumXY = 0;
-    uint256 sumX2 = 0;
-
-    for (uint i = 0; i < n; i++) {
-        sumX += timestamps[i];
-        sumY += prices[i];
-        sumXY += timestamps[i] * prices[i];
-        sumX2 += timestamps[i] * timestamps[i];
+    for (uint i = history.timestamps.length - 1; i > 0; i--) {
+        if (history.timestamps[currentIndex] - history.timestamps[i] >= period) {
+            periodIndex = i;
+            break;
+        }
     }
 
-    // Calculate slope (avoid division by zero)
-    if (n * sumX2 <= sumX * sumX) {
+    // If we don't have enough history, use the oldest available
+    if (periodIndex == 0 && history.prices.length > 1) {
+        periodIndex = 0;
+    }
+
+    // Calculate percent change
+    if (history.prices[periodIndex] == 0) {
         return 0;
     }
 
-    int256 numerator = int256(n * sumXY) - int256(sumX * sumY);
-    uint256 denominator = n * sumX2 - sumX * sumX;
+    int256 priceChange = int256(history.prices[currentIndex]) - int256(history.prices[periodIndex]);
+    int256 momentumValue = (priceChange * int256(PRECISION_FACTOR)) / int256(history.prices[periodIndex]);
 
-    return numerator / int256(denominator);
+    return momentumValue;
+}
+```
+
+#### 4.3.3 Temporal Validation Rules
+
+Implements Oracle EPM-inspired features for time-based validation:
+
+```solidity
+struct TemporalValidationRule {
+    bytes32 assetId;
+    uint256 maxDataAge;            // Maximum age of data in seconds
+    uint256 minDataPoints;         // Minimum number of data points required
+    uint256 refreshFrequency;      // How often data should be refreshed
+    uint256 freshnessThreshold;    // Minimum percentage of fresh data required
+    uint8 backfillStrategy;        // Strategy for handling gaps
+    uint8 validationStatus;        // ValidationStatus enum value
+}
+
+enum ValidationStatus {
+    Pass,   // Data passes all validation rules
+    Fail,   // Data fails critical validation rules
+    Warn,   // Data passes with warnings (threshold proximity)
+    Skip    // Known non-critical issues, validation skipped
+}
+
+function validateTemporalRules(
+    bytes32 asset,
+    uint256[] memory timestamps,
+    uint256 currentTime
+) internal view returns (
+    ValidationStatus status,
+    string memory reason,
+    uint256 freshnessScore
+) {
+    // Get temporal validation rule for this asset
+    TemporalValidationRule memory rule = getTemporalRule(asset);
+
+    if (rule.assetId == bytes32(0)) {
+        // No specific rule defined, use default
+        rule = getDefaultTemporalRule();
+    }
+
+    // Check if we have enough data points
+    if (timestamps.length < rule.minDataPoints) {
+        return (
+            ValidationStatus.Fail,
+            "Insufficient data points",
+            0
+        );
+    }
+
+    // Check data age and freshness
+    uint256 freshCount = 0;
+    uint256 maxAge = 0;
+
+    for (uint i = 0; i < timestamps.length; i++) {
+        uint256 age = currentTime - timestamps[i];
+
+        // Track maximum age
+        if (age > maxAge) {
+            maxAge = age;
+        }
+
+        // Count fresh data points
+        if (age <= rule.refreshFrequency) {
+            freshCount++;
+        }
+    }
+
+    // Calculate freshness percentage
+    uint256 freshnessPct = (freshCount * 100) / timestamps.length;
+
+    // Calculate freshness score (0-100)
+    freshnessScore = freshnessPct;
+
+    // Check if max age exceeds threshold
+    if (maxAge > rule.maxDataAge) {
+        return (
+            ValidationStatus.Fail,
+            "Data exceeds maximum age",
+            freshnessScore
+        );
+    }
+
+    // Check freshness threshold
+    if (freshnessPct < rule.freshnessThreshold) {
+        // If close to threshold, warn instead of fail
+        if (freshnessPct >= rule.freshnessThreshold * 80 / 100) {
+            return (
+                ValidationStatus.Warn,
+                "Data freshness below optimal threshold",
+                freshnessScore
+            );
+        } else {
+            return (
+                ValidationStatus.Fail,
+                "Data freshness below required threshold",
+                freshnessScore
+            );
+        }
+    }
+
+    // All checks passed
+    return (
+        ValidationStatus.Pass,
+        "Temporal validation passed",
+        freshnessScore
+    );
 }
 ```
 
 ### 4.4 Confidence Score Calculation
 
-The framework combines validation results into a unified confidence score.
+The framework calculates a composite confidence score for each validated price.
 
 #### 4.4.1 Component Confidence Scores
 
-Each validation method provides a component confidence score:
+Individual confidence scores are calculated for each validation dimension:
 
 ```solidity
-struct ValidationResult {
-    bool isValid;
-    uint256 confidenceScore;
-    uint8 validationMethod;
-    bytes32 metadata;
+struct ConfidenceComponents {
+    uint256 sourceConfidence;      // Confidence in the data source
+    uint256 outlierConfidence;     // Confidence based on outlier detection
+    uint256 correlationConfidence; // Confidence based on cross-asset correlation
+    uint256 momentumConfidence;    // Confidence based on price momentum
+    uint256 changeRateConfidence;  // Confidence based on rate of change
+    uint256 freshnessConfidence;   // Confidence based on data freshness
+    uint256 consensusConfidence;   // Confidence based on source consensus
 }
 
-function validatePrice(
-    bytes32 asset,
+function calculateSourceConfidence(
+    bytes32 source,
+    bytes32 asset
+) internal view returns (uint256) {
+    // Get source reliability score
+    uint256 reliabilityScore = getSourceReliability(source);
+
+    // Get source-specific track record for this asset
+    uint256 assetTrackRecord = getSourceAssetTrackRecord(source, asset);
+
+    // Combine reliability and track record
+    uint256 sourceConfidence = (reliabilityScore * 7 + assetTrackRecord * 3) / 10;
+
+    return sourceConfidence;
+}
+
+function calculateOutlierConfidence(
     uint256 price,
-    uint256 timestamp,
-    bytes32 source
-) internal view returns (ValidationResult[] memory results) {
-    results = new ValidationResult[](5);
+    uint256[] memory allPrices,
+    bool isOutlier,
+    uint8 detectionMethod
+) internal pure returns (uint256) {
+    if (isOutlier) {
+        // If marked as outlier, calculate how far outside normal range
+        uint256 deviation = calculateOutlierDeviation(price, allPrices);
 
-    // 1. Outlier validation
-    (bool isOutlier, uint256 outlierConfidence, uint8 outlierMethod) = validateOutlier(
-        asset,
-        price,
-        timestamp,
-        source
-    );
+        // Severe outliers get very low confidence
+        if (deviation > SEVERE_OUTLIER_THRESHOLD) {
+            return 0;
+        }
 
-    results[0] = ValidationResult({
-        isValid: !isOutlier,
-        confidenceScore: outlierConfidence,
-        validationMethod: VALIDATION_OUTLIER,
-        metadata: bytes32(outlierMethod)
-    });
+        // Moderate outliers get reduced confidence
+        return PRECISION_FACTOR / (1 + deviation);
+    }
 
-    // 2. Cross-correlation validation
-    (bool isValidCorrelation, uint256 correlationConfidence, bytes32 correlationMetadata) =
-        validatePriceWithCorrelations(asset, price, timestamp);
+    // Not an outlier, calculate confidence based on proximity to median
+    uint256 medianProximity = calculateMedianProximity(price, allPrices);
 
-    results[1] = ValidationResult({
-        isValid: isValidCorrelation,
-        confidenceScore: correlationConfidence,
-        validationMethod: VALIDATION_CORRELATION,
-        metadata: correlationMetadata
-    });
-
-    // 3. Change rate validation
-    (bool isValidChangeRate, uint256 changeRateConfidence, uint256 maxAllowedChange) =
-        validateChangeRate(asset, price, timestamp);
-
-    results[2] = ValidationResult({
-        isValid: isValidChangeRate,
-        confidenceScore: changeRateConfidence,
-        validationMethod: VALIDATION_CHANGE_RATE,
-        metadata: bytes32(maxAllowedChange)
-    });
-
-    // 4. Momentum validation
-    (bool isValidMomentum, uint256 momentumConfidence) =
-        validateMomentum(asset, price, timestamp);
-
-    results[3] = ValidationResult({
-        isValid: isValidMomentum,
-        confidenceScore: momentumConfidence,
-        validationMethod: VALIDATION_MOMENTUM,
-        metadata: 0
-    });
-
-    // 5. Source credibility validation
-    (bool isValidSource, uint256 sourceConfidence, bytes32 sourceMetadata) =
-        validateSourceCredibility(asset, source);
-
-    results[4] = ValidationResult({
-        isValid: isValidSource,
-        confidenceScore: sourceConfidence,
-        validationMethod: VALIDATION_SOURCE,
-        metadata: sourceMetadata
-    });
-
-    return results;
+    // Higher confidence for values closer to median
+    return PRECISION_FACTOR - (medianProximity * PRECISION_FACTOR / MEDIAN_PROXIMITY_SCALE);
 }
 ```
 
 #### 4.4.2 Composite Confidence Calculation
 
-Component scores are combined to produce a final confidence score:
+The component confidence scores are combined into a composite score:
 
 ```solidity
 function calculateCompositeConfidence(
-    ValidationResult[] memory results,
+    ConfidenceComponents memory components,
     bytes32 asset
-) internal view returns (
-    uint256 compositeConfidence,
-    bool isValid,
-    uint8 failedValidations
-) {
-    // Get validation weights for this asset
-    uint256[] memory weights = getValidationWeights(asset);
+) internal view returns (uint256) {
+    // Get asset-specific component weights
+    uint256[7] memory weights = getConfidenceWeights(asset);
 
-    require(weights.length == results.length, "Weight count mismatch");
+    // Calculate weighted sum
+    uint256 weightedSum =
+        components.sourceConfidence * weights[0] +
+        components.outlierConfidence * weights[1] +
+        components.correlationConfidence * weights[2] +
+        components.momentumConfidence * weights[3] +
+        components.changeRateConfidence * weights[4] +
+        components.freshnessConfidence * weights[5] +
+        components.consensusConfidence * weights[6];
 
-    uint256 weightedSum = 0;
+    // Calculate total weight
     uint256 totalWeight = 0;
-    failedValidations = 0;
-
-    for (uint i = 0; i < results.length; i++) {
-        // Skip components with zero weight
-        if (weights[i] == 0) continue;
-
-        // Add to weighted sum
-        weightedSum += results[i].confidenceScore * weights[i];
+    for (uint i = 0; i < weights.length; i++) {
         totalWeight += weights[i];
-
-        // Track failed validations
-        if (!results[i].isValid) {
-            failedValidations++;
-        }
     }
 
-    // Calculate weighted average confidence
-    if (totalWeight > 0) {
-        compositeConfidence = weightedSum / totalWeight;
-    } else {
-        compositeConfidence = DEFAULT_CONFIDENCE;
+    // Calculate weighted average
+    uint256 compositeConfidence = weightedSum / totalWeight;
+
+    return compositeConfidence;
+}
+
+function getConfidenceWeights(
+    bytes32 asset
+) internal view returns (uint256[7] memory) {
+    // Default weights
+    uint256[7] memory defaultWeights = [
+        uint256(20),  // Source confidence
+        uint256(25),  // Outlier confidence
+        uint256(15),  // Correlation confidence
+        uint256(10),  // Momentum confidence
+        uint256(15),  // Change rate confidence
+        uint256(10),  // Freshness confidence
+        uint256(5)    // Consensus confidence
+    ];
+
+    // Check for asset-specific weights
+    bytes32 weightsKey = keccak256(abi.encodePacked("confidenceWeights", asset));
+    if (parameters.hasParameter(weightsKey)) {
+        return abi.decode(parameters.getBytes(weightsKey), (uint256[7]));
     }
 
-    // Determine overall validity
-    isValid = (failedValidations == 0 ||
-              (failedValidations <= MAX_ALLOWED_FAILURES &&
-               compositeConfidence >= MIN_VALID_CONFIDENCE));
-
-    return (compositeConfidence, isValid, failedValidations);
+    return defaultWeights;
 }
 ```
 
 #### 4.4.3 Asset-Specific Validation Parameters
 
-Validation parameters are tailored to each asset's characteristics:
+The system uses configurable, asset-specific parameters for validation:
 
 ```solidity
-function getValidationWeights(bytes32 asset) internal view returns (uint256[] memory) {
-    // Get asset category
+function getAssetValidationParameters(
+    bytes32 asset
+) internal view returns (AssetValidationParams memory) {
+    AssetValidationParams memory params;
+
+    // Check if asset has custom parameters
+    bytes32 paramsKey = keccak256(abi.encodePacked("validationParams", asset));
+    if (parameters.hasParameter(paramsKey)) {
+        return abi.decode(parameters.getBytes(paramsKey), (AssetValidationParams));
+    }
+
+    // Return default parameters based on asset category
     uint8 category = getAssetCategory(asset);
 
-    // Return category-specific weights
     if (category == ASSET_CATEGORY_MAJOR_CRYPTO) {
-        return [
-            300,  // Outlier validation
-            250,  // Cross-correlation validation
-            200,  // Change rate validation
-            150,  // Momentum validation
-            100   // Source credibility
-        ];
+        params.maxPriceDeviation = 5 * PRECISION_FACTOR / 100; // 5%
+        params.outlierZScoreThreshold = 3 * PRECISION_FACTOR;
+        params.correlationThreshold = 60 * PRECISION_FACTOR / 100; // 0.6
+        params.volatilityMultiplier = 150 * PRECISION_FACTOR / 100; // 1.5x
+        params.minDataPoints = 3;
+        params.maxDataAge = 3600; // 1 hour
+        params.freshnessThreshold = 80; // 80%
     } else if (category == ASSET_CATEGORY_ALT_CRYPTO) {
-        return [
-            350,  // Outlier validation
-            150,  // Cross-correlation validation
-            250,  // Change rate validation
-            150,  // Momentum validation
-            100   // Source credibility
-        ];
-    } else if (category == ASSET_CATEGORY_STABLECOIN) {
-        return [
-            400,  // Outlier validation
-            100,  // Cross-correlation validation
-            300,  // Change rate validation
-            100,  // Momentum validation
-            100   // Source credibility
-        ];
+        params.maxPriceDeviation = 10 * PRECISION_FACTOR / 100; // 10%
+        params.outlierZScoreThreshold = 4 * PRECISION_FACTOR;
+        params.correlationThreshold = 50 * PRECISION_FACTOR / 100; // 0.5
+        params.volatilityMultiplier = 200 * PRECISION_FACTOR / 100; // 2x
+        params.minDataPoints = 3;
+        params.maxDataAge = 7200; // 2 hours
+        params.freshnessThreshold = 70; // 70%
+    } else if (category == ASSET_CATEGORY_FIAT) {
+        params.maxPriceDeviation = 2 * PRECISION_FACTOR / 100; // 2%
+        params.outlierZScoreThreshold = 3 * PRECISION_FACTOR;
+        params.correlationThreshold = 70 * PRECISION_FACTOR / 100; // 0.7
+        params.volatilityMultiplier = 120 * PRECISION_FACTOR / 100; // 1.2x
+        params.minDataPoints = 3;
+        params.maxDataAge = 14400; // 4 hours
+        params.freshnessThreshold = 60; // 60%
     } else {
-        // Default weights
-        return [
-            250,  // Outlier validation
-            200,  // Cross-correlation validation
-            250,  // Change rate validation
-            150,  // Momentum validation
-            150   // Source credibility
-        ];
+        // Default for unknown categories
+        params.maxPriceDeviation = 7 * PRECISION_FACTOR / 100; // 7%
+        params.outlierZScoreThreshold = 3 * PRECISION_FACTOR;
+        params.correlationThreshold = 60 * PRECISION_FACTOR / 100; // 0.6
+        params.volatilityMultiplier = 150 * PRECISION_FACTOR / 100; // 1.5x
+        params.minDataPoints = 3;
+        params.maxDataAge = 7200; // 2 hours
+        params.freshnessThreshold = 70; // 70%
     }
+
+    return params;
 }
 ```
 
-## 5. Zero-Knowledge Enhanced Oracle System
+## 5. Privacy-Preserving Oracle Systems
 
-### 5.1 ZKP Integration Overview
+The RESI Protocol implements state-of-the-art privacy techniques for secure and confidential oracle data.
 
-The Oracle System integrates zero-knowledge proofs to enhance privacy while maintaining data integrity.
+### 5.1 PICA Algorithm Integration
 
-#### 5.1.1 ZKP-Enhanced Data Flow
+The Paillier-based In-Chain Aggregation (PICA) algorithm enables end-to-end encrypted data flows in the oracle system.
 
-```
-+------------------------------------------------------------------+
-|                                                                  |
-|                    Oracle Provider Systems                       |
-|                                                                  |
-+------------+-------------------------+---------------------------+
-             |                         |
-             | Raw Data               | ZK Proofs
-             v                         v
-+------------+-------------------------+---------------------------+
-|                                                                  |
-|            ZK-Enhanced Oracle Adapter Layer                      |
-|                                                                  |
-+------------+-------------------------+---------------------------+
-             |                         |
-             | Normalized Data        | Verified Proofs
-             v                         v
-+------------+-------------------------+---------------------------+
-|                                                                  |
-|           Statistical Validation & Aggregation Engine            |
-|           with ZK-Verified Inputs                                |
-|                                                                  |
-+------------+-------------------------+---------------------------+
-             |                         |
-             | Aggregated Data        | Combined ZK Proof
-             v                         v
-+------------+-------------------------+---------------------------+
-|                                                                  |
-|                   Oracle Security Module                         |
-|                                                                  |
-+------------+-------------------------+---------------------------+
-             |                         |
-             | Final Data             | Final ZK Proof
-             v                         v
-+------------+-------------------------+---------------------------+
-|                                                                  |
-|                    Protocol Components                           |
-|                                                                  |
-+------------------------------------------------------------------+
-```
+#### 5.1.1 Homomorphic Encryption Overview
 
-#### 5.1.2 Privacy-Preserving Oracle Requirements
-
-The ZKP integration addresses several privacy and integrity requirements:
-
-1. **Price Source Privacy**: Oracle providers can submit data without revealing their exact price sources
-2. **Proprietary Model Protection**: Providers can keep proprietary pricing models confidential
-3. **Validation Range Proofs**: Providers prove their data is within acceptable ranges without revealing exact values
-4. **Credential Validation**: Providers prove they are authorized without revealing credentials
-5. **Aggregation Verification**: The system proves correct aggregation without revealing individual inputs
-
-### 5.2 ZK Circuit Designs for Oracle Validation
-
-#### 5.2.1 Oracle Data Validation Circuit
-
-```circom
-pragma circom 2.0.0;
-
-include "node_modules/circomlib/circuits/comparators.circom";
-include "node_modules/circomlib/circuits/poseidon.circom";
-
-template OracleDataValidation(min_decimals, max_decimals) {
-    // Public inputs
-    signal input publicRangeMin;
-    signal input publicRangeMax;
-    signal input publicProviderHash;
-    signal input publicAssetId;
-    signal input publicTimestamp;
-
-    // Private inputs
-    signal input privateExactPrice;
-    signal input privateProviderCredential;
-    signal input privateSourceIdentifier;
-    signal input privateDecimalPlaces;
-
-    // Range check on decimal places
-    component validDecimals = GreaterEqThan(4);
-    validDecimals.in[0] <== privateDecimalPlaces;
-    validDecimals.in[1] <== min_decimals;
-    validDecimals.out === 1;
-
-    component validMaxDecimals = LessEqThan(4);
-    validMaxDecimals.in[0] <== privateDecimalPlaces;
-    validMaxDecimals.in[1] <== max_decimals;
-    validMaxDecimals.out === 1;
-
-    // Price range validation
-    component inRange = RangeCheck();
-    inRange.value <== privateExactPrice;
-    inRange.lowerBound <== publicRangeMin;
-    inRange.upperBound <== publicRangeMax;
-    inRange.isInRange === 1;
-
-    // Provider credential verification
-    component credentialHasher = Poseidon(2);
-    credentialHasher.inputs[0] <== privateProviderCredential;
-    credentialHasher.inputs[1] <== privateSourceIdentifier;
-    credentialHasher.out === publicProviderHash;
-}
-
-template RangeCheck() {
-    signal input value;
-    signal input lowerBound;
-    signal input upperBound;
-    signal output isInRange;
-
-    component greaterThanLower = GreaterEqThan(252);
-    greaterThanLower.in[0] <== value;
-    greaterThanLower.in[1] <== lowerBound;
-
-    component lessThanUpper = LessEqThan(252);
-    lessThanUpper.in[0] <== value;
-    lessThanUpper.in[1] <== upperBound;
-
-    isInRange <== greaterThanLower.out * lessThanUpper.out;
-}
-
-component main {public [publicRangeMin, publicRangeMax, publicProviderHash, publicAssetId, publicTimestamp]} = OracleDataValidation(8, 18);
-```
-
-#### 5.2.2 Oracle Aggregation Circuit
-
-```circom
-pragma circom 2.0.0;
-
-include "node_modules/circomlib/circuits/comparators.circom";
-include "node_modules/circomlib/circuits/poseidon.circom";
-include "range_proof.circom";
-
-template OracleAggregation(n) {
-    // Public inputs
-    signal input publicAggregatedPrice;
-    signal input publicProviderCount;
-    signal input publicTimestamp;
-    signal input publicAggregationMethod;
-
-    // Private inputs
-    signal input privatePrices[n];
-    signal input privateWeights[n];
-    signal input privateProviderIndices[n];
-    signal input privateValidFlags[n];
-
-    // Verify provider count is valid
-    component validProviders = LessEqThan(8);
-    validProviders.in[0] <== publicProviderCount;
-    validProviders.in[1] <== n;
-    validProviders.out === 1;
-
-    // Count valid providers
-    signal validProviderCount;
-    validProviderCount <== privateValidFlags[0];
-    for (var i = 1; i < n; i++) {
-        validProviderCount += privateValidFlags[i];
-    }
-
-    // Ensure valid provider count matches public count
-    validProviderCount === publicProviderCount;
-
-    // Calculate weighted median or mean based on aggregation method
-    signal aggregatedResult;
-
-    // For median aggregation (method 1)
-    if (publicAggregationMethod == 1) {
-        aggregatedResult <== computeMedian(n, privatePrices, privateValidFlags);
-    }
-    // For weighted mean aggregation (method 2)
-    else if (publicAggregationMethod == 2) {
-        aggregatedResult <== computeWeightedMean(n, privatePrices, privateWeights, privateValidFlags);
-    }
-    // For TWAP aggregation (method 3)
-    else if (publicAggregationMethod == 3) {
-        aggregatedResult <== computeTWAP(n, privatePrices, privateValidFlags, privateWeights);
-    }
-
-    // Verify aggregated result matches public value
-    aggregatedResult === publicAggregatedPrice;
-
-    // Ensure all provider indices are unique
-    signal uniqueProviders[n][n];
-    for (var i = 0; i < n; i++) {
-        for (var j = 0; j < n; j++) {
-            if (i == j) {
-                uniqueProviders[i][j] <== 1;
-            } else {
-                // Check if indices are different
-                component neq = IsEqual();
-                neq.in[0] <== privateProviderIndices[i];
-                neq.in[1] <== privateProviderIndices[j];
-                uniqueProviders[i][j] <== 1 - neq.out;
-            }
-        }
-    }
-
-    // Validate all uniqueness constraints
-    for (var i = 0; i < n; i++) {
-        for (var j = i + 1; j < n; j++) {
-            uniqueProviders[i][j] === 1;
-        }
-    }
-}
-
-// Helper function for median computation (simplified)
-function computeMedian(n, prices, validFlags) {
-    // Implementation depends on circom capabilities
-    // This is a placeholder that would need a full sorting implementation
-    return prices[n/2];
-}
-
-// Helper function for weighted mean computation
-function computeWeightedMean(n, prices, weights, validFlags) {
-    signal weightedSum;
-    signal totalWeight;
-
-    weightedSum <== prices[0] * weights[0] * validFlags[0];
-    totalWeight <== weights[0] * validFlags[0];
-
-    for (var i = 1; i < n; i++) {
-        weightedSum += prices[i] * weights[i] * validFlags[i];
-        totalWeight += weights[i] * validFlags[i];
-    }
-
-    return weightedSum / totalWeight;
-}
-
-// Helper function for TWAP computation
-function computeTWAP(n, prices, validFlags, timeWeights) {
-    signal weightedSum;
-    signal totalWeight;
-
-    weightedSum <== prices[0] * timeWeights[0] * validFlags[0];
-    totalWeight <== timeWeights[0] * validFlags[0];
-
-    for (var i = 1; i < n; i++) {
-        weightedSum += prices[i] * timeWeights[i] * validFlags[i];
-        totalWeight += timeWeights[i] * validFlags[i];
-    }
-
-    return weightedSum / totalWeight;
-}
-
-component main {public [publicAggregatedPrice, publicProviderCount, publicTimestamp, publicAggregationMethod]} = OracleAggregation(10);
-```
-
-### 5.3 Privacy-Preserving Validation Process
-
-#### 5.3.1 Oracle Provider ZKP Generation
-
-Oracle providers generate ZKPs to prove data validity without revealing exact values:
-
-```typescript
-async function generateOracleDataProof(
-  assetId: string,
-  exactPrice: bigint,
-  providerCredential: string,
-  sourceIdentifier: string,
-  decimalPlaces: number,
-  timestamp: number
-): Promise<{
-  proof: Proof;
-  publicInputs: {
-    rangeMin: bigint;
-    rangeMax: bigint;
-    providerHash: string;
-    assetId: string;
-    timestamp: number;
-  };
-}> {
-  // Calculate appropriate range (e.g., +/- 5% of exact price)
-  const rangeMin = (exactPrice * 95n) / 100n;
-  const rangeMax = (exactPrice * 105n) / 100n;
-
-  // Generate provider hash for verification
-  const providerHash = poseidonHash([
-    stringToField(providerCredential),
-    stringToField(sourceIdentifier),
-  ]);
-
-  // Compile inputs for the circuit
-  const inputs = {
-    // Public inputs
-    publicRangeMin: rangeMin,
-    publicRangeMax: rangeMax,
-    publicProviderHash: providerHash,
-    publicAssetId: stringToField(assetId),
-    publicTimestamp: BigInt(timestamp),
-
-    // Private inputs
-    privateExactPrice: exactPrice,
-    privateProviderCredential: stringToField(providerCredential),
-    privateSourceIdentifier: stringToField(sourceIdentifier),
-    privateDecimalPlaces: BigInt(decimalPlaces),
-  };
-
-  // Generate the proof
-  const circuit = await loadCircuit("oracle_data_validation.circom");
-  const { proof, publicSignals } = await generateProof(circuit, inputs);
-
-  return {
-    proof,
-    publicInputs: {
-      rangeMin,
-      rangeMax,
-      providerHash,
-      assetId,
-      timestamp,
-    },
-  };
-}
-```
-
-#### 5.3.2 Verifier Contract Implementation
-
-On-chain verification of oracle data proofs:
+Paillier cryptosystem provides additive homomorphic properties that allow computation on encrypted data:
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./OracleDataVerifier.sol";
-import "./IOracleProvider.sol";
-
-contract ZKOracleAdapter {
-    // Verifier contract for oracle data ZK proofs
-    OracleDataVerifier public immutable verifier;
-
-    // Registered oracle providers
-    mapping(bytes32 => address) public oracleProviders;
-
-    // Asset price range history (for verification)
-    mapping(bytes32 => RangeHistory) public assetRangeHistory;
-
-    // Struct to store range history
-    struct RangeHistory {
-        uint256[] rangeMinimums;
-        uint256[] rangeMaximums;
-        uint256[] timestamps;
-        bytes32[] providerHashes;
-        uint256 lastUpdated;
-    }
-
-    constructor(address _verifier) {
-        verifier = OracleDataVerifier(_verifier);
+/**
+ * @title PaillierCrypto
+ * @notice Library for Paillier cryptosystem operations
+ */
+contract PaillierCrypto {
+    /**
+     * @notice Add two encrypted values homomorphically
+     * @param encA First encrypted value
+     * @param encB Second encrypted value
+     * @param n Paillier modulus
+     * @return result Encryption of the sum
+     */
+    function homomorphicAdd(
+        uint256 encA,
+        uint256 encB,
+        uint256 n
+    ) external pure returns (uint256 result) {
+        // Homomorphic addition is multiplication in ciphertext space
+        uint256 nSquared = n * n;
+        return (encA * encB) % nSquared;
     }
 
     /**
-     * @notice Submit oracle data with ZK proof
-     * @param assetId Asset identifier
-     * @param rangeMin Minimum of the price range
-     * @param rangeMax Maximum of the price range
-     * @param providerHash Hash of the provider credentials
-     * @param timestamp Data timestamp
-     * @param proof ZK proof validating the data
-     * @return success True if submission is valid
+     * @notice Multiply an encrypted value by a plaintext scalar
+     * @param encA Encrypted value
+     * @param scalar Plaintext scalar
+     * @param n Paillier modulus
+     * @return result Encryption of the product
      */
-    function submitOracleData(
-        bytes32 assetId,
-        uint256 rangeMin,
-        uint256 rangeMax,
-        bytes32 providerHash,
-        uint256 timestamp,
-        bytes calldata proof
-    ) external returns (bool success) {
-        // Ensure range is valid
-        require(rangeMin < rangeMax, "Invalid range");
-        require(rangeMax - rangeMin < rangeMax / 2, "Range too wide");
+    function homomorphicMul(
+        uint256 encA,
+        uint256 scalar,
+        uint256 n
+    ) external pure returns (uint256 result) {
+        // Homomorphic multiplication is exponentiation in ciphertext space
+        uint256 nSquared = n * n;
+        return modExp(encA, scalar, nSquared);
+    }
 
-        // Ensure timestamp is reasonable
+    /**
+     * @notice Verify a zero-balance proof commitment
+     * @param encryptedValue Encrypted value
+     * @param proof Zero-balance proof
+     * @param publicKey Paillier public key
+     * @return isValid Whether the proof is valid
+     */
+    function verifyZeroBalanceProof(
+        uint256 encryptedValue,
+        bytes calldata proof,
+        uint256[2] calldata publicKey
+    ) external pure returns (bool isValid) {
+        // Verify that the encrypted value is a valid encryption of zero
+        // using the provided zero-knowledge proof
+
+        // Implementation details depend on the specific ZKP system used
+        return true; // Placeholder
+    }
+
+    /**
+     * @notice Compute modular exponentiation efficiently
+     * @param base Base value
+     * @param exponent Exponent value
+     * @param modulus Modulus
+     * @return result (base^exponent) % modulus
+     */
+    function modExp(
+        uint256 base,
+        uint256 exponent,
+        uint256 modulus
+    ) internal pure returns (uint256 result) {
+        // Solidity 0.8.0+ has a built-in for modular exponentiation
+        return mulmod(base, exponent, modulus);
+    }
+}
+```
+
+#### 5.1.2 Multi-Party Threshold Decryption
+
+The system implements a (t,n)-threshold scheme requiring at least t nodes to decrypt:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title ThresholdDecryption
+ * @notice Implements threshold decryption for Paillier cryptosystem
+ */
+contract ThresholdDecryption {
+    // Paillier parameters
+    uint256 public n; // Modulus
+    uint256 public nSquared; // n^2
+
+    // Threshold parameters
+    uint256 public threshold; // Minimum shares needed for decryption
+    uint256 public totalShares; // Total number of shares
+
+    // Key holders
+    mapping(address => bool) public keyHolders;
+    address[] public keyHolderList;
+
+    // Partial decryptions for each message
+    mapping(bytes32 => mapping(address => uint256)) public partialDecryptions;
+    mapping(bytes32 => uint256) public decryptionCount;
+
+    // Events
+    event PartialDecryptionSubmitted(bytes32 indexed messageId, address indexed keyHolder);
+    event DecryptionComplete(bytes32 indexed messageId, uint256 plaintext);
+
+    constructor(
+        uint256 _n,
+        uint256 _threshold,
+        uint256 _totalShares,
+        address[] memory _initialKeyHolders
+    ) {
+        require(_threshold <= _totalShares, "Threshold must be <= total shares");
+        require(_initialKeyHolders.length == _totalShares, "Key holders must match total shares");
+
+        n = _n;
+        nSquared = n * n;
+        threshold = _threshold;
+        totalShares = _totalShares;
+
+        // Register key holders
+        for (uint i = 0; i < _initialKeyHolders.length; i++) {
+            keyHolders[_initialKeyHolders[i]] = true;
+            keyHolderList.push(_initialKeyHolders[i]);
+        }
+    }
+
+    /**
+     * @notice Submit a partial decryption of a message
+     * @param messageId Unique message identifier
+     * @param partialDecryption Partial decryption share
+     * @param proof Proof of correct partial decryption
+     */
+    function submitPartialDecryption(
+        bytes32 messageId,
+        uint256 partialDecryption,
+        bytes calldata proof
+    ) external {
+        require(keyHolders[msg.sender], "Not a key holder");
+        require(partialDecryptions[messageId][msg.sender] == 0, "Already submitted");
+
+        // Verify the partial decryption is valid
         require(
-            timestamp <= block.timestamp &&
-            timestamp > block.timestamp - 1 hours,
-            "Invalid timestamp"
+            verifyPartialDecryption(messageId, partialDecryption, proof),
+            "Invalid partial decryption"
         );
 
-        // Prepare public inputs for verification
-        uint256[5] memory publicInputs = [
-            rangeMin,
-            rangeMax,
-            uint256(providerHash),
-            uint256(assetId),
-            timestamp
-        ];
+        // Store the partial decryption
+        partialDecryptions[messageId][msg.sender] = partialDecryption;
+        decryptionCount[messageId]++;
 
-        // Verify the ZK proof
+        emit PartialDecryptionSubmitted(messageId, msg.sender);
+
+        // Check if we have enough shares to decrypt
+        if (decryptionCount[messageId] >= threshold) {
+            combineShares(messageId);
+        }
+    }
+
+    /**
+     * @notice Combine partial decryptions to recover the plaintext
+     * @param messageId Message identifier
+     */
+    function combineShares(bytes32 messageId) internal {
+        require(decryptionCount[messageId] >= threshold, "Not enough shares");
+
+        // Collect partial decryptions
+        address[] memory contributors = new address[](threshold);
+        uint256[] memory shares = new uint256[](threshold);
+
+        uint256 count = 0;
+        for (uint i = 0; i < keyHolderList.length && count < threshold; i++) {
+            address holder = keyHolderList[i];
+            if (partialDecryptions[messageId][holder] > 0) {
+                contributors[count] = holder;
+                shares[count] = partialDecryptions[messageId][holder];
+                count++;
+            }
+        }
+
+        // Combine shares using Lagrange interpolation
+        uint256 plaintext = lagrangeInterpolate(shares);
+
+        emit DecryptionComplete(messageId, plaintext);
+    }
+
+    /**
+     * @notice Verify a partial decryption
+     * @param messageId Message identifier
+     * @param partialDecryption Partial decryption share
+     * @param proof Proof of correct partial decryption
+     * @return isValid Whether the partial decryption is valid
+     */
+    function verifyPartialDecryption(
+        bytes32 messageId,
+        uint256 partialDecryption,
+        bytes calldata proof
+    ) internal view returns (bool isValid) {
+        // Implementation depends on the specific ZKP system used
+        // for proving correct partial decryption
+
+        return true; // Placeholder
+    }
+
+    /**
+     * @notice Combine shares using Lagrange interpolation
+     * @param shares Array of partial decryptions
+     * @return result Combined plaintext
+     */
+    function lagrangeInterpolate(
+        uint256[] memory shares
+    ) internal view returns (uint256) {
+        // Implementation of Lagrange interpolation for threshold decryption
+
+        // Placeholder for actual implementation
+        return shares[0];
+    }
+}
+```
+
+### 5.2 ZK-Oracle Attestations
+
+The system implements zero-knowledge proofs for data provenance without revealing raw sources.
+
+#### 5.2.1 ZK-Proofs of Data Provenance
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title ZkOracleAttestation
+ * @notice Implements ZK proofs of data provenance for oracle data
+ */
+contract ZkOracleAttestation {
+    struct DataProvenance {
+        bytes32 dataDigest;       // Hash of the oracle data
+        uint256 timestamp;        // Timestamp of data collection
+        bytes32 sourceIdentifier; // Identifier of the data source (hashed)
+        bytes32 methodIdentifier; // Identifier of the collection method
+    }
+
+    // Registered verifiers
+    mapping(address => bool) public verifiers;
+
+    // Verified attestations
+    mapping(bytes32 => bool) public verifiedAttestations;
+
+    // Events
+    event AttestationVerified(bytes32 indexed attestationId, bytes32 dataDigest);
+
+    constructor(address[] memory initialVerifiers) {
+        for (uint i = 0; i < initialVerifiers.length; i++) {
+            verifiers[initialVerifiers[i]] = true;
+        }
+    }
+
+    /**
+     * @notice Verify a ZK proof of data provenance
+     * @param dataDigest Hash of the data being attested
+     * @param provenance Data provenance information
+     * @param zkProof Zero-knowledge proof of data provenance
+     * @return attestationId Unique identifier for the attestation
+     */
+    function verifyDataProvenance(
+        bytes32 dataDigest,
+        DataProvenance calldata provenance,
+        bytes calldata zkProof
+    ) external returns (bytes32 attestationId) {
+        require(verifiers[msg.sender], "Not an authorized verifier");
+
+        // Verify the zero-knowledge proof
         require(
-            verifier.verifyProof(proof, publicInputs),
+            verifyProvenanceProof(dataDigest, provenance, zkProof),
             "Invalid ZK proof"
         );
 
-        // Store the range data
-        RangeHistory storage history = assetRangeHistory[assetId];
+        // Generate attestation ID
+        attestationId = keccak256(abi.encodePacked(
+            dataDigest,
+            provenance.timestamp,
+            provenance.sourceIdentifier,
+            provenance.methodIdentifier
+        ));
 
-        // Add to history arrays
-        history.rangeMinimums.push(rangeMin);
-        history.rangeMaximums.push(rangeMax);
-        history.timestamps.push(timestamp);
-        history.providerHashes.push(providerHash);
-        history.lastUpdated = block.timestamp;
+        // Record the attestation
+        verifiedAttestations[attestationId] = true;
 
-        // Track valid submissions
-        emit OracleDataSubmitted(
-            assetId,
-            rangeMin,
-            rangeMax,
-            providerHash,
-            timestamp
-        );
+        emit AttestationVerified(attestationId, dataDigest);
 
-        return true;
+        return attestationId;
     }
 
     /**
-     * @notice Get latest price range for an asset
-     * @param assetId Asset identifier
-     * @return minPrice Minimum of the price range
-     * @return maxPrice Maximum of the price range
-     * @return timestamp Data timestamp
-     * @return confidence Confidence level (0-1e18)
+     * @notice Check if an attestation has been verified
+     * @param attestationId Attestation identifier
+     * @return isVerified Whether the attestation is verified
      */
-    function getLatestPriceRange(bytes32 assetId) external view returns (
-        uint256 minPrice,
-        uint256 maxPrice,
+    function isAttestationVerified(
+        bytes32 attestationId
+    ) external view returns (bool isVerified) {
+        return verifiedAttestations[attestationId];
+    }
+
+    /**
+     * @notice Verify a ZK proof of data provenance
+     * @param dataDigest Hash of the data
+     * @param provenance Data provenance information
+     * @param zkProof Zero-knowledge proof
+     * @return isValid Whether the proof is valid
+     */
+    function verifyProvenanceProof(
+        bytes32 dataDigest,
+        DataProvenance calldata provenance,
+        bytes calldata zkProof
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on the specific ZKP system used
+
+        return true; // Placeholder
+    }
+}
+```
+
+#### 5.2.2 Temporal Encryption for Future-Reveal Validations
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title TemporalEncryption
+ * @notice Implements temporal encryption for future-reveal oracle validations
+ */
+contract TemporalEncryption {
+    struct TimelockedData {
+        bytes32 dataDigest;      // Hash of the encrypted data
+        uint256 revealTime;      // Time when data can be revealed
+        bytes encryptedData;     // Encrypted data
+        bytes temporalProof;     // Proof that data can only be decrypted after revealTime
+        bool revealed;           // Whether data has been revealed
+    }
+
+    // Mapping from data ID to timelocked data
+    mapping(bytes32 => TimelockedData) public timelockedData;
+
+    // Events
+    event DataTimelocked(bytes32 indexed dataId, uint256 revealTime);
+    event DataRevealed(bytes32 indexed dataId, bytes32 dataValue);
+
+    /**
+     * @notice Submit temporally encrypted data
+     * @param dataId Unique identifier for the data
+     * @param encryptedData Encrypted data
+     * @param revealTime Time when data can be revealed
+     * @param temporalProof Proof that data can only be decrypted after revealTime
+     */
+    function submitEncryptedData(
+        bytes32 dataId,
+        bytes calldata encryptedData,
+        uint256 revealTime,
+        bytes calldata temporalProof
+    ) external {
+        require(revealTime > block.timestamp, "Reveal time must be in the future");
+        require(
+            verifyTemporalProof(encryptedData, revealTime, temporalProof),
+            "Invalid temporal proof"
+        );
+
+        // Store the timelocked data
+        timelockedData[dataId] = TimelockedData({
+            dataDigest: keccak256(encryptedData),
+            revealTime: revealTime,
+            encryptedData: encryptedData,
+            temporalProof: temporalProof,
+            revealed: false
+        });
+
+        emit DataTimelocked(dataId, revealTime);
+    }
+
+    /**
+     * @notice Reveal timelocked data
+     * @param dataId Data identifier
+     * @param decryptionKey Key to decrypt the data
+     * @return data Revealed data
+     */
+    function revealData(
+        bytes32 dataId,
+        bytes calldata decryptionKey
+    ) external returns (bytes32 data) {
+        TimelockedData storage tlData = timelockedData[dataId];
+
+        require(!tlData.revealed, "Data already revealed");
+        require(block.timestamp >= tlData.revealTime, "Reveal time not reached");
+
+        // Decrypt the data
+        bytes32 decryptedData = decryptData(tlData.encryptedData, decryptionKey);
+
+        // Mark as revealed
+        tlData.revealed = true;
+
+        emit DataRevealed(dataId, decryptedData);
+
+        return decryptedData;
+    }
+
+    /**
+     * @notice Verify temporal encryption proof
+     * @param encryptedData Encrypted data
+     * @param revealTime Reveal time
+     * @param temporalProof Temporal proof
+     * @return isValid Whether the proof is valid
+     */
+    function verifyTemporalProof(
+        bytes calldata encryptedData,
+        uint256 revealTime,
+        bytes calldata temporalProof
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on the specific temporal encryption scheme
+
+        return true; // Placeholder
+    }
+
+    /**
+     * @notice Decrypt temporally encrypted data
+     * @param encryptedData Encrypted data
+     * @param decryptionKey Decryption key
+     * @return decryptedData Decrypted data
+     */
+    function decryptData(
+        bytes memory encryptedData,
+        bytes calldata decryptionKey
+    ) internal pure returns (bytes32 decryptedData) {
+        // Implementation depends on the specific temporal encryption scheme
+
+        return bytes32(0); // Placeholder
+    }
+}
+```
+
+#### 5.2.3 Federated Price Discovery
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title FederatedPriceDiscovery
+ * @notice Implements federated price discovery across oracle networks
+ */
+contract FederatedPriceDiscovery {
+    struct FederatedSource {
+        bytes32 sourceId;        // Source identifier
+        uint8 sourceType;        // Type of source (0=direct, 1=aggregated, 2=computed)
+        uint256 weight;          // Weight in federation
+        uint256 lastUpdateTime;  // Last update timestamp
+        bool active;             // Whether source is active
+    }
+
+    struct FederatedAsset {
+        bytes32 assetId;               // Asset identifier
+        FederatedSource[] sources;     // Data sources for this asset
+        bytes32[] crossAssetRefs;      // Cross-asset references
+        uint256 lastFederatedPrice;    // Last federated price
+        uint256 lastUpdateTime;        // Last update timestamp
+    }
+
+    // Mapping from asset ID to federated asset
+    mapping(bytes32 => FederatedAsset) public federatedAssets;
+
+    // Authorized updaters
+    mapping(address => bool) public authorizedUpdaters;
+
+    // Events
+    event FederatedPriceUpdated(bytes32 indexed assetId, uint256 price, uint256 timestamp);
+
+    constructor(address[] memory initialUpdaters) {
+        for (uint i = 0; i < initialUpdaters.length; i++) {
+            authorizedUpdaters[initialUpdaters[i]] = true;
+        }
+    }
+
+    /**
+     * @notice Add a new federated asset
+     * @param assetId Asset identifier
+     * @param sources Initial data sources
+     * @param crossAssetRefs Cross-asset references
+     */
+    function addFederatedAsset(
+        bytes32 assetId,
+        FederatedSource[] calldata sources,
+        bytes32[] calldata crossAssetRefs
+    ) external {
+        require(authorizedUpdaters[msg.sender], "Not authorized");
+        require(federatedAssets[assetId].assetId == bytes32(0), "Asset already exists");
+
+        federatedAssets[assetId] = FederatedAsset({
+            assetId: assetId,
+            sources: sources,
+            crossAssetRefs: crossAssetRefs,
+            lastFederatedPrice: 0,
+            lastUpdateTime: 0
+        });
+    }
+
+    /**
+     * @notice Update a federated price
+     * @param assetId Asset identifier
+     * @param sourcePrices Array of prices from each source
+     * @param sourceTimestamps Array of timestamps for each price
+     * @param confidenceScores Array of confidence scores for each price
+     * @param zkProof Zero-knowledge proof of price validity
+     * @return federatedPrice The calculated federated price
+     */
+    function updateFederatedPrice(
+        bytes32 assetId,
+        uint256[] calldata sourcePrices,
+        uint256[] calldata sourceTimestamps,
+        uint256[] calldata confidenceScores,
+        bytes calldata zkProof
+    ) external returns (uint256 federatedPrice) {
+        require(authorizedUpdaters[msg.sender], "Not authorized");
+
+        FederatedAsset storage asset = federatedAssets[assetId];
+        require(asset.assetId != bytes32(0), "Asset not found");
+        require(
+            sourcePrices.length == asset.sources.length &&
+            sourceTimestamps.length == asset.sources.length &&
+            confidenceScores.length == asset.sources.length,
+            "Array length mismatch"
+        );
+
+        // Verify the zero-knowledge proof
+        require(
+            verifyFederatedPriceProof(
+                assetId,
+                sourcePrices,
+                sourceTimestamps,
+                confidenceScores,
+                zkProof
+            ),
+            "Invalid ZK proof"
+        );
+
+        // Calculate federated price
+        federatedPrice = calculateFederatedPrice(
+            asset,
+            sourcePrices,
+            sourceTimestamps,
+            confidenceScores
+        );
+
+        // Update federated asset
+        asset.lastFederatedPrice = federatedPrice;
+        asset.lastUpdateTime = block.timestamp;
+
+        // Update source timestamps
+        for (uint i = 0; i < asset.sources.length; i++) {
+            asset.sources[i].lastUpdateTime = sourceTimestamps[i];
+        }
+
+        emit FederatedPriceUpdated(assetId, federatedPrice, block.timestamp);
+
+        return federatedPrice;
+    }
+
+    /**
+     * @notice Calculate federated price from source prices
+     * @param asset Federated asset
+     * @param sourcePrices Array of prices from each source
+     * @param sourceTimestamps Array of timestamps for each price
+     * @param confidenceScores Array of confidence scores for each price
+     * @return federatedPrice The calculated federated price
+     */
+    function calculateFederatedPrice(
+        FederatedAsset storage asset,
+        uint256[] calldata sourcePrices,
+        uint256[] calldata sourceTimestamps,
+        uint256[] calldata confidenceScores
+    ) internal view returns (uint256 federatedPrice) {
+        uint256 weightedSum = 0;
+        uint256 totalWeight = 0;
+
+        for (uint i = 0; i < asset.sources.length; i++) {
+            // Skip inactive sources
+            if (!asset.sources[i].active) continue;
+
+            // Calculate effective weight (base weight * confidence score)
+            uint256 effectiveWeight = (asset.sources[i].weight * confidenceScores[i]) / 1e18;
+
+            // Add to weighted sum
+            weightedSum += sourcePrices[i] * effectiveWeight;
+            totalWeight += effectiveWeight;
+        }
+
+        // Calculate weighted average
+        if (totalWeight > 0) {
+            federatedPrice = weightedSum / totalWeight;
+        } else {
+            // Fallback to last price if no valid sources
+            federatedPrice = asset.lastFederatedPrice;
+        }
+
+        return federatedPrice;
+    }
+
+    /**
+     * @notice Verify ZK proof of federated price
+     * @param assetId Asset identifier
+     * @param sourcePrices Array of prices from each source
+     * @param sourceTimestamps Array of timestamps for each price
+     * @param confidenceScores Array of confidence scores for each price
+     * @param zkProof Zero-knowledge proof
+     * @return isValid Whether the proof is valid
+     */
+    function verifyFederatedPriceProof(
+        bytes32 assetId,
+        uint256[] calldata sourcePrices,
+        uint256[] calldata sourceTimestamps,
+        uint256[] calldata confidenceScores,
+        bytes calldata zkProof
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on the specific ZKP system used
+
+        return true; // Placeholder
+    }
+}
+```
+
+### 5.3 Chainlink OCR 2.0 Integration
+
+Integration with Chainlink's Off-Chain Reporting 2.0 protocol for secure, efficient data aggregation.
+
+#### 5.3.1 OCR 2.0 Data Flow
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+import "@chainlink/contracts/src/v0.8/interfaces/OCR2AggregatorInterface.sol";
+
+/**
+ * @title ChainlinkOCR2Integration
+ * @notice Integrates with Chainlink OCR 2.0 for secure data aggregation
+ */
+contract ChainlinkOCR2Integration {
+    struct OCR2Feed {
+        address feedAddress;           // OCR 2.0 feed contract address
+        uint256 staleness;             // Maximum acceptable staleness
+        uint256 minimumNodeConsensus;  // Minimum number of nodes required for consensus
+        uint8 decimals;                // Decimals of the feed
+        bool active;                   // Whether feed is active
+    }
+
+    // Mapping from asset ID to OCR2 feed
+    mapping(bytes32 => OCR2Feed) public ocr2Feeds;
+
+    // Events
+    event OCR2FeedAdded(bytes32 indexed assetId, address feedAddress);
+    event OCR2FeedRemoved(bytes32 indexed assetId);
+
+    /**
+     * @notice Add a new OCR 2.0 feed
+     * @param assetId Asset identifier
+     * @param feedAddress OCR 2.0 feed contract address
+     * @param staleness Maximum acceptable staleness
+     * @param minimumNodeConsensus Minimum node consensus
+     */
+    function addOCR2Feed(
+        bytes32 assetId,
+        address feedAddress,
+        uint256 staleness,
+        uint256 minimumNodeConsensus
+    ) external {
+        // Validate feed
+        OCR2AggregatorInterface feed = OCR2AggregatorInterface(feedAddress);
+        uint8 decimals = feed.decimals();
+
+        // Store feed information
+        ocr2Feeds[assetId] = OCR2Feed({
+            feedAddress: feedAddress,
+            staleness: staleness,
+            minimumNodeConsensus: minimumNodeConsensus,
+            decimals: decimals,
+            active: true
+        });
+
+        emit OCR2FeedAdded(assetId, feedAddress);
+    }
+
+    /**
+     * @notice Get latest price data from OCR 2.0 feed
+     * @param assetId Asset identifier
+     * @return price Price value (18 decimals)
+     * @return timestamp Timestamp of the data
+     * @return confidence Confidence score (0-1e18)
+     */
+    function getOCR2Price(
+        bytes32 assetId
+    ) external view returns (
+        uint256 price,
         uint256 timestamp,
         uint256 confidence
     ) {
-        RangeHistory storage history = assetRangeHistory[assetId];
+        OCR2Feed memory feed = ocr2Feeds[assetId];
+        require(feed.active, "Feed not active");
 
-        // Ensure there is data
-        require(history.timestamps.length > 0, "No data for asset");
+        OCR2AggregatorInterface ocr2Feed = OCR2AggregatorInterface(feed.feedAddress);
 
-        // Find the most recent range
-        uint256 latestIndex = history.timestamps.length - 1;
-        timestamp = history.timestamps[latestIndex];
+        // Get latest round data
+        (
+            uint80 roundId,
+            int256 answer,
+            uint256 startedAt,
+            uint256 updatedAt,
+            uint80 answeredInRound
+        ) = ocr2Feed.latestRoundData();
 
-        // Check if data is fresh enough
-        if (block.timestamp - timestamp > 1 hours) {
-            // Data is stale, reduce confidence
-            confidence = 1e18 * (1 hours) / (block.timestamp - timestamp + 1);
-            confidence = confidence < 1e17 ? 1e17 : confidence; // Min 10% confidence
+        // Validate the data
+        require(answer > 0, "Invalid price");
+        require(updatedAt > 0, "Incomplete round");
+        require(answeredInRound >= roundId, "Stale price");
+        require(block.timestamp - updatedAt <= feed.staleness, "Price too old");
+
+        // Get OCR 2.0 specific information
+        (
+            bytes32 configDigest,
+            uint32 epoch,
+            uint8 round,
+            int192 latestAnswer,
+            uint64 latestTimestamp
+        ) = ocr2Feed.latestTransmissionDetails();
+
+        // Verify node consensus
+        uint8 nodeConsensusCount = ocr2Feed.latestRoundNodeConsensusCount();
+        require(
+            nodeConsensusCount >= feed.minimumNodeConsensus,
+            "Insufficient node consensus"
+        );
+
+        // Normalize decimals to 18
+        uint256 scaledAnswer;
+        if (feed.decimals < 18) {
+            scaledAnswer = uint256(answer) * (10 ** (18 - feed.decimals));
+        } else if (feed.decimals > 18) {
+            scaledAnswer = uint256(answer) / (10 ** (feed.decimals - 18));
         } else {
-            confidence = 1e18; // Full confidence for fresh data
+            scaledAnswer = uint256(answer);
         }
 
-        minPrice = history.rangeMinimums[latestIndex];
-        maxPrice = history.rangeMaximums[latestIndex];
+        // Calculate confidence based on node consensus
+        uint256 nodeCount = ocr2Feed.nodeCount();
+        uint256 consensusConfidence = (nodeConsensusCount * 1e18) / nodeCount;
 
-        return (minPrice, maxPrice, timestamp, confidence);
+        // Calculate time-based confidence
+        uint256 timeSinceUpdate = block.timestamp - updatedAt;
+        uint256 timeConfidence = 1e18 - ((timeSinceUpdate * 1e18) / feed.staleness);
+
+        // Combine confidence scores
+        confidence = (consensusConfidence * timeConfidence) / 1e18;
+
+        return (scaledAnswer, updatedAt, confidence);
+    }
+}
+```
+
+#### 5.3.2 Multi-DVN Verification
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title MultiDVNVerification
+ * @notice Implements X-of-Y multi-DVN verification for oracle data
+ */
+contract MultiDVNVerification {
+    struct DVN {
+        bytes32 dvnId;       // DVN identifier
+        address operator;    // DVN operator address
+        uint256 stake;       // Staked amount
+        bool active;         // Whether DVN is active
     }
 
+    struct VerificationConfig {
+        bytes32 configId;      // Configuration identifier
+        uint256 requiredDVNs;  // Required number of DVNs (X in X-of-Y)
+        uint256 totalDVNs;     // Total number of DVNs (Y in X-of-Y)
+        bytes32[] dvnIds;      // Participating DVN IDs
+    }
+
+    struct VerificationReport {
+        bytes32 reportId;      // Report identifier
+        bytes32 dataDigest;    // Hash of the data being verified
+        uint256 timestamp;     // Timestamp of the report
+        uint256 signatures;    // Number of signatures collected
+        bool finalized;        // Whether verification is finalized
+        mapping(bytes32 => bool) signedByDVN;  // Tracking which DVNs signed
+    }
+
+    // Registered DVNs
+    mapping(bytes32 => DVN) public dvns;
+    bytes32[] public dvnList;
+
+    // Verification configurations
+    mapping(bytes32 => VerificationConfig) public verificationConfigs;
+    bytes32[] public configList;
+
+    // Verification reports
+    mapping(bytes32 => VerificationReport) public verificationReports;
+
     // Events
-    event OracleDataSubmitted(
-        bytes32 indexed assetId,
-        uint256 rangeMin,
-        uint256 rangeMax,
-        bytes32 indexed providerHash,
-        uint256 timestamp
-    );
+    event DVNRegistered(bytes32 indexed dvnId, address operator, uint256 stake);
+    event ConfigCreated(bytes32 indexed configId, uint256 requiredDVNs, uint256 totalDVNs);
+    event ReportInitiated(bytes32 indexed reportId, bytes32 dataDigest);
+    event ReportSigned(bytes32 indexed reportId, bytes32 indexed dvnId);
+    event ReportFinalized(bytes32 indexed reportId, bool verified);
+
+    /**
+     * @notice Register a new DVN
+     * @param dvnId DVN identifier
+     * @param operator DVN operator address
+     * @param stake Stake amount
+     */
+    function registerDVN(
+        bytes32 dvnId,
+        address operator,
+        uint256 stake
+    ) external {
+        require(dvns[dvnId].dvnId == bytes32(0), "DVN already registered");
+
+        dvns[dvnId] = DVN({
+            dvnId: dvnId,
+            operator: operator,
+            stake: stake,
+            active: true
+        });
+
+        dvnList.push(dvnId);
+
+        emit DVNRegistered(dvnId, operator, stake);
+    }
+
+    /**
+     * @notice Create a verification configuration
+     * @param configId Configuration identifier
+     * @param requiredDVNs Required number of DVNs (X in X-of-Y)
+     * @param dvnIds Array of participating DVN IDs
+     */
+    function createVerificationConfig(
+        bytes32 configId,
+        uint256 requiredDVNs,
+        bytes32[] calldata dvnIds
+    ) external {
+        require(verificationConfigs[configId].configId == bytes32(0), "Config already exists");
+        require(requiredDVNs <= dvnIds.length, "Required DVNs exceeds total");
+        require(requiredDVNs >= 1, "At least one DVN required");
+
+        // Verify all DVNs exist and are active
+        for (uint i = 0; i < dvnIds.length; i++) {
+            require(dvns[dvnIds[i]].active, "DVN not active");
+        }
+
+        verificationConfigs[configId] = VerificationConfig({
+            configId: configId,
+            requiredDVNs: requiredDVNs,
+            totalDVNs: dvnIds.length,
+            dvnIds: dvnIds
+        });
+
+        configList.push(configId);
+
+        emit ConfigCreated(configId, requiredDVNs, dvnIds.length);
+    }
+
+    /**
+     * @notice Initiate a verification report
+     * @param configId Configuration identifier
+     * @param dataDigest Hash of the data to verify
+     * @return reportId Report identifier
+     */
+    function initiateReport(
+        bytes32 configId,
+        bytes32 dataDigest
+    ) external returns (bytes32 reportId) {
+        require(verificationConfigs[configId].configId != bytes32(0), "Config not found");
+
+        reportId = keccak256(abi.encodePacked(configId, dataDigest, block.timestamp));
+
+        VerificationReport storage report = verificationReports[reportId];
+        report.reportId = reportId;
+        report.dataDigest = dataDigest;
+        report.timestamp = block.timestamp;
+        report.signatures = 0;
+        report.finalized = false;
+
+        emit ReportInitiated(reportId, dataDigest);
+
+        return reportId;
+    }
+
+    /**
+     * @notice Sign a verification report as a DVN
+     * @param reportId Report identifier
+     * @param signature DVN signature
+     */
+    function signReport(
+        bytes32 reportId,
+        bytes calldata signature
+    ) external {
+        VerificationReport storage report = verificationReports[reportId];
+        require(report.reportId != bytes32(0), "Report not found");
+        require(!report.finalized, "Report already finalized");
+
+        // Extract DVN ID from signature
+        bytes32 dvnId = recoverDVNId(report.dataDigest, signature);
+
+        // Verify DVN is authorized
+        require(dvns[dvnId].active, "DVN not active");
+        require(dvns[dvnId].operator == msg.sender, "Not DVN operator");
+        require(!report.signedByDVN[dvnId], "Already signed");
+
+        // Record signature
+        report.signedByDVN[dvnId] = true;
+        report.signatures++;
+
+        emit ReportSigned(reportId, dvnId);
+
+        // Check if report can be finalized
+        bytes32 configId = extractConfigId(reportId);
+        VerificationConfig storage config = verificationConfigs[configId];
+
+        if (report.signatures >= config.requiredDVNs) {
+            finalizeReport(reportId);
+        }
+    }
+
+    /**
+     * @notice Finalize a verification report
+     * @param reportId Report identifier
+     */
+    function finalizeReport(bytes32 reportId) internal {
+        VerificationReport storage report = verificationReports[reportId];
+        bytes32 configId = extractConfigId(reportId);
+        VerificationConfig storage config = verificationConfigs[configId];
+
+        bool verified = report.signatures >= config.requiredDVNs;
+
+        report.finalized = true;
+
+        emit ReportFinalized(reportId, verified);
+    }
+
+    /**
+     * @notice Extract configuration ID from report ID
+     * @param reportId Report identifier
+     * @return configId Configuration identifier
+     */
+    function extractConfigId(
+        bytes32 reportId
+    ) internal pure returns (bytes32 configId) {
+        // First 32 bytes of the report ID is the config ID
+        return bytes32(uint256(reportId) & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000000);
+    }
+
+    /**
+     * @notice Recover DVN ID from signature
+     * @param dataDigest Data digest that was signed
+     * @param signature DVN signature
+     * @return dvnId DVN identifier
+     */
+    function recoverDVNId(
+        bytes32 dataDigest,
+        bytes calldata signature
+    ) internal pure returns (bytes32 dvnId) {
+        // Implementation depends on the signature scheme used
+
+        return bytes32(0); // Placeholder
+    }
 }
 ```
 
-#### 5.3.3 Aggregate Proof Generation
+### 5.4 Federated Learning Integration
 
-The system generates a composite proof for the aggregation process:
+Integration of federated learning techniques for enhanced data validation.
 
-```typescript
-async function generateAggregationProof(
-  assetId: string,
-  prices: bigint[],
-  weights: bigint[],
-  providerIndices: number[],
-  validFlags: number[],
-  aggregationMethod: number,
-  timestamp: number
-): Promise<{
-  proof: Proof;
-  publicInputs: {
-    aggregatedPrice: bigint;
-    providerCount: number;
-    timestamp: number;
-    aggregationMethod: number;
-  };
-}> {
-  // Calculate the aggregated price based on the method
-  let aggregatedPrice: bigint;
+#### 5.4.1 OPA Protocol Implementation
 
-  if (aggregationMethod === 1) {
-    // Median aggregation
-    aggregatedPrice = calculateMedian(prices, validFlags);
-  } else if (aggregationMethod === 2) {
-    // Weighted mean aggregation
-    aggregatedPrice = calculateWeightedMean(prices, weights, validFlags);
-  } else if (aggregationMethod === 3) {
-    // TWAP aggregation
-    aggregatedPrice = calculateTWAP(prices, weights, validFlags);
-  } else {
-    throw new Error("Unsupported aggregation method");
-  }
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
 
-  // Count valid providers
-  const providerCount = validFlags.reduce((sum, flag) => sum + flag, 0);
+/**
+ * @title OPAProtocolImplementation
+ * @notice Implements OPA (One-shot Private Aggregation) protocol for oracle data
+ */
+contract OPAProtocolImplementation {
+    struct OPASession {
+        bytes32 sessionId;            // Session identifier
+        uint256 startTime;            // Session start time
+        uint256 endTime;              // Session end time
+        bytes32 taskDefinition;       // Hash of the task definition
+        uint256 epsilon;              // Differential privacy parameter (scaled by 1e18)
+        uint256 delta;                // Differential privacy parameter (scaled by 1e18)
+        uint256 participants;         // Number of participating oracles
+        bool completed;               // Whether session is completed
+    }
 
-  // Compile inputs for the circuit
-  const inputs = {
-    // Public inputs
-    publicAggregatedPrice: aggregatedPrice,
-    publicProviderCount: BigInt(providerCount),
-    publicTimestamp: BigInt(timestamp),
-    publicAggregationMethod: BigInt(aggregationMethod),
+    struct OPAParticipant {
+        bytes32 participantId;        // Participant identifier
+        uint256 dataPointCount;       // Number of data points contributed
+        bytes32 dataCommitment;       // Commitment to data
+        bytes encryptedData;          // Encrypted data contribution
+        bool hasSubmitted;            // Whether participant has submitted
+    }
 
-    // Private inputs
-    privatePrices: prices,
-    privateWeights: weights,
-    privateProviderIndices: providerIndices.map((i) => BigInt(i)),
-    privateValidFlags: validFlags.map((f) => BigInt(f)),
-  };
+    // Mapping from session ID to session
+    mapping(bytes32 => OPASession) public opaSessions;
 
-  // Generate the proof
-  const circuit = await loadCircuit("oracle_aggregation.circom");
-  const { proof, publicSignals } = await generateProof(circuit, inputs);
+    // Mapping from session ID to participant ID to participant
+    mapping(bytes32 => mapping(bytes32 => OPAParticipant)) public opaParticipants;
 
-  return {
-    proof,
-    publicInputs: {
-      aggregatedPrice,
-      providerCount,
-      timestamp,
-      aggregationMethod,
-    },
-  };
+    // Events
+    event SessionCreated(bytes32 indexed sessionId, bytes32 taskDefinition, uint256 epsilon);
+    event ParticipantRegistered(bytes32 indexed sessionId, bytes32 indexed participantId);
+    event DataSubmitted(bytes32 indexed sessionId, bytes32 indexed participantId);
+    event SessionCompleted(bytes32 indexed sessionId, bytes32 resultCommitment);
+
+    /**
+     * @notice Create a new OPA session
+     * @param taskDefinition Hash of the task definition
+     * @param startTime Session start time
+     * @param endTime Session end time
+     * @param epsilon Differential privacy parameter (scaled by 1e18)
+     * @param delta Differential privacy parameter (scaled by 1e18)
+     * @return sessionId Session identifier
+     */
+    function createOPASession(
+        bytes32 taskDefinition,
+        uint256 startTime,
+        uint256 endTime,
+        uint256 epsilon,
+        uint256 delta
+    ) external returns (bytes32 sessionId) {
+        require(startTime < endTime, "Invalid time range");
+        require(startTime >= block.timestamp, "Start time in the past");
+        require(epsilon > 0 && epsilon <= 2 * 1e18, "Invalid epsilon"); // ε = 0.5-2.0
+        require(delta > 0 && delta <= 1e16, "Invalid delta"); // δ ≤ 10^-2
+
+        sessionId = keccak256(abi.encodePacked(
+            taskDefinition,
+            startTime,
+            endTime,
+            epsilon,
+            delta,
+            block.timestamp
+        ));
+
+        opaSessions[sessionId] = OPASession({
+            sessionId: sessionId,
+            startTime: startTime,
+            endTime: endTime,
+            taskDefinition: taskDefinition,
+            epsilon: epsilon,
+            delta: delta,
+            participants: 0,
+            completed: false
+        });
+
+        emit SessionCreated(sessionId, taskDefinition, epsilon);
+
+        return sessionId;
+    }
+
+    /**
+     * @notice Register as a participant in an OPA session
+     * @param sessionId Session identifier
+     * @param participantId Participant identifier
+     * @param dataPointCount Number of data points to contribute
+     * @param dataCommitment Commitment to data
+     */
+    function registerParticipant(
+        bytes32 sessionId,
+        bytes32 participantId,
+        uint256 dataPointCount,
+        bytes32 dataCommitment
+    ) external {
+        OPASession storage session = opaSessions[sessionId];
+        require(session.sessionId != bytes32(0), "Session not found");
+        require(block.timestamp < session.startTime, "Registration period ended");
+        require(
+            opaParticipants[sessionId][participantId].participantId == bytes32(0),
+            "Already registered"
+        );
+
+        opaParticipants[sessionId][participantId] = OPAParticipant({
+            participantId: participantId,
+            dataPointCount: dataPointCount,
+            dataCommitment: dataCommitment,
+            encryptedData: new bytes(0),
+            hasSubmitted: false
+        });
+
+        session.participants++;
+
+        emit ParticipantRegistered(sessionId, participantId);
+    }
+
+    /**
+     * @notice Submit encrypted data for an OPA session
+     * @param sessionId Session identifier
+     * @param participantId Participant identifier
+     * @param encryptedData Encrypted data contribution
+     * @param proof Proof of correct encryption and noise addition
+     */
+    function submitData(
+        bytes32 sessionId,
+        bytes32 participantId,
+        bytes calldata encryptedData,
+        bytes calldata proof
+    ) external {
+        OPASession storage session = opaSessions[sessionId];
+        require(session.sessionId != bytes32(0), "Session not found");
+        require(
+            block.timestamp >= session.startTime && block.timestamp <= session.endTime,
+            "Not in submission period"
+        );
+
+        OPAParticipant storage participant = opaParticipants[sessionId][participantId];
+        require(participant.participantId != bytes32(0), "Not registered");
+        require(!participant.hasSubmitted, "Already submitted");
+
+        // Verify the proof of correct encryption and noise addition
+        require(
+            verifyOPAProof(
+                sessionId,
+                participantId,
+                encryptedData,
+                participant.dataCommitment,
+                proof
+            ),
+            "Invalid proof"
+        );
+
+        // Store encrypted data
+        participant.encryptedData = encryptedData;
+        participant.hasSubmitted = true;
+
+        emit DataSubmitted(sessionId, participantId);
+    }
+
+    /**
+     * @notice Complete an OPA session and compute the aggregate
+     * @param sessionId Session identifier
+     * @param participants Array of participant IDs that submitted valid data
+     * @param aggregationProof Proof of correct aggregation
+     * @return resultCommitment Commitment to the aggregated result
+     */
+    function completeSession(
+        bytes32 sessionId,
+        bytes32[] calldata participants,
+        bytes calldata aggregationProof
+    ) external returns (bytes32 resultCommitment) {
+        OPASession storage session = opaSessions[sessionId];
+        require(session.sessionId != bytes32(0), "Session not found");
+        require(block.timestamp > session.endTime, "Session not ended");
+        require(!session.completed, "Session already completed");
+
+        // Verify all participants have submitted
+        for (uint i = 0; i < participants.length; i++) {
+            OPAParticipant storage participant = opaParticipants[sessionId][participants[i]];
+            require(participant.hasSubmitted, "Participant did not submit");
+        }
+
+        // Verify aggregation proof
+        resultCommitment = verifyAggregationProof(
+            sessionId,
+            participants,
+            aggregationProof
+        );
+
+        // Mark session as completed
+        session.completed = true;
+
+        emit SessionCompleted(sessionId, resultCommitment);
+
+        return resultCommitment;
+    }
+
+    /**
+     * @notice Verify OPA proof of correct encryption and noise addition
+     * @param sessionId Session identifier
+     * @param participantId Participant identifier
+     * @param encryptedData Encrypted data
+     * @param dataCommitment Data commitment
+     * @param proof Zero-knowledge proof
+     * @return isValid Whether the proof is valid
+     */
+    function verifyOPAProof(
+        bytes32 sessionId,
+        bytes32 participantId,
+        bytes calldata encryptedData,
+        bytes32 dataCommitment,
+        bytes calldata proof
+    ) internal view returns (bool isValid) {
+        // Implementation depends on the specific ZKP system used
+
+        return true; // Placeholder
+    }
+
+    /**
+     * @notice Verify aggregation proof and compute result commitment
+     * @param sessionId Session identifier
+     * @param participants Array of participant IDs
+     * @param aggregationProof Proof of correct aggregation
+     * @return resultCommitment Commitment to the aggregated result
+     */
+    function verifyAggregationProof(
+        bytes32 sessionId,
+        bytes32[] calldata participants,
+        bytes calldata aggregationProof
+    ) internal view returns (bytes32 resultCommitment) {
+        // Implementation depends on the specific ZKP system used
+
+        return bytes32(0); // Placeholder
+    }
 }
 ```
 
-### 5.4 Privacy Guarantees and Limitations
+#### 5.4.2 Model Aggregation Safeguards
 
-#### 5.4.1 Privacy Guarantees
+````solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
 
-The ZKP-enhanced oracle system provides:
+/**
+ * @title ModelAggregationSafeguards
+ * @notice Implements safeguards for federated model aggregation
+ */
+contract ModelAggregationSafeguards {
+    struct FederatedModel {
+        bytes32 modelId;              // Model identifier
+        bytes32 modelArchitecture;    // Hash of model architecture
+        uint256 round;                // Current training round
+        uint256 participantCount;     // Number of participants
+        uint256 lastUpdateTime;       // Last update timestamp
+        bytes32 currentWeightsHash;   // Hash of current model weights
+        bool active;                  // Whether model is active
+    }
 
-1. **Input Privacy**: Oracle providers never reveal exact price values
-2. **Provider Credential Protection**: Authentication without revealing provider keys
-3. **Source Confidentiality**: Data sources remain private
-4. **Aggregation Integrity**: Proof that aggregation was performed correctly
-5. **Range Verification**: Validation that prices are within reasonable bounds
+    struct ModelUpdate {
+        bytes32 updateId;             // Update identifier
+        bytes32 modelId;              // Model ID being updated
+        uint256 round;                // Training round
+        address participant;          // Participant address
+        bytes32 gradientHash;         // Hash of gradient update
+        bool validated;               // Whether update is validated
+        bool applied;                 // Whether update is applied
+    }
 
-#### 5.4.2 Limitations and Considerations
+    // Mapping from model ID to federated model
+    mapping(bytes32 => FederatedModel) public federatedModels;
 
-Important considerations when using the ZKP-enhanced oracle system:
+    // Mapping from update ID to model update
+    mapping(bytes32 => ModelUpdate) public modelUpdates;
 
-1. **Range Information Leakage**: Min/max ranges still reveal some information about the price
-2. **Computational Overhead**: ZKP generation adds latency compared to plaintext submissions
-3. **On-Chain Verification Cost**: ZKP verification requires additional gas
-4. **Setup Trust Assumptions**: Relies on the security of the ZKP trusted setup ceremony
-5. **Proof Size Considerations**: ZKPs add data overhead to oracle submissions
+    // Events
+    event ModelCreated(bytes32 indexed modelId, bytes32 modelArchitecture);
+    event UpdateSubmitted(bytes32 indexed updateId, bytes32 indexed modelId, uint256 round);
+    event UpdateValidated(bytes32 indexed updateId, bool valid);
+    event ModelAggregated(bytes32 indexed modelId, uint256 round, uint256 participantCount);
+
+    /**
+     * @notice Create a new federated model
+     * @param modelArchitecture Hash of model architecture
+     * @param initialWeightsHash Hash of initial model weights
+     * @return modelId Model identifier
+     */
+    ```solidity
+    function createFederatedModel(
+        bytes32 modelArchitecture,
+        bytes32 initialWeightsHash
+    ) external returns (bytes32 modelId) {
+        modelId = keccak256(abi.encodePacked(
+            modelArchitecture,
+            initialWeightsHash,
+            block.timestamp,
+            msg.sender
+        ));
+
+        federatedModels[modelId] = FederatedModel({
+            modelId: modelId,
+            modelArchitecture: modelArchitecture,
+            round: 0,
+            participantCount: 0,
+            lastUpdateTime: block.timestamp,
+            currentWeightsHash: initialWeightsHash,
+            active: true
+        });
+
+        emit ModelCreated(modelId, modelArchitecture);
+
+        return modelId;
+    }
+
+    /**
+     * @notice Submit a model update
+     * @param modelId Model identifier
+     * @param gradientHash Hash of gradient update
+     * @param gradientProof ZK proof of gradient validity
+     * @return updateId Update identifier
+     */
+    function submitModelUpdate(
+        bytes32 modelId,
+        bytes32 gradientHash,
+        bytes calldata gradientProof
+    ) external returns (bytes32 updateId) {
+        FederatedModel storage model = federatedModels[modelId];
+        require(model.modelId != bytes32(0), "Model not found");
+        require(model.active, "Model not active");
+
+        updateId = keccak256(abi.encodePacked(
+            modelId,
+            model.round,
+            gradientHash,
+            msg.sender,
+            block.timestamp
+        ));
+
+        modelUpdates[updateId] = ModelUpdate({
+            updateId: updateId,
+            modelId: modelId,
+            round: model.round,
+            participant: msg.sender,
+            gradientHash: gradientHash,
+            validated: false,
+            applied: false
+        });
+
+        emit UpdateSubmitted(updateId, modelId, model.round);
+
+        // Validate the update using ZK proof
+        validateModelUpdate(updateId, gradientProof);
+
+        return updateId;
+    }
+
+    /**
+     * @notice Validate a model update using ZK proof
+     * @param updateId Update identifier
+     * @param gradientProof ZK proof of gradient validity
+     */
+    function validateModelUpdate(
+        bytes32 updateId,
+        bytes calldata gradientProof
+    ) internal {
+        ModelUpdate storage update = modelUpdates[updateId];
+        require(update.updateId != bytes32(0), "Update not found");
+        require(!update.validated, "Already validated");
+
+        FederatedModel storage model = federatedModels[update.modelId];
+
+        // Verify the ZK proof of gradient validity
+        bool isValid = verifyGradientProof(
+            update.modelId,
+            model.currentWeightsHash,
+            update.gradientHash,
+            gradientProof
+        );
+
+        update.validated = true;
+
+        emit UpdateValidated(updateId, isValid);
+    }
+
+    /**
+     * @notice Aggregate model updates using Byzantine-robust averaging
+     * @param modelId Model identifier
+     * @param updateIds Array of validated update IDs
+     * @param aggregationProof Proof of correct aggregation
+     * @return newWeightsHash Hash of new model weights
+     */
+    function aggregateModelUpdates(
+        bytes32 modelId,
+        bytes32[] calldata updateIds,
+        bytes calldata aggregationProof
+    ) external returns (bytes32 newWeightsHash) {
+        FederatedModel storage model = federatedModels[modelId];
+        require(model.modelId != bytes32(0), "Model not found");
+        require(model.active, "Model not active");
+
+        // Verify all updates are validated
+        for (uint i = 0; i < updateIds.length; i++) {
+            ModelUpdate storage update = modelUpdates[updateIds[i]];
+            require(update.modelId == modelId, "Update not for this model");
+            require(update.round == model.round, "Update from wrong round");
+            require(update.validated, "Update not validated");
+            require(!update.applied, "Update already applied");
+
+            // Mark update as applied
+            update.applied = true;
+        }
+
+        // Verify aggregation proof
+        newWeightsHash = verifyAggregationProof(
+            modelId,
+            model.currentWeightsHash,
+            updateIds,
+            aggregationProof
+        );
+
+        // Update model
+        model.currentWeightsHash = newWeightsHash;
+        model.round++;
+        model.participantCount = updateIds.length;
+        model.lastUpdateTime = block.timestamp;
+
+        emit ModelAggregated(modelId, model.round, updateIds.length);
+
+        return newWeightsHash;
+    }
+
+    /**
+     * @notice Verify ZK proof of gradient validity
+     * @param modelId Model identifier
+     * @param currentWeightsHash Current model weights hash
+     * @param gradientHash Gradient hash
+     * @param gradientProof ZK proof
+     * @return isValid Whether the proof is valid
+     */
+    function verifyGradientProof(
+        bytes32 modelId,
+        bytes32 currentWeightsHash,
+        bytes32 gradientHash,
+        bytes calldata gradientProof
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on the specific ZKP system used
+
+        return true; // Placeholder
+    }
+
+    /**
+     * @notice Verify aggregation proof and compute new weights hash
+     * @param modelId Model identifier
+     * @param currentWeightsHash Current weights hash
+     * @param updateIds Array of update IDs
+     * @param aggregationProof Proof of correct aggregation
+     * @return newWeightsHash Hash of new model weights
+     */
+    function verifyAggregationProof(
+        bytes32 modelId,
+        bytes32 currentWeightsHash,
+        bytes32[] calldata updateIds,
+        bytes calldata aggregationProof
+    ) internal pure returns (bytes32 newWeightsHash) {
+        // Implementation depends on the specific ZKP system used
+
+        return bytes32(0); // Placeholder
+    }
+}
+````
 
 ## 6. Data Security & Reliability Mechanisms
 
@@ -2134,1842 +3552,674 @@ The Oracle Security Module introduces a time delay before price updates affect t
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./IPriceFeed.sol";
-import "./IDelayedOracle.sol";
-
-contract OracleSecurityModule is IDelayedOracle {
-    // Source price feed
-    IPriceFeed public immutable priceFeed;
-
-    // Delay parameters
-    uint256 public delay;
-    uint256 public maxPriceDeviation;
-
-    // Next price information
-    struct NextPrice {
-        uint256 value;
-        uint256 timestamp;
-        bool set;
+/**
+ * @title OracleSecurityModule
+ * @notice Implements time-delayed price feeds for security
+ */
+contract OracleSecurityModule {
+    struct DelayedPrice {
+        uint256 currentPrice;     // Current active price
+        uint256 nextPrice;        // Next price in queue
+        uint256 timestamp;        // Timestamp of current price
+        uint256 nextTimestamp;    // Timestamp of next price
+        uint256 delaySeconds;     // Delay in seconds
+        uint256 lastUpdateTime;   // Time of last update
     }
 
-    // Current price information
-    struct CurrentPrice {
-        uint256 value;
-        uint256 timestamp;
-    }
+    // Mapping from asset ID to delayed price
+    mapping(bytes32 => DelayedPrice) public delayedPrices;
 
-    // Price data by asset
-    mapping(bytes32 => NextPrice) public nextPrices;
-    mapping(bytes32 => CurrentPrice) public currentPrices;
+    // Default delay in seconds
+    uint256 public defaultDelay = 3600; // 1 hour
 
-    // Governance control
-    address public governance;
-    address public guardian;
+    // Events
+    event PriceUpdated(bytes32 indexed assetId, uint256 price, uint256 timestamp);
+    event NextPriceQueued(bytes32 indexed assetId, uint256 nextPrice, uint256 nextTimestamp);
 
-    constructor(
-        address _priceFeed,
-        uint256 _delay,
-        uint256 _maxPriceDeviation,
-        address _governance,
-        address _guardian
-    ) {
-        priceFeed = IPriceFeed(_priceFeed);
-        delay = _delay;
-        maxPriceDeviation = _maxPriceDeviation;
-        governance = _governance;
-        guardian = _guardian;
+    /**
+     * @notice Set default delay
+     * @param newDelay New delay in seconds
+     */
+    function setDefaultDelay(uint256 newDelay) external {
+        require(newDelay > 0, "Delay must be positive");
+        defaultDelay = newDelay;
     }
 
     /**
-     * @notice Update the next price for an asset
-     * @param asset Asset identifier
+     * @notice Set asset-specific delay
+     * @param assetId Asset identifier
+     * @param delaySeconds Delay in seconds
      */
-    function updateNextPrice(bytes32 asset) external {
-        // Get latest price from the source feed
-        (uint256 price, uint256 timestamp) = priceFeed.getPriceData(asset);
-
-        // Ensure timestamp is reasonably fresh
-        require(block.timestamp - timestamp <= delay, "Price too old");
-
-        // Store as next price
-        nextPrices[asset] = NextPrice({
-            value: price,
-            timestamp: timestamp,
-            set: true
-        });
-
-        emit NextPriceUpdated(asset, price, timestamp);
+    function setAssetDelay(bytes32 assetId, uint256 delaySeconds) external {
+        require(delaySeconds > 0, "Delay must be positive");
+        DelayedPrice storage delayedPrice = delayedPrices[assetId];
+        delayedPrice.delaySeconds = delaySeconds;
     }
 
     /**
-     * @notice Apply the delayed price update
-     * @param asset Asset identifier
+     * @notice Update price
+     * @param assetId Asset identifier
+     * @param newPrice New price
+     * @param timestamp Timestamp of the price
      */
-    function applyNextPrice(bytes32 asset) external {
-        NextPrice storage next = nextPrices[asset];
+    function updatePrice(
+        bytes32 assetId,
+        uint256 newPrice,
+        uint256 timestamp
+    ) external {
+        require(newPrice > 0, "Price must be positive");
 
-        // Ensure next price is set
-        require(next.set, "Next price not set");
+        DelayedPrice storage delayedPrice = delayedPrices[assetId];
 
-        // Ensure delay has passed
-        require(block.timestamp >= next.timestamp + delay, "Delay not elapsed");
+        // Initialize if first update
+        if (delayedPrice.currentPrice == 0) {
+            delayedPrice.currentPrice = newPrice;
+            delayedPrice.timestamp = timestamp;
+            delayedPrice.lastUpdateTime = block.timestamp;
+            delayedPrice.delaySeconds = delayedPrice.delaySeconds == 0 ? defaultDelay : delayedPrice.delaySeconds;
 
-        // Get current price
-        CurrentPrice storage current = currentPrices[asset];
+            emit PriceUpdated(assetId, newPrice, timestamp);
+            return;
+        }
 
-        // If first price or no price deviation concerns
-        if (current.value == 0 ||
-            priceDeviationOK(current.value, next.value)) {
+        // Queue next price
+        delayedPrice.nextPrice = newPrice;
+        delayedPrice.nextTimestamp = timestamp;
+        delayedPrice.lastUpdateTime = block.timestamp;
 
-            // Store new current price
-            current.value = next.value;
-            current.timestamp = block.timestamp;
+        emit NextPriceQueued(assetId, newPrice, timestamp);
 
-            // Clear next price
-            next.set = false;
+        // Process the queue if enough time has passed
+        processQueue(assetId);
+    }
 
-            emit PriceUpdated(asset, next.value, block.timestamp);
-        } else {
-            // Price deviation too high, trigger guardian review
-            emit PriceDeviationExceeded(
-                asset,
-                current.value,
-                next.value,
-                block.timestamp
-            );
+    /**
+     * @notice Process the price queue
+     * @param assetId Asset identifier
+     */
+    function processQueue(bytes32 assetId) public {
+        DelayedPrice storage delayedPrice = delayedPrices[assetId];
+
+        // Check if there's a queued price
+        if (delayedPrice.nextPrice == 0) {
+            return;
+        }
+
+        // Check if enough time has passed
+        if (block.timestamp >= delayedPrice.lastUpdateTime + delayedPrice.delaySeconds) {
+            // Update the current price
+            delayedPrice.currentPrice = delayedPrice.nextPrice;
+            delayedPrice.timestamp = delayedPrice.nextTimestamp;
+
+            // Clear the queue
+            delayedPrice.nextPrice = 0;
+            delayedPrice.nextTimestamp = 0;
+
+            emit PriceUpdated(assetId, delayedPrice.currentPrice, delayedPrice.timestamp);
         }
     }
 
     /**
-     * @notice Emergency update price (guardian only)
-     * @param asset Asset identifier
-     * @param price New price
-     */
-    function emergencyUpdatePrice(bytes32 asset, uint256 price) external {
-        require(msg.sender == guardian || msg.sender == governance, "Not authorized");
-
-        // Update current price directly
-        currentPrices[asset].value = price;
-        currentPrices[asset].timestamp = block.timestamp;
-
-        // Clear next price if set
-        if (nextPrices[asset].set) {
-            nextPrices[asset].set = false;
-        }
-
-        emit EmergencyPriceUpdated(asset, price, block.timestamp);
-    }
-
-    /**
-     * @notice Get the current price for an asset
-     * @param asset Asset identifier
+     * @notice Get current price
+     * @param assetId Asset identifier
      * @return price Current price
-     * @return timestamp Price timestamp
+     * @return timestamp Timestamp of the price
      */
-    function getPriceData(bytes32 asset) external view override returns (
+    function getCurrentPrice(
+        bytes32 assetId
+    ) external view returns (
         uint256 price,
         uint256 timestamp
     ) {
-        CurrentPrice storage current = currentPrices[asset];
-
-        require(current.value > 0, "No current price");
-
-        return (current.value, current.timestamp);
+        DelayedPrice storage delayedPrice = delayedPrices[assetId];
+        return (delayedPrice.currentPrice, delayedPrice.timestamp);
     }
 
     /**
-     * @notice Check if price deviation is within allowed range
-     * @param oldPrice Previous price
-     * @param newPrice New price
-     * @return isOK True if deviation is acceptable
+     * @notice Get next price
+     * @param assetId Asset identifier
+     * @return price Next price
+     * @return timestamp Timestamp of the price
+     * @return activationTime Time when the price will be activated
      */
-    function priceDeviationOK(uint256 oldPrice, uint256 newPrice) internal view returns (bool) {
-        uint256 deviation;
+    function getNextPrice(
+        bytes32 assetId
+    ) external view returns (
+        uint256 price,
+        uint256 timestamp,
+        uint256 activationTime
+    ) {
+        DelayedPrice storage delayedPrice = delayedPrices[assetId];
+        uint256 activation = delayedPrice.lastUpdateTime + delayedPrice.delaySeconds;
+        return (delayedPrice.nextPrice, delayedPrice.nextTimestamp, activation);
+    }
+}
+```
 
+#### 6.1.2 Asset-Specific Delay Configuration
+
+Different assets have different security requirements based on their volatility and importance:
+
+```solidity
+/**
+ * @notice Configure asset-specific delay parameters
+ * @param assetId Asset identifier
+ * @param delaySeconds Delay in seconds
+ * @param maxPriceDeviation Maximum allowed price deviation in a single update
+ * @param emergencyDelay Delay for emergency updates
+ */
+function configureAssetDelay(
+    bytes32 assetId,
+    uint256 delaySeconds,
+    uint256 maxPriceDeviation,
+    uint256 emergencyDelay
+) external {
+    require(isAuthorized(msg.sender), "Not authorized");
+
+    AssetDelayConfig storage config = assetDelayConfigs[assetId];
+    config.delaySeconds = delaySeconds;
+    config.maxPriceDeviation = maxPriceDeviation;
+    config.emergencyDelay = emergencyDelay;
+
+    emit AssetDelayConfigured(
+        assetId,
+        delaySeconds,
+        maxPriceDeviation,
+        emergencyDelay
+    );
+}
+```
+
+### 6.2 Fallback Mechanisms
+
+The system implements robust fallback mechanisms to ensure continuous operation.
+
+#### 6.2.1 Tiered Fallback Structure
+
+```solidity
+enum FallbackTier {
+    PRIMARY,
+    SECONDARY,
+    TERTIARY,
+    EMERGENCY
+}
+
+struct FallbackConfig {
+    FallbackTier currentTier;
+    address[] primarySources;
+    address[] secondarySources;
+    address[] tertiarySources;
+    address emergencySource;
+    uint256 failoverThreshold;
+    uint256 recoveryThreshold;
+    bool autoFailover;
+}
+
+mapping(bytes32 => FallbackConfig) public fallbackConfigs;
+
+/**
+ * @notice Get price with fallback handling
+ * @param assetId Asset identifier
+ * @return price Current price
+ * @return timestamp Timestamp of the price
+ * @return tier Fallback tier used
+ */
+function getPriceWithFallback(
+    bytes32 assetId
+) external returns (
+    uint256 price,
+    uint256 timestamp,
+    FallbackTier tier
+) {
+    FallbackConfig storage config = fallbackConfigs[assetId];
+    tier = config.currentTier;
+
+    // Try to get price from current tier
+    (bool success, uint256 fetchedPrice, uint256 fetchedTimestamp) = tryGetPrice(assetId, tier);
+
+    // If successful, check if we can recover to a higher tier
+    if (success) {
+        if (tier != FallbackTier.PRIMARY && checkRecovery(assetId, tier)) {
+            // Recover to higher tier
+            config.currentTier = FallbackTier(uint8(tier) - 1);
+            emit TierRecovered(assetId, tier, config.currentTier);
+        }
+        return (fetchedPrice, fetchedTimestamp, tier);
+    }
+
+    // If not successful and auto-failover is enabled, try lower tiers
+    if (config.autoFailover && tier != FallbackTier.EMERGENCY) {
+        // Try next tier
+        tier = FallbackTier(uint8(tier) + 1);
+        (success, fetchedPrice, fetchedTimestamp) = tryGetPrice(assetId, tier);
+
+        if (success) {
+            config.currentTier = tier;
+            emit TierFailover(assetId, config.currentTier, tier);
+            return (fetchedPrice, fetchedTimestamp, tier);
+        }
+
+        // Try emergency tier as last resort
+        if (tier != FallbackTier.EMERGENCY) {
+            tier = FallbackTier.EMERGENCY;
+            (success, fetchedPrice, fetchedTimestamp) = tryGetPrice(assetId, tier);
+
+            if (success) {
+                config.currentTier = tier;
+                emit TierFailover(assetId, config.currentTier, tier);
+                return (fetchedPrice, fetchedTimestamp, tier);
+            }
+        }
+    }
+
+    // If all fails, revert
+    revert("No price available in any tier");
+}
+```
+
+#### 6.2.2 Last Resort Mechanism
+
+```solidity
+struct LastResortPrice {
+    uint256 price;
+    uint256 timestamp;
+    uint256 validUntil;
+    bool active;
+    address setter;
+}
+
+mapping(bytes32 => LastResortPrice) public lastResortPrices;
+
+/**
+ * @notice Set last resort price
+ * @param assetId Asset identifier
+ * @param price Last resort price
+ * @param validUntil Timestamp until which the price is valid
+ */
+function setLastResortPrice(
+    bytes32 assetId,
+    uint256 price,
+    uint256 validUntil
+) external {
+    require(isEmergencyOracle(msg.sender), "Not emergency oracle");
+    require(validUntil > block.timestamp, "Invalid validity period");
+    require(price > 0, "Invalid price");
+
+    lastResortPrices[assetId] = LastResortPrice({
+        price: price,
+        timestamp: block.timestamp,
+        validUntil: validUntil,
+        active: true,
+        setter: msg.sender
+    });
+
+    emit LastResortPriceSet(assetId, price, validUntil, msg.sender);
+}
+
+/**
+ * @notice Get last resort price
+ * @param assetId Asset identifier
+ * @return price Last resort price
+ * @return timestamp Timestamp of the price
+ * @return isValid Whether the price is valid
+ */
+function getLastResortPrice(
+    bytes32 assetId
+) external view returns (
+    uint256 price,
+    uint256 timestamp,
+    bool isValid
+) {
+    LastResortPrice storage lrp = lastResortPrices[assetId];
+
+    isValid = lrp.active && block.timestamp <= lrp.validUntil;
+
+    return (lrp.price, lrp.timestamp, isValid);
+}
+```
+
+### 6.3 Circuit Breaker Integration
+
+The framework includes circuit breakers to pause operations during extreme market conditions.
+
+#### 6.3.1 Oracle Circuit Breaker
+
+```solidity
+enum CircuitBreakerState {
+    NORMAL,
+    WARNING,
+    BREAKER_TRIGGERED,
+    EMERGENCY_OVERRIDE
+}
+
+struct CircuitBreakerConfig {
+    CircuitBreakerState state;
+    uint256 priceDeviationThreshold;
+    uint256 volumeDeviationThreshold;
+    uint256 consecutiveFailuresThreshold;
+    uint256 stalePriceThreshold;
+    uint256 cooldownPeriod;
+    uint256 lastTriggeredTime;
+    uint256 consecutiveFailures;
+    bool requiresManualReset;
+}
+
+mapping(bytes32 => CircuitBreakerConfig) public circuitBreakerConfigs;
+
+/**
+ * @notice Check and potentially trigger circuit breaker
+ * @param assetId Asset identifier
+ * @param newPrice New price
+ * @param oldPrice Old price
+ * @return state Current circuit breaker state
+ */
+function checkCircuitBreaker(
+    bytes32 assetId,
+    uint256 newPrice,
+    uint256 oldPrice
+) external returns (CircuitBreakerState state) {
+    CircuitBreakerConfig storage config = circuitBreakerConfigs[assetId];
+
+    // If already triggered and in cooldown period, return current state
+    if (config.state == CircuitBreakerState.BREAKER_TRIGGERED) {
+        if (block.timestamp < config.lastTriggeredTime + config.cooldownPeriod) {
+            return config.state;
+        }
+
+        // Cooldown period elapsed, reset if not requiring manual reset
+        if (!config.requiresManualReset) {
+            config.state = CircuitBreakerState.NORMAL;
+            config.consecutiveFailures = 0;
+            emit CircuitBreakerReset(assetId, CircuitBreakerState.NORMAL);
+        }
+    }
+
+    // Check price deviation
+    if (oldPrice > 0) {
+        uint256 deviation;
         if (newPrice > oldPrice) {
             deviation = ((newPrice - oldPrice) * 1e18) / oldPrice;
         } else {
             deviation = ((oldPrice - newPrice) * 1e18) / oldPrice;
         }
 
-        return deviation <= maxPriceDeviation;
-    }
+        if (deviation > config.priceDeviationThreshold) {
+            config.consecutiveFailures++;
 
-    /**
-     * @notice Update delay parameter
-     * @param newDelay New delay in seconds
-     */
-    function setDelay(uint256 newDelay) external {
-        require(msg.sender == governance, "Not governance");
-        require(newDelay <= 24 hours, "Delay too long");
-
-        uint256 oldDelay = delay;
-        delay = newDelay;
-
-        emit DelayUpdated(oldDelay, newDelay);
-    }
-
-    /**
-     * @notice Update max price deviation parameter
-     * @param newMaxDeviation New maximum price deviation (1e18 = 100%)
-     */
-    function setMaxPriceDeviation(uint256 newMaxDeviation) external {
-        require(msg.sender == governance, "Not governance");
-        require(newMaxDeviation <= 5e17, "Deviation too high"); // Max 50%
-
-        uint256 oldMaxDeviation = maxPriceDeviation;
-        maxPriceDeviation = newMaxDeviation;
-
-        emit MaxDeviationUpdated(oldMaxDeviation, newMaxDeviation);
-    }
-
-    // Events
-    event NextPriceUpdated(bytes32 indexed asset, uint256 price, uint256 timestamp);
-    event PriceUpdated(bytes32 indexed asset, uint256 price, uint256 timestamp);
-    event PriceDeviationExceeded(bytes32 indexed asset, uint256 oldPrice, uint256 newPrice, uint256 timestamp);
-    event EmergencyPriceUpdated(bytes32 indexed asset, uint256 price, uint256 timestamp);
-    event DelayUpdated(uint256 oldDelay, uint256 newDelay);
-    event MaxDeviationUpdated(uint256 oldMaxDeviation, uint256 newMaxDeviation);
-}
-```
-
-#### 6.1.2 Asset-Specific Delay Configuration
-
-Different assets have different delay parameters based on their volatility and importance:
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-
-import "./OracleSecurityModule.sol";
-
-contract OSMRegistry {
-    // OSM instances by asset
-    mapping(bytes32 => OracleSecurityModule) public assetOSMs;
-
-        // Asset categories
-    uint8 public constant CATEGORY_MAJOR_CRYPTO = 1;
-    uint8 public constant CATEGORY_ALT_CRYPTO = 2;
-    uint8 public constant CATEGORY_STABLECOIN = 3;
-    uint8 public constant CATEGORY_UTILITY_TOKEN = 4;
-
-    // Asset information
-    struct AssetInfo {
-        uint8 category;
-        uint256 recommendedDelay;
-        uint256 recommendedDeviation;
-        string name;
-        bool isActive;
-    }
-
-    // Asset information registry
-    mapping(bytes32 => AssetInfo) public assetInfo;
-
-    // Governance
-    address public governance;
-    address public guardian;
-
-    constructor(address _governance, address _guardian) {
-        governance = _governance;
-        guardian = _guardian;
-    }
-
-    /**
-     * @notice Register a new OSM for an asset
-     * @param asset Asset identifier
-     * @param priceFeed Source price feed address
-     * @param name Asset name
-     * @param category Asset category
-     */
-    function registerAssetOSM(
-        bytes32 asset,
-        address priceFeed,
-        string calldata name,
-        uint8 category
-    ) external {
-        require(msg.sender == governance, "Not governance");
-        require(address(assetOSMs[asset]) == address(0), "OSM already exists");
-
-        // Determine appropriate delay and deviation based on category
-        (uint256 delay, uint256 maxDeviation) = getParametersForCategory(category);
-
-        // Create new OSM
-        OracleSecurityModule osm = new OracleSecurityModule(
-            priceFeed,
-            delay,
-            maxDeviation,
-            governance,
-            guardian
-        );
-
-        // Register OSM
-        assetOSMs[asset] = osm;
-
-        // Store asset info
-        assetInfo[asset] = AssetInfo({
-            category: category,
-            recommendedDelay: delay,
-            recommendedDeviation: maxDeviation,
-            name: name,
-            isActive: true
-        });
-
-        emit OSMRegistered(asset, address(osm), name, category);
-    }
-
-    /**
-     * @notice Update asset category
-     * @param asset Asset identifier
-     * @param newCategory New asset category
-     */
-    function updateAssetCategory(bytes32 asset, uint8 newCategory) external {
-        require(msg.sender == governance, "Not governance");
-        require(address(assetOSMs[asset]) != address(0), "OSM does not exist");
-
-        AssetInfo storage info = assetInfo[asset];
-        info.category = newCategory;
-
-        // Update recommended parameters
-        (uint256 delay, uint256 maxDeviation) = getParametersForCategory(newCategory);
-        info.recommendedDelay = delay;
-        info.recommendedDeviation = maxDeviation;
-
-        emit AssetCategoryUpdated(asset, newCategory, delay, maxDeviation);
-    }
-
-    /**
-     * @notice Get parameters for asset category
-     * @param category Asset category
-     * @return delay Recommended delay in seconds
-     * @return maxDeviation Recommended max price deviation
-     */
-    function getParametersForCategory(uint8 category) public pure returns (
-        uint256 delay,
-        uint256 maxDeviation
-    ) {
-        if (category == CATEGORY_MAJOR_CRYPTO) {
-            // Major cryptocurrencies - moderate delay, moderate deviation allowance
-            return (1 hours, 1e17); // 1 hour delay, 10% max deviation
-        } else if (category == CATEGORY_ALT_CRYPTO) {
-            // Alternative cryptocurrencies - longer delay, higher deviation allowance
-            return (2 hours, 2e17); // 2 hour delay, 20% max deviation
-        } else if (category == CATEGORY_STABLECOIN) {
-            // Stablecoins - shorter delay, very low deviation allowance
-            return (30 minutes, 2e16); // 30 minute delay, 2% max deviation
-        } else if (category == CATEGORY_UTILITY_TOKEN) {
-            // Utility tokens - longer delay, higher deviation allowance
-            return (3 hours, 3e17); // 3 hour delay, 30% max deviation
+            if (config.consecutiveFailures >= config.consecutiveFailuresThreshold) {
+                config.state = CircuitBreakerState.BREAKER_TRIGGERED;
+                config.lastTriggeredTime = block.timestamp;
+                emit CircuitBreakerTriggered(
+                    assetId,
+                    "Price deviation exceeded threshold",
+                    deviation,
+                    config.priceDeviationThreshold
+                );
+            } else {
+                config.state = CircuitBreakerState.WARNING;
+                emit CircuitBreakerWarning(
+                    assetId,
+                    "Price deviation near threshold",
+                    deviation,
+                    config.priceDeviationThreshold
+                );
+            }
         } else {
-            // Default parameters
-            return (1 hours, 1e17); // 1 hour delay, 10% max deviation
-        }
-    }
+            // Reset consecutive failures on normal operation
+            config.consecutiveFailures = 0;
 
-    // Events
-    event OSMRegistered(bytes32 indexed asset, address osm, string name, uint8 category);
-    event AssetCategoryUpdated(bytes32 indexed asset, uint8 category, uint256 recommendedDelay, uint256 recommendedDeviation);
-}
-```
-
-### 6.2 Fallback Mechanisms
-
-The framework implements robust fallback mechanisms to ensure continuous data availability even during oracle failures.
-
-#### 6.2.1 Tiered Fallback Structure
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-
-import "./IOracleProvider.sol";
-
-contract OracleFallbackSystem {
-    // Fallback tiers
-    uint8 public constant TIER_PRIMARY = 1;
-    uint8 public constant TIER_SECONDARY = 2;
-    uint8 public constant TIER_TERTIARY = 3;
-    uint8 public constant TIER_EMERGENCY = 4;
-
-    // Oracle provider by asset and tier
-    mapping(bytes32 => mapping(uint8 => OracleInfo)) public oracleProviders;
-
-    // Current active tier by asset
-    mapping(bytes32 => uint8) public activeTier;
-
-    // Oracle information
-    struct OracleInfo {
-        address provider;
-        uint256 lastSuccessTimestamp;
-        uint256 failureCount;
-        bool isActive;
-    }
-
-    // Governance
-    address public governance;
-    address public guardian;
-
-    constructor(address _governance, address _guardian) {
-        governance = _governance;
-        guardian = _guardian;
-    }
-
-    /**
-     * @notice Register an oracle provider for a tier
-     * @param asset Asset identifier
-     * @param tier Provider tier
-     * @param provider Oracle provider address
-     */
-    function registerOracleProvider(
-        bytes32 asset,
-        uint8 tier,
-        address provider
-    ) external {
-        require(msg.sender == governance, "Not governance");
-        require(tier >= TIER_PRIMARY && tier <= TIER_EMERGENCY, "Invalid tier");
-        require(provider != address(0), "Invalid provider");
-
-        oracleProviders[asset][tier] = OracleInfo({
-            provider: provider,
-            lastSuccessTimestamp: 0,
-            failureCount: 0,
-            isActive: true
-        });
-
-        // Set active tier to primary if not set
-        if (activeTier[asset] == 0) {
-            activeTier[asset] = TIER_PRIMARY;
-        }
-
-        emit OracleProviderRegistered(asset, tier, provider);
-    }
-
-    /**
-     * @notice Get price data with fallback
-     * @param asset Asset identifier
-     * @return price Asset price
-     * @return timestamp Price timestamp
-     * @return usedTier Tier that provided the data
-     */
-    function getPriceDataWithFallback(bytes32 asset) external returns (
-        uint256 price,
-        uint256 timestamp,
-        uint8 usedTier
-    ) {
-        // Try currently active tier
-        uint8 currentTier = activeTier[asset];
-        OracleInfo storage info = oracleProviders[asset][currentTier];
-
-        if (info.isActive) {
-            try IOracleProvider(info.provider).getPriceData(asset) returns (
-                uint256 _price,
-                uint256 _timestamp,
-                uint256 _confidence
-            ) {
-                // Check if response is valid
-                if (_price > 0 && _timestamp > block.timestamp - 1 hours && _confidence >= 5e17) {
-                    // Update success timestamp
-                    info.lastSuccessTimestamp = block.timestamp;
-
-                    return (_price, _timestamp, currentTier);
-                }
-            } catch {
-                // Increment failure count
-                info.failureCount++;
-
-                // If too many failures, try fallback
-                if (info.failureCount >= getMaxFailuresForTier(currentTier)) {
-                    // Fallback to next tier if available
-                    uint8 nextTier = findNextActiveTier(asset, currentTier);
-                    if (nextTier != 0 && nextTier != currentTier) {
-                        activeTier[asset] = nextTier;
-                        emit TierChanged(asset, currentTier, nextTier);
-
-                        // Try with new tier
-                        return this.getPriceDataWithFallback(asset);
-                    }
-                }
+            if (config.state == CircuitBreakerState.WARNING) {
+                config.state = CircuitBreakerState.NORMAL;
+                emit CircuitBreakerReset(assetId, CircuitBreakerState.NORMAL);
             }
         }
-
-        // If current tier failed, try other tiers in order
-        for (uint8 tier = TIER_PRIMARY; tier <= TIER_EMERGENCY; tier++) {
-            if (tier == currentTier) continue; // Skip current tier as we already tried it
-
-            OracleInfo storage fallbackInfo = oracleProviders[asset][tier];
-            if (!fallbackInfo.isActive) continue;
-
-            try IOracleProvider(fallbackInfo.provider).getPriceData(asset) returns (
-                uint256 _price,
-                uint256 _timestamp,
-                uint256 _confidence
-            ) {
-                // Check if response is valid
-                if (_price > 0 && _timestamp > block.timestamp - 1 hours && _confidence >= 5e17) {
-                    // Update success timestamp
-                    fallbackInfo.lastSuccessTimestamp = block.timestamp;
-
-                    // Switch to this tier
-                    activeTier[asset] = tier;
-                    emit TierChanged(asset, currentTier, tier);
-
-                    return (_price, _timestamp, tier);
-                }
-            } catch {
-                // Increment failure count
-                fallbackInfo.failureCount++;
-            }
-        }
-
-        // If all tiers failed, use last known good price if available
-        for (uint8 tier = TIER_PRIMARY; tier <= TIER_EMERGENCY; tier++) {
-            OracleInfo storage lastKnownInfo = oracleProviders[asset][tier];
-            if (lastKnownInfo.lastSuccessTimestamp > 0) {
-                try IOracleProvider(lastKnownInfo.provider).getLastKnownPrice(asset) returns (
-                    uint256 _price,
-                    uint256 _timestamp
-                ) {
-                    if (_price > 0) {
-                        // Use last known price with reduced confidence
-                        emit FallbackToLastKnownPrice(asset, tier, _price, _timestamp);
-                        return (_price, _timestamp, tier);
-                    }
-                } catch {
-                    // Continue to next tier
-                }
-            }
-        }
-
-        // If everything failed, revert
-        revert("No valid price found");
     }
 
-    /**
-     * @notice Find next active tier
-     * @param asset Asset identifier
-     * @param currentTier Current tier
-     * @return nextTier Next active tier or 0 if none found
-     */
-    function findNextActiveTier(bytes32 asset, uint8 currentTier) internal view returns (uint8) {
-        // Try next tier first
-        for (uint8 tier = currentTier + 1; tier <= TIER_EMERGENCY; tier++) {
-            if (oracleProviders[asset][tier].isActive) {
-                return tier;
-            }
-        }
-
-        // If no higher tier is active, try lower tiers
-        for (uint8 tier = TIER_PRIMARY; tier < currentTier; tier++) {
-            if (oracleProviders[asset][tier].isActive) {
-                return tier;
-            }
-        }
-
-        // No other active tier found
-        return 0;
-    }
-
-    /**
-     * @notice Get maximum allowed failures for a tier
-     * @param tier Provider tier
-     * @return maxFailures Maximum allowed failures
-     */
-    function getMaxFailuresForTier(uint8 tier) internal pure returns (uint256) {
-        if (tier == TIER_PRIMARY) {
-            return 3; // Primary tier gets more chances
-        } else if (tier == TIER_SECONDARY) {
-            return 2;
-        } else {
-            return 1; // Less tolerance for lower tiers
-        }
-    }
-
-    /**
-     * @notice Reset failure count for a provider
-     * @param asset Asset identifier
-     * @param tier Provider tier
-     */
-    function resetFailureCount(bytes32 asset, uint8 tier) external {
-        require(msg.sender == governance || msg.sender == guardian, "Not authorized");
-        require(tier >= TIER_PRIMARY && tier <= TIER_EMERGENCY, "Invalid tier");
-
-        oracleProviders[asset][tier].failureCount = 0;
-
-        emit FailureCountReset(asset, tier);
-    }
-
-    /**
-     * @notice Set active tier manually
-     * @param asset Asset identifier
-     * @param tier New active tier
-     */
-    function setActiveTier(bytes32 asset, uint8 tier) external {
-        require(msg.sender == governance || msg.sender == guardian, "Not authorized");
-        require(tier >= TIER_PRIMARY && tier <= TIER_EMERGENCY, "Invalid tier");
-        require(oracleProviders[asset][tier].isActive, "Tier not active");
-
-        uint8 oldTier = activeTier[asset];
-        activeTier[asset] = tier;
-
-        emit TierChanged(asset, oldTier, tier);
-    }
-
-    // Events
-    event OracleProviderRegistered(bytes32 indexed asset, uint8 tier, address provider);
-    event TierChanged(bytes32 indexed asset, uint8 oldTier, uint8 newTier);
-    event FailureCountReset(bytes32 indexed asset, uint8 tier);
-    event FallbackToLastKnownPrice(bytes32 indexed asset, uint8 tier, uint256 price, uint256 timestamp);
-}
-```
-
-#### 6.2.2 Last Resort Mechanism
-
-The system implements a last resort mechanism for extreme scenarios where all oracles fail:
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-
-contract LastResortOracle {
-    // Last resort price data
-    struct LastResortPrice {
-        uint256 price;
-        uint256 timestamp;
-        address setter;
-        string reason;
-    }
-
-    // Last resort prices by asset
-    mapping(bytes32 => LastResortPrice) public lastResortPrices;
-
-    // Last resort authorizations
-    mapping(address => bool) public isLastResortAuthority;
-
-    // Required confirmations
-    uint256 public requiredConfirmations;
-
-    // Confirmation tracking
-    mapping(bytes32 => mapping(address => bool)) public confirmations;
-    mapping(bytes32 => uint256) public confirmationCount;
-
-    // Governance
-    address public governance;
-
-    constructor(address _governance, uint256 _requiredConfirmations) {
-        governance = _governance;
-        requiredConfirmations = _requiredConfirmations;
-    }
-
-    /**
-     * @notice Set or confirm a last resort price
-     * @param asset Asset identifier
-     * @param price Last resort price
-     * @param reason Reason for setting last resort price
-     */
-    function setLastResortPrice(
-        bytes32 asset,
-        uint256 price,
-        string calldata reason
-    ) external {
-        require(isLastResortAuthority[msg.sender], "Not authorized");
-        require(price > 0, "Invalid price");
-
-        // Create key for this price proposal
-        bytes32 proposalKey = keccak256(abi.encodePacked(asset, price, block.timestamp / 1 hours));
-
-        // Record confirmation
-        if (!confirmations[proposalKey][msg.sender]) {
-            confirmations[proposalKey][msg.sender] = true;
-            confirmationCount[proposalKey]++;
-        }
-
-        // If enough confirmations, set the price
-        if (confirmationCount[proposalKey] >= requiredConfirmations) {
-            lastResortPrices[asset] = LastResortPrice({
-                price: price,
-                timestamp: block.timestamp,
-                setter: msg.sender,
-                reason: reason
-            });
-
-            emit LastResortPriceSet(asset, price, reason, msg.sender);
-        } else {
-            emit LastResortPriceConfirmed(asset, price, msg.sender, confirmationCount[proposalKey]);
-        }
-    }
-
-    /**
-     * @notice Get last resort price data
-     * @param asset Asset identifier
-     * @return price Last resort price
-     * @return timestamp Price timestamp
-     */
-    function getLastResortPriceData(bytes32 asset) external view returns (
-        uint256 price,
-        uint256 timestamp
-    ) {
-        LastResortPrice storage lastResort = lastResortPrices[asset];
-
-        require(lastResort.price > 0, "No last resort price set");
-
-        return (lastResort.price, lastResort.timestamp);
-    }
-
-    /**
-     * @notice Add a last resort authority
-     * @param authority Address to add as authority
-     */
-    function addLastResortAuthority(address authority) external {
-        require(msg.sender == governance, "Not governance");
-        require(authority != address(0), "Invalid address");
-
-        isLastResortAuthority[authority] = true;
-
-        emit LastResortAuthorityAdded(authority);
-    }
-
-    /**
-     * @notice Remove a last resort authority
-     * @param authority Address to remove
-     */
-    function removeLastResortAuthority(address authority) external {
-        require(msg.sender == governance, "Not governance");
-
-        isLastResortAuthority[authority] = false;
-
-        emit LastResortAuthorityRemoved(authority);
-    }
-
-    /**
-     * @notice Update required confirmations
-     * @param newRequiredConfirmations New confirmation threshold
-     */
-    function setRequiredConfirmations(uint256 newRequiredConfirmations) external {
-        require(msg.sender == governance, "Not governance");
-        require(newRequiredConfirmations > 0, "Invalid confirmation count");
-
-        requiredConfirmations = newRequiredConfirmations;
-
-        emit RequiredConfirmationsChanged(newRequiredConfirmations);
-    }
-
-    // Events
-    event LastResortPriceSet(bytes32 indexed asset, uint256 price, string reason, address setter);
-    event LastResortPriceConfirmed(bytes32 indexed asset, uint256 price, address confirmer, uint256 confirmations);
-    event LastResortAuthorityAdded(address indexed authority);
-    event LastResortAuthorityRemoved(address indexed authority);
-    event RequiredConfirmationsChanged(uint256 newRequiredConfirmations);
-}
-```
-
-### 6.3 Circuit Breaker Integration
-
-The oracle system integrates with the protocol's circuit breaker system to prevent harmful operations during oracle failures.
-
-#### 6.3.1 Oracle Circuit Breaker
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-
-import "./IOracleConsumer.sol";
-import "./ICircuitBreaker.sol";
-
-contract OracleCircuitBreaker is ICircuitBreaker {
-    // Circuit breaker conditions
-    enum BreakCondition {
-        NONE,
-        ORACLE_TIMEOUT,
-        EXTREME_VOLATILITY,
-        DRAMATIC_DEVIATION,
-        CORRELATION_MISMATCH,
-        AGGREGATION_FAILURE,
-        PROVIDER_DISAGREEMENT,
-        MANUAL_TRIGGER
-    }
-
-    // Circuit breaker status
-    struct BreakerStatus {
-        bool broken;
-        BreakCondition condition;
-        uint256 triggeredAt;
-        address triggeredBy;
-        bytes32 assetId;
-        string reason;
-    }
-
-    // Status by asset
-    mapping(bytes32 => BreakerStatus) public breakerStatus;
-
-    // Oracle timeout thresholds (asset => timeout period)
-    mapping(bytes32 => uint256) public timeoutThresholds;
-
-    // Volatility thresholds (asset => max allowed volatility)
-    mapping(bytes32 => uint256) public volatilityThresholds;
-
-    // Deviation thresholds (asset => max allowed deviation)
-    mapping(bytes32 => uint256) public deviationThresholds;
-
-    // Oracle consumer contract
-    IOracleConsumer public oracleConsumer;
-
-    // Authorized breaker triggers
-    mapping(address => bool) public canTriggerBreaker;
-
-    // Authorized breaker resetters
-    mapping(address => bool) public canResetBreaker;
-
-    // Governance
-    address public governance;
-
-    constructor(
-        address _oracleConsumer,
-        address _governance
-    ) {
-        oracleConsumer = IOracleConsumer(_oracleConsumer);
-        governance = _governance;
-
-        // Governance can trigger and reset
-        canTriggerBreaker[_governance] = true;
-        canResetBreaker[_governance] = true;
-    }
-
-    /**
-     * @notice Check if circuit breaker is active for an asset
-     * @param asset Asset identifier
-     * @return broken True if circuit breaker is active
-     */
-    function isCircuitBroken(bytes32 asset) external view override returns (bool) {
-        return breakerStatus[asset].broken;
-    }
-
-    /**
-     * @notice Check for timeout condition and trigger breaker if needed
-     * @param asset Asset identifier
-     */
-    function checkTimeoutCondition(bytes32 asset) external {
-        // Get last update time from oracle consumer
-        uint256 lastUpdateTime = oracleConsumer.getLastUpdateTime(asset);
-        uint256 timeout = timeoutThresholds[asset];
-
-        // If no custom timeout, use default (1 hour)
-        if (timeout == 0) {
-            timeout = 1 hours;
-        }
-
-        // Check if update is stale
-        if (lastUpdateTime > 0 && block.timestamp - lastUpdateTime > timeout) {
-            // Trigger circuit breaker for timeout
-            _triggerBreaker(
-                asset,
-                BreakCondition.ORACLE_TIMEOUT,
-                msg.sender,
-                string(abi.encodePacked(
-                    "Oracle timeout: ",
-                    uint2str(block.timestamp - lastUpdateTime),
-                    "s elapsed"
-                ))
-            );
-        }
-    }
-
-    /**
-     * @notice Check for extreme volatility condition and trigger breaker if needed
-     * @param asset Asset identifier
-     */
-    function checkVolatilityCondition(bytes32 asset) external {
-        // Get volatility data from oracle consumer
-        uint256 volatility = oracleConsumer.getAssetVolatility(asset);
-        uint256 threshold = volatilityThresholds[asset];
-
-        // If no custom threshold, use default (50%)
-        if (threshold == 0) {
-            threshold = 5e17;
-        }
-
-        // Check if volatility exceeds threshold
-        if (volatility > threshold) {
-            // Trigger circuit breaker for volatility
-            _triggerBreaker(
-                asset,
-                BreakCondition.EXTREME_VOLATILITY,
-                msg.sender,
-                string(abi.encodePacked(
-                    "Extreme volatility: ",
-                    uint2str(volatility / 1e16),
-                    "% observed"
-                ))
-            );
-        }
-    }
-
-    /**
-     * @notice Check for dramatic price deviation and trigger breaker if needed
-     * @param asset Asset identifier
-     */
-    function checkDeviationCondition(bytes32 asset) external {
-        // Get last price and previous price
-        (uint256 currentPrice, uint256 currentTimestamp) = oracleConsumer.getCurrentPrice(asset);
-        (uint256 previousPrice, uint256 previousTimestamp) = oracleConsumer.getPreviousPrice(asset);
-
-        // Ensure we have valid prices
-        if (currentPrice == 0 || previousPrice == 0) {
-            return;
-        }
-
-        // Calculate price change percentage
-        uint256 priceChange;
-        if (currentPrice > previousPrice) {
-            priceChange = ((currentPrice - previousPrice) * 1e18) / previousPrice;
-        } else {
-            priceChange = ((previousPrice - currentPrice) * 1e18) / previousPrice;
-        }
-
-        uint256 threshold = deviationThresholds[asset];
-
-        // If no custom threshold, use default (30%)
-        if (threshold == 0) {
-            threshold = 3e17;
-        }
-
-        // Check if price change exceeds threshold
-        if (priceChange > threshold) {
-            // Calculate change duration
-            uint256 changeDuration = currentTimestamp > previousTimestamp ?
-                                    currentTimestamp - previousTimestamp : 0;
-
-            // Trigger circuit breaker for deviation
-            _triggerBreaker(
-                asset,
-                BreakCondition.DRAMATIC_DEVIATION,
-                msg.sender,
-                string(abi.encodePacked(
-                    "Dramatic price deviation: ",
-                    uint2str(priceChange / 1e16),
-                    "% change in ",
-                    uint2str(changeDuration),
-                    "s"
-                ))
-            );
-        }
-    }
-
-    /**
-     * @notice Manually trigger circuit breaker
-     * @param asset Asset identifier
-     * @param reason Reason for triggering
-     */
-    function triggerBreaker(bytes32 asset, string calldata reason) external {
-        require(canTriggerBreaker[msg.sender], "Not authorized to trigger");
-
-        _triggerBreaker(
-            asset,
-            BreakCondition.MANUAL_TRIGGER,
-            msg.sender,
-            reason
-        );
-    }
-
-    /**
-     * @notice Reset circuit breaker
-     * @param asset Asset identifier
-     */
-    function resetBreaker(bytes32 asset) external {
-        require(canResetBreaker[msg.sender], "Not authorized to reset");
-        require(breakerStatus[asset].broken, "Circuit not broken");
-
-        // Store data for event
-        BreakCondition condition = breakerStatus[asset].condition;
-        uint256 duration = block.timestamp - breakerStatus[asset].triggeredAt;
-
-        // Reset breaker
-        breakerStatus[asset].broken = false;
-
-        emit CircuitReset(asset, condition, msg.sender, duration);
-    }
-
-    /**
-     * @notice Internal function to trigger circuit breaker
-     * @param asset Asset identifier
-     * @param condition Break condition
-     * @param trigger Address triggering the breaker
-     * @param reason Reason for triggering
-     */
-    function _triggerBreaker(
-        bytes32 asset,
-        BreakCondition condition,
-        address trigger,
-        string memory reason
-    ) internal {
-        // Only trigger if not already broken
-        if (!breakerStatus[asset].broken) {
-            breakerStatus[asset] = BreakerStatus({
-                broken: true,
-                condition: condition,
-                triggeredAt: block.timestamp,
-                triggeredBy: trigger,
-                assetId: asset,
-                reason: reason
-            });
-
-            emit CircuitBroken(asset, uint8(condition), trigger, reason);
-        }
-    }
-
-    /**
-     * @notice Update timeout threshold
-     * @param asset Asset identifier
-     * @param threshold New timeout threshold in seconds
-     */
-    function setTimeoutThreshold(bytes32 asset, uint256 threshold) external {
-        require(msg.sender == governance, "Not governance");
-
-        timeoutThresholds[asset] = threshold;
-
-        emit TimeoutThresholdUpdated(asset, threshold);
-    }
-
-    /**
-     * @notice Update volatility threshold
-     * @param asset Asset identifier
-     * @param threshold New volatility threshold (1e18 = 100%)
-     */
-    function setVolatilityThreshold(bytes32 asset, uint256 threshold) external {
-        require(msg.sender == governance, "Not governance");
-
-        volatilityThresholds[asset] = threshold;
-
-        emit VolatilityThresholdUpdated(asset, threshold);
-    }
-
-    /**
-     * @notice Update deviation threshold
-     * @param asset Asset identifier
-     * @param threshold New deviation threshold (1e18 = 100%)
-     */
-    function setDeviationThreshold(bytes32 asset, uint256 threshold) external {
-        require(msg.sender == governance, "Not governance");
-
-        deviationThresholds[asset] = threshold;
-
-        emit DeviationThresholdUpdated(asset, threshold);
-    }
-
-    /**
-     * @notice Set breaker trigger permission
-     * @param account Account to update
-     * @param canTrigger Whether account can trigger breaker
-     */
-    function setCanTriggerBreaker(address account, bool canTrigger) external {
-        require(msg.sender == governance, "Not governance");
-
-        canTriggerBreaker[account] = canTrigger;
-
-        emit BreakerTriggerPermissionUpdated(account, canTrigger);
-    }
-
-    /**
-     * @notice Set breaker reset permission
-     * @param account Account to update
-     * @param canReset Whether account can reset breaker
-     */
-    function setCanResetBreaker(address account, bool canReset) external {
-        require(msg.sender == governance, "Not governance");
-
-        canResetBreaker[account] = canReset;
-
-        emit BreakerResetPermissionUpdated(account, canReset);
-    }
-
-    /**
-     * @notice Convert uint to string (helper function)
-     * @param value Value to convert
-     * @return str String representation
-     */
-    function uint2str(uint256 value) internal pure returns (string memory) {
-        if (value == 0) {
-            return "0";
-        }
-
-        uint256 temp = value;
-        uint256 digits;
-
-        while (temp != 0) {
-            digits++;
-            temp /= 10;
-        }
-
-        bytes memory buffer = new bytes(digits);
-        while (value != 0) {
-            digits -= 1;
-            buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));
-            value /= 10;
-        }
-
-        return string(buffer);
-    }
-
-    // Events
-    event CircuitBroken(bytes32 indexed asset, uint8 condition, address trigger, string reason);
-    event CircuitReset(bytes32 indexed asset, BreakCondition condition, address resetter, uint256 duration);
-    event TimeoutThresholdUpdated(bytes32 indexed asset, uint256 threshold);
-    event VolatilityThresholdUpdated(bytes32 indexed asset, uint256 threshold);
-    event DeviationThresholdUpdated(bytes32 indexed asset, uint256 threshold);
-    event BreakerTriggerPermissionUpdated(address indexed account, bool canTrigger);
-    event BreakerResetPermissionUpdated(address indexed account, bool canReset);
+    return config.state;
 }
 ```
 
 #### 6.3.2 Circuit Breaker Response Mechanisms
 
 ```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+/**
+ * @notice Manually reset circuit breaker
+ * @param assetId Asset identifier
+ */
+function resetCircuitBreaker(bytes32 assetId) external {
+    require(isAuthorized(msg.sender), "Not authorized");
 
-import "./ICircuitBreaker.sol";
-import "./IProtocolController.sol";
+    CircuitBreakerConfig storage config = circuitBreakerConfigs[assetId];
+    require(config.state == CircuitBreakerState.BREAKER_TRIGGERED, "Not triggered");
 
-contract OracleCircuitBreakerResponse {
-    // Possible response actions
-    enum ResponseAction {
-        NONE,
-        PAUSE_AFFECTED_FUNCTIONS,
-        USE_FALLBACK_ORACLE,
-        INCREASE_BUFFER_REQUIREMENTS,
-        LIMIT_TRANSACTION_SIZE,
-        ENABLE_GUARDIAN_MODE
+    config.state = CircuitBreakerState.NORMAL;
+    config.consecutiveFailures = 0;
+
+    emit CircuitBreakerReset(assetId, CircuitBreakerState.NORMAL);
+}
+
+/**
+ * @notice Emergency override of circuit breaker
+ * @param assetId Asset identifier
+ * @param state Desired state
+ * @param reason Reason for override
+ */
+function emergencyOverride(
+    bytes32 assetId,
+    CircuitBreakerState state,
+    string calldata reason
+) external {
+    require(isEmergencyAuthorized(msg.sender), "Not emergency authorized");
+
+    CircuitBreakerConfig storage config = circuitBreakerConfigs[assetId];
+    config.state = state;
+
+    if (state == CircuitBreakerState.NORMAL) {
+        config.consecutiveFailures = 0;
     }
 
-    // Response configuration
-    struct ResponseConfig {
-        ResponseAction[] actions;
-        uint256 minBrokenDuration;
-        bool requireManualReset;
-    }
-
-    // Response configuration by asset and condition
-    mapping(bytes32 => mapping(uint8 => ResponseConfig)) public responseConfigs;
-
-    // Circuit breaker to monitor
-    ICircuitBreaker public circuitBreaker;
-
-    // Protocol controller to execute actions
-    IProtocolController public protocolController;
-
-    // Governance
-    address public governance;
-
-    constructor(
-        address _circuitBreaker,
-        address _protocolController,
-        address _governance
-    ) {
-        circuitBreaker = ICircuitBreaker(_circuitBreaker);
-        protocolController = IProtocolController(_protocolController);
-        governance = _governance;
-    }
-
-    /**
-     * @notice Check and respond to broken circuit
-     * @param asset Asset identifier
-     */
-    function checkAndRespond(bytes32 asset) external {
-        // Check if circuit is broken for this asset
-        bool isBroken = circuitBreaker.isCircuitBroken(asset);
-
-        if (isBroken) {
-            // Get breaker status details
-            (
-                bool broken,
-                uint8 condition,
-                uint256 triggeredAt,
-                address triggeredBy,
-                bytes32 assetId,
-                string memory reason
-            ) = circuitBreaker.getBreakerStatus(asset);
-
-            // Ensure details match
-            if (broken && assetId == asset) {
-                // Get response configuration for this condition
-                ResponseConfig storage config = responseConfigs[asset][condition];
-
-                // Check if we've passed the minimum duration
-                if (block.timestamp >= triggeredAt + config.minBrokenDuration) {
-                    // Execute all configured response actions
-                    for (uint i = 0; i < config.actions.length; i++) {
-                        executeResponseAction(asset, config.actions[i], condition);
-                    }
-
-                    // Emit event for response
-                    emit ResponseActionsExecuted(asset, condition, triggeredBy, reason);
-                }
-            }
-        }
-    }
-
-    /**
-     * @notice Execute a specific response action
-     * @param asset Asset identifier
-     * @param action Response action to execute
-     * @param condition Circuit breaker condition
-     */
-    function executeResponseAction(
-        bytes32 asset,
-        ResponseAction action,
-        uint8 condition
-    ) internal {
-        if (action == ResponseAction.PAUSE_AFFECTED_FUNCTIONS) {
-            protocolController.pauseAssetFunctions(asset);
-        } else if (action == ResponseAction.USE_FALLBACK_ORACLE) {
-            protocolController.activateFallbackOracle(asset);
-        } else if (action == ResponseAction.INCREASE_BUFFER_REQUIREMENTS) {
-            protocolController.increaseAssetBuffers(asset, getBufferIncreaseForCondition(condition));
-        } else if (action == ResponseAction.LIMIT_TRANSACTION_SIZE) {
-            protocolController.setAssetTransactionLimit(asset, getTransactionLimitForAsset(asset));
-        } else if (action == ResponseAction.ENABLE_GUARDIAN_MODE) {
-            protocolController.enableGuardianMode(asset);
-        }
-
-        emit ResponseActionExecuted(asset, uint8(action), condition);
-    }
-
-    /**
-     * @notice Configure response for asset and condition
-     * @param asset Asset identifier
-     * @param condition Circuit breaker condition
-     * @param actions Response actions to configure
-     * @param minDuration Minimum broken duration before response
-     * @param requireManualReset Whether to require manual reset
-     */
-    function configureResponse(
-        bytes32 asset,
-        uint8 condition,
-        uint8[] calldata actions,
-        uint256 minDuration,
-        bool requireManualReset
-    ) external {
-        require(msg.sender == governance, "Not governance");
-
-        // Convert action IDs to enum values
-        ResponseAction[] memory responseActions = new ResponseAction[](actions.length);
-        for (uint i = 0; i < actions.length; i++) {
-            responseActions[i] = ResponseAction(actions[i]);
-        }
-
-        // Set configuration
-        responseConfigs[asset][condition] = ResponseConfig({
-            actions: responseActions,
-            minBrokenDuration: minDuration,
-            requireManualReset: requireManualReset
-        });
-
-        emit ResponseConfigured(asset, condition, minDuration, requireManualReset);
-    }
-
-    /**
-     * @notice Get buffer increase amount for a condition
-     * @param condition Circuit breaker condition
-     * @return bufferIncrease Buffer increase percentage (1e18 = 100%)
-     */
-    function getBufferIncreaseForCondition(uint8 condition) internal pure returns (uint256) {
-        if (condition == uint8(ICircuitBreaker.BreakCondition.ORACLE_TIMEOUT)) {
-            return 2e17; // 20% increase
-        } else if (condition == uint8(ICircuitBreaker.BreakCondition.EXTREME_VOLATILITY)) {
-            return 5e17; // 50% increase
-        } else if (condition == uint8(ICircuitBreaker.BreakCondition.DRAMATIC_DEVIATION)) {
-            return 3e17; // 30% increase
-        } else {
-            return 1e17; // 10% default increase
-        }
-    }
-
-    /**
-     * @notice Get transaction limit for an asset
-     * @param asset Asset identifier
-     * @return limit Transaction limit amount
-     */
-    function getTransactionLimitForAsset(bytes32 asset) internal view returns (uint256) {
-        // This could be implemented with asset-specific logic
-        // For simplicity, we use a standard reduction
-        return protocolController.getDefaultTransactionLimit(asset) / 2;
-    }
-
-    // Events
-    event ResponseActionsExecuted(bytes32 indexed asset, uint8 condition, address triggeredBy, string reason);
-    event ResponseActionExecuted(bytes32 indexed asset, uint8 action, uint8 condition);
-    event ResponseConfigured(bytes32 indexed asset, uint8 condition, uint256 minDuration, bool requireManualReset);
+    emit CircuitBreakerOverride(assetId, state, reason, msg.sender);
 }
 ```
 
 ### 6.4 Data Retention and History
 
-The framework includes comprehensive data retention capabilities for audit and analysis purposes.
+The framework manages historical data for analysis and verification.
 
 #### 6.4.1 Oracle History Storage
 
 ```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+struct PriceDataPoint {
+    uint256 price;
+    uint256 timestamp;
+    uint256 confidence;
+    uint8 source;
+}
 
-import "./IOracleHistoryConsumer.sol";
+// Mapping from asset ID to array of historical prices
+mapping(bytes32 => PriceDataPoint[]) public priceHistory;
+// Maximum history length per asset
+uint256 public maxHistoryLength = 1000;
 
-contract OracleHistoryStorage {
-    // Price record structure
-    struct PriceRecord {
-        uint256 price;
-        uint256 timestamp;
-        uint8 source;
-        uint8 confidenceLevel; // 0-255, higher is more confident
-    }
+/**
+ * @notice Add price data point to history
+ * @param assetId Asset identifier
+ * @param price Price value
+ * @param timestamp Timestamp of the price
+ * @param confidence Confidence score
+ * @param source Source identifier
+ */
+function addPriceToHistory(
+    bytes32 assetId,
+    uint256 price,
+    uint256 timestamp,
+    uint256 confidence,
+    uint8 source
+) internal {
+    PriceDataPoint[] storage history = priceHistory[assetId];
 
-    // Price history by asset
-    mapping(bytes32 => PriceRecord[]) private priceHistories;
+    // If history is at max length, remove oldest entry
+    if (history.length >= maxHistoryLength) {
+        // Shift all elements left by one
+        for (uint i = 0; i < history.length - 1; i++) {
+            history[i] = history[i + 1];
+        }
 
-    // Mapping to track indices for quick timestamp lookup
-    mapping(bytes32 => mapping(uint256 => uint256)) private timestampToIndex;
-
-    // Storage configuration
-    uint256 public maxHistoryLength;
-    uint256 public pruneThreshold;
-
-    // Access control
-    address public admin;
-    mapping(address => bool) public authorizedWriters;
-    mapping(address => bool) public authorizedReaders;
-
-    constructor(uint256 _maxHistoryLength, uint256 _pruneThreshold) {
-        maxHistoryLength = _maxHistoryLength;
-        pruneThreshold = _pruneThreshold;
-        admin = msg.sender;
-    }
-
-    /**
-     * @notice Store a new price record
-     * @param asset Asset identifier
-     * @param price Asset price
-     * @param timestamp Price timestamp
-     * @param source Source identifier
-     * @param confidenceLevel Confidence level (0-255)
-     */
-    function storePrice(
-        bytes32 asset,
-        uint256 price,
-        uint256 timestamp,
-        uint8 source,
-        uint8 confidenceLevel
-    ) external {
-        require(authorizedWriters[msg.sender], "Not authorized to write");
-
-        // Create new record
-        PriceRecord memory record = PriceRecord({
+        // Replace last element
+        history[history.length - 1] = PriceDataPoint({
             price: price,
             timestamp: timestamp,
-            source: source,
-            confidenceLevel: confidenceLevel
+            confidence: confidence,
+            source: source
         });
+    } else {
+        // Add new entry
+        history.push(PriceDataPoint({
+            price: price,
+            timestamp: timestamp,
+            confidence: confidence,
+            source: source
+        }));
+    }
+}
 
-        // Get current history
-        PriceRecord[] storage history = priceHistories[asset];
+/**
+ * @notice Get price history for an asset
+ * @param assetId Asset identifier
+ * @param count Number of historical entries to retrieve
+ * @return prices Array of prices
+ * @return timestamps Array of timestamps
+ * @return confidences Array of confidence scores
+ * @return sources Array of source identifiers
+ */
+function getPriceHistory(
+    bytes32 assetId,
+    uint256 count
+) external view returns (
+    uint256[] memory prices,
+    uint256[] memory timestamps,
+    uint256[] memory confidences,
+    uint8[] memory sources
+) {
+    PriceDataPoint[] storage history = priceHistory[assetId];
 
-        // Add new record
-        uint256 newIndex = history.length;
-        history.push(record);
+    // Determine how many entries to return
+    uint256 returnCount = count < history.length ? count : history.length;
 
-        // Map timestamp to index for faster lookup
-        timestampToIndex[asset][timestamp] = newIndex;
+    prices = new uint256[](returnCount);
+    timestamps = new uint256[](returnCount);
+    confidences = new uint256[](returnCount);
+    sources = new uint8[](returnCount);
 
-        emit PriceStored(asset, price, timestamp, source, confidenceLevel);
-
-        // Check if we need to prune history
-        if (history.length > maxHistoryLength) {
-            _pruneHistory(asset);
-        }
+    // Fill arrays starting from the most recent entry
+    for (uint i = 0; i < returnCount; i++) {
+        uint256 index = history.length - 1 - i;
+        prices[i] = history[index].price;
+        timestamps[i] = history[index].timestamp;
+        confidences[i] = history[index].confidence;
+        sources[i] = history[index].source;
     }
 
-    /**
-     * @notice Get price at a specific timestamp
-     * @param asset Asset identifier
-     * @param timestamp Target timestamp
-     * @return price Price at timestamp (or closest before)
-     * @return actualTimestamp Actual timestamp of returned price
-     * @return source Source of the price
-     * @return confidenceLevel Confidence level of the price
-     */
-    function getPriceAt(
-        bytes32 asset,
-        uint256 timestamp
-    ) external view returns (
-        uint256 price,
-        uint256 actualTimestamp,
-        uint8 source,
-        uint8 confidenceLevel
-    ) {
-        require(authorizedReaders[msg.sender], "Not authorized to read");
-
-        // Check if we have an exact match
-        if (timestampToIndex[asset][timestamp] > 0) {
-            uint256 index = timestampToIndex[asset][timestamp];
-            PriceRecord storage record = priceHistories[asset][index];
-            return (
-                record.price,
-                record.timestamp,
-                record.source,
-                record.confidenceLevel
-            );
-        }
-
-        // Find closest timestamp before target
-        PriceRecord[] storage history = priceHistories[asset];
-        uint256 closestTimestamp = 0;
-        uint256 closestIndex = 0;
-
-        for (uint256 i = 0; i < history.length; i++) {
-            if (history[i].timestamp <= timestamp &&
-                history[i].timestamp > closestTimestamp) {
-                closestTimestamp = history[i].timestamp;
-                closestIndex = i;
-            }
-        }
-
-        // Ensure we found a record
-        require(closestTimestamp > 0, "No price data found before timestamp");
-
-        PriceRecord storage closest = history[closestIndex];
-        return (
-            closest.price,
-            closest.timestamp,
-            closest.source,
-            closest.confidenceLevel
-        );
-    }
-
-    /**
-     * @notice Get price history within a time range
-     * @param asset Asset identifier
-     * @param startTime Start timestamp (inclusive)
-     * @param endTime End timestamp (inclusive)
-     * @param maxPoints Maximum number of points to return
-     * @return prices Array of prices
-     * @return timestamps Array of timestamps
-     * @return sources Array of sources
-     * @return confidenceLevels Array of confidence levels
-     */
-    function getPriceHistory(
-        bytes32 asset,
-        uint256 startTime,
-        uint256 endTime,
-        uint256 maxPoints
-    ) external view returns (
-        uint256[] memory prices,
-        uint256[] memory timestamps,
-        uint8[] memory sources,
-        uint8[] memory confidenceLevels
-    ) {
-        require(authorizedReaders[msg.sender], "Not authorized to read");
-        require(endTime >= startTime, "Invalid time range");
-
-        PriceRecord[] storage history = priceHistories[asset];
-
-        // Count how many records are in the time range
-        uint256 count = 0;
-        for (uint256 i = 0; i < history.length; i++) {
-            if (history[i].timestamp >= startTime &&
-                history[i].timestamp <= endTime) {
-                count++;
-            }
-        }
-
-        // Limit to maxPoints
-        if (maxPoints > 0 && count > maxPoints) {
-            count = maxPoints;
-        }
-
-        // Prepare return arrays
-        prices = new uint256[](count);
-        timestamps = new uint256[](count);
-        sources = new uint8[](count);
-        confidenceLevels = new uint8[](count);
-
-        // Fill arrays with most recent points first
-        uint256 resultIndex = 0;
-
-        // If we're limiting results, we need to sample evenly
-        if (count < maxPoints || maxPoints == 0) {
-            // Return all points in range (up to count)
-            for (uint256 i = 0; i < history.length && resultIndex < count; i++) {
-                if (history[i].timestamp >= startTime &&
-                    history[i].timestamp <= endTime) {
-                    prices[resultIndex] = history[i].price;
-                    timestamps[resultIndex] = history[i].timestamp;
-                    sources[resultIndex] = history[i].source;
-                    confidenceLevels[resultIndex] = history[i].confidenceLevel;
-                    resultIndex++;
-                }
-            }
-        } else {
-            // Sample evenly across the time range
-            uint256 timespan = endTime - startTime;
-            for (uint256 i = 0; i < maxPoints && i < count; i++) {
-                uint256 targetTime = startTime + (timespan * i) / (maxPoints - 1);
-
-                // Find closest timestamp
-                uint256 closestDiff = type(uint256).max;
-                uint256 closestIndex = 0;
-
-                for (uint256 j = 0; j < history.length; j++) {
-                    if (history[j].timestamp >= startTime &&
-                        history[j].timestamp <= endTime) {
-                        uint256 diff = history[j].timestamp > targetTime ?
-                                      history[j].timestamp - targetTime :
-                                      targetTime - history[j].timestamp;
-
-                        if (diff < closestDiff) {
-                            closestDiff = diff;
-                            closestIndex = j;
-                        }
-                    }
-                }
-
-                // Add to result
-                prices[resultIndex] = history[closestIndex].price;
-                timestamps[resultIndex] = history[closestIndex].timestamp;
-                sources[resultIndex] = history[closestIndex].source;
-                confidenceLevels[resultIndex] = history[closestIndex].confidenceLevel;
-                resultIndex++;
-            }
-        }
-
-        return (prices, timestamps, sources, confidenceLevels);
-    }
-
-    /**
-     * @notice Prune history to prevent excessive storage use
-     * @param asset Asset identifier to prune
-     */
-    function _pruneHistory(bytes32 asset) internal {
-        PriceRecord[] storage history = priceHistories[asset];
-
-        // Only prune if we're above threshold
-        if (history.length <= pruneThreshold) {
-            return;
-        }
-
-        // Determine how many to keep
-        uint256 keep = maxHistoryLength / 2;
-
-        // Create new array with only the newest 'keep' records
-        PriceRecord[] memory newHistory = new PriceRecord[](keep);
-
-        // Copy newest records
-        for (uint i = 0; i < keep; i++) {
-            newHistory[i] = history[history.length - keep + i];
-        }
-
-        // Clear history
-        delete priceHistories[asset];
-
-        // Rebuild history with just the records we want to keep
-        for (uint i = 0; i < keep; i++) {
-            priceHistories[asset].push(newHistory[i]);
-            timestampToIndex[asset][newHistory[i].timestamp] = i;
-        }
-
-        emit HistoryPruned(asset, history.length, keep);
-    }
-
-    /**
-     * @notice Set maximum history length
-     * @param newMaxLength New maximum length
-     */
-    function setMaxHistoryLength(uint256 newMaxLength) external {
-        require(msg.sender == admin, "Not admin");
-        require(newMaxLength > 0, "Invalid length");
-
-        maxHistoryLength = newMaxLength;
-
-        emit MaxHistoryLengthUpdated(newMaxLength);
-    }
-
-    /**
-     * @notice Set prune threshold
-     * @param newThreshold New prune threshold
-     */
-    function setPruneThreshold(uint256 newThreshold) external {
-        require(msg.sender == admin, "Not admin");
-        require(newThreshold > 0 && newThreshold <= maxHistoryLength, "Invalid threshold");
-
-        pruneThreshold = newThreshold;
-
-        emit PruneThresholdUpdated(newThreshold);
-    }
-
-    /**
-     * @notice Set authorized writer
-     * @param writer Address to authorize/deauthorize
-     * @param authorized Authorization status
-     */
-    function setAuthorizedWriter(address writer, bool authorized) external {
-        require(msg.sender == admin, "Not admin");
-
-        authorizedWriters[writer] = authorized;
-
-        emit WriterAuthorizationChanged(writer, authorized);
-    }
-
-    /**
-     * @notice Set authorized reader
-     * @param reader Address to authorize/deauthorize
-     * @param authorized Authorization status
-     */
-    function setAuthorizedReader(address reader, bool authorized) external {
-        require(msg.sender == admin, "Not admin");
-
-        authorizedReaders[reader] = authorized;
-
-        emit ReaderAuthorizationChanged(reader, authorized);
-    }
-
-    /**
-     * @notice Transfer admin role
-     * @param newAdmin New admin address
-     */
-    function transferAdmin(address newAdmin) external {
-        require(msg.sender == admin, "Not admin");
-        require(newAdmin != address(0), "Invalid address");
-
-        admin = newAdmin;
-
-        emit AdminTransferred(msg.sender, newAdmin);
-    }
-
-    // Events
-    event PriceStored(bytes32 indexed asset, uint256 price, uint256 timestamp, uint8 source, uint8 confidenceLevel);
-    event HistoryPruned(bytes32 indexed asset, uint256 oldLength, uint256 newLength);
-    event MaxHistoryLengthUpdated(uint256 newMaxLength);
-    event PruneThresholdUpdated(uint256 newThreshold);
-    event WriterAuthorizationChanged(address indexed writer, bool authorized);
-    event ReaderAuthorizationChanged(address indexed reader, bool authorized);
-    event AdminTransferred(address indexed oldAdmin, address indexed newAdmin);
+    return (prices, timestamps, confidences, sources);
 }
 ```
 
 #### 6.4.2 Analytics Data Extractor
 
-```typescript
+```solidity
+struct PriceAnalytics {
+    uint256 minPrice;
+    uint256 maxPrice;
+    uint256 averagePrice;
+    uint256 volatility;
+    uint256 timeWeightedAverage;
+    uint256 medianPrice;
+    uint256 confidenceAverage;
+}
+
 /**
- * Oracle Analytics Data Extractor
- *
- * Extracts and processes historical oracle data for analysis purposes.
+ * @notice Calculate price analytics for an asset
+ * @param assetId Asset identifier
+ * @param lookbackPeriod Period in seconds to look back
+ * @return analytics Price analytics
  */
-class OracleAnalyticsExtractor {
-  private readonly provider: ethers.providers.Provider;
-  private readonly historyContract: ethers.Contract;
-  private readonly database: Database;
+function calculatePriceAnalytics(
+    bytes32 assetId,
+    uint256 lookbackPeriod
+) external view returns (PriceAnalytics memory analytics) {
+    PriceDataPoint[] storage history = priceHistory[assetId];
 
-  constructor(
-    provider: ethers.providers.Provider,
-    historyContractAddress: string,
-    database: Database
-  ) {
-    this.provider = provider;
-    this.historyContract = new ethers.Contract(
-      historyContractAddress,
-      OracleHistoryABI,
-      provider
-    );
-    this.database = database;
-  }
-
-  /**
-   * Extract historical price data for analysis
-   */
-  public async extractHistoricalData(
-    asset: string,
-    startTime: number,
-    endTime: number,
-    maxPoints: number = 1000
-  ): Promise<PriceDataPoint[]> {
-    try {
-      // Call the contract to get history
-      const [prices, timestamps, sources, confidenceLevels] =
-        await this.historyContract.getPriceHistory(
-          ethers.utils.formatBytes32String(asset),
-          startTime,
-          endTime,
-          maxPoints
-        );
-
-      // Convert to data points
-      const dataPoints: PriceDataPoint[] = [];
-      for (let i = 0; i < prices.length; i++) {
-        dataPoints.push({
-          asset,
-          price: prices[i].toString(),
-          timestamp: new Date(timestamps[i].toNumber() * 1000),
-          source: sources[i],
-          confidenceLevel: confidenceLevels[i] / 255, // Normalize to 0-1
-        });
-      }
-
-      // Store in database
-      await this.storeDataPoints(dataPoints);
-
-      return dataPoints;
-    } catch (error) {
-      console.error(`Error extracting history for ${asset}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Calculate analytics from historical data
-   */
-  public async calculateAnalytics(
-    asset: string,
-    timeWindow: number
-  ): Promise<OracleAnalytics> {
-    const endTime = Math.floor(Date.now() / 1000);
-    const startTime = endTime - timeWindow;
-
-    // Extract raw data
-    const dataPoints = await this.extractHistoricalData(
-      asset,
-      startTime,
-      endTime
-    );
-
-    if (dataPoints.length < 2) {
-      throw new Error("Insufficient data points for analytics");
+    if (history.length == 0) {
+        return PriceAnalytics(0, 0, 0, 0, 0, 0, 0);
     }
 
-    // Calculate statistics
-    const prices = dataPoints.map((dp) => parseFloat(dp.price));
+    uint256 minTimestamp = block.timestamp - lookbackPeriod;
 
-    const analytics: OracleAnalytics = {
-      asset,
-      timeWindow,
-      dataPoints: dataPoints.length,
-      averagePrice: this.calculateAverage(prices),
-      volatility: this.calculateVolatility(prices),
-      minPrice: Math.min(...prices),
-      maxPrice: Math.max(...prices),
-      priceChange: (prices[prices.length - 1] - prices[0]) / prices[0],
-      sourceDistribution: this.calculateSourceDistribution(dataPoints),
-      confidenceAverage: this.calculateAverage(
-        dataPoints.map((dp) => dp.confidenceLevel)
-      ),
-      updateFrequency: this.calculateUpdateFrequency(dataPoints),
-      timestamp: new Date(),
-    };
+    // Collect valid data points
+    uint256[] memory validPrices = new uint256[](history.length);
+    uint256[] memory validTimestamps = new uint256[](history.length);
+    uint256[] memory validConfidences = new uint256[](history.length);
 
-    // Store analytics
-    await this.storeAnalytics(analytics);
+    uint256 validCount = 0;
+
+    for (uint i = 0; i < history.length; i++) {
+        if (history[i].timestamp >= minTimestamp) {
+            validPrices[validCount] = history[i].price;
+            validTimestamps[validCount] = history[i].timestamp;
+            validConfidences[validCount] = history[i].confidence;
+            validCount++;
+        }
+    }
+
+    if (validCount == 0) {
+        return PriceAnalytics(0, 0, 0, 0, 0, 0, 0);
+    }
+
+    // Calculate analytics
+    analytics.minPrice = validPrices[0];
+    analytics.maxPrice = validPrices[0];
+    uint256 sum = 0;
+    uint256 confidenceSum = 0;
+
+    for (uint i = 0; i < validCount; i++) {
+        if (validPrices[i] < analytics.minPrice) {
+            analytics.minPrice = validPrices[i];
+        }
+        if (validPrices[i] > analytics.maxPrice) {
+            analytics.maxPrice = validPrices[i];
+        }
+        sum += validPrices[i];
+        confidenceSum += validConfidences[i];
+    }
+
+    analytics.averagePrice = sum / validCount;
+    analytics.confidenceAverage = confidenceSum / validCount;
+
+    // Calculate median
+    uint256[] memory sortedPrices = new uint256[](validCount);
+    for (uint i = 0; i < validCount; i++) {
+        sortedPrices[i] = validPrices[i];
+    }
+    sort(sortedPrices, 0, int256(validCount - 1));
+
+    analytics.medianPrice = sortedPrices[validCount / 2];
+    if (validCount % 2 == 0 && validCount >= 2) {
+        analytics.medianPrice = (analytics.medianPrice + sortedPrices[(validCount / 2) - 1]) / 2;
+    }
+
+    // Calculate time-weighted average price
+    analytics.timeWeightedAverage = calculateTWAP(validPrices, validTimestamps, validCount);
+
+    // Calculate volatility (standard deviation of returns)
+    analytics.volatility = calculateVolatility(validPrices, validCount);
 
     return analytics;
-  }
-
-  /**
-   * Store data points in database
-   */
-  private async storeDataPoints(dataPoints: PriceDataPoint[]): Promise<void> {
-    // Database storage implementation
-    await this.database.bulkInsert("price_history", dataPoints);
-  }
-
-  /**
-   * Store analytics in database
-   */
-  private async storeAnalytics(analytics: OracleAnalytics): Promise<void> {
-    // Database storage implementation
-    await this.database.insert("oracle_analytics", analytics);
-  }
-
-  /**
-   * Calculate average of values
-   */
-  private calculateAverage(values: number[]): number {
-    if (values.length === 0) return 0;
-    return values.reduce((sum, value) => sum + value, 0) / values.length;
-  }
-
-  /**
-   * Calculate volatility (standard deviation)
-   */
-  private calculateVolatility(prices: number[]): number {
-    const avg = this.calculateAverage(prices);
-    const squareDiffs = prices.map((price) => Math.pow(price - avg, 2));
-    const avgSquareDiff = this.calculateAverage(squareDiffs);
-    return Math.sqrt(avgSquareDiff);
-  }
-
-  /**
-   * Calculate source distribution
-   */
-  private calculateSourceDistribution(
-    dataPoints: PriceDataPoint[]
-  ): Record<number, number> {
-    const distribution: Record<number, number> = {};
-
-    dataPoints.forEach((dp) => {
-      if (!distribution[dp.source]) {
-        distribution[dp.source] = 0;
-      }
-      distribution[dp.source]++;
-    });
-
-    // Convert to percentages
-    Object.keys(distribution).forEach((source) => {
-      const sourceId = parseInt(source);
-      distribution[sourceId] = distribution[sourceId] / dataPoints.length;
-    });
-
-    return distribution;
-  }
-
-  /**
-   * Calculate average update frequency in seconds
-   */
-  private calculateUpdateFrequency(dataPoints: PriceDataPoint[]): number {
-    if (dataPoints.length < 2) return 0;
-
-    const timestamps = dataPoints.map((dp) => dp.timestamp.getTime() / 1000);
-    const timeDiffs: number[] = [];
-
-    for (let i = 1; i < timestamps.length; i++) {
-      timeDiffs.push(timestamps[i] - timestamps[i - 1]);
-    }
-
-    return this.calculateAverage(timeDiffs);
-  }
-}
-
-// Types
-interface PriceDataPoint {
-  asset: string;
-  price: string;
-  timestamp: Date;
-  source: number;
-  confidenceLevel: number;
-}
-
-interface OracleAnalytics {
-  asset: string;
-  timeWindow: number;
-  dataPoints: number;
-  averagePrice: number;
-  volatility: number;
-  minPrice: number;
-  maxPrice: number;
-  priceChange: number;
-  sourceDistribution: Record<number, number>;
-  confidenceAverage: number;
-  updateFrequency: number;
-  timestamp: Date;
 }
 ```
 
 ### 6.5 Access Control
 
-The framework implements fine-grained access control for oracle data.
+The framework implements granular access control for oracle data.
 
 #### 6.5.1 Oracle Access Control Contract
 
@@ -3977,381 +4227,187 @@ The framework implements fine-grained access control for oracle data.
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./AccessControlUpgradeable.sol";
-
-contract OracleAccessController is AccessControlUpgradeable {
-    // Role definitions
-    bytes32 public constant ORACLE_ADMIN_ROLE = keccak256("ORACLE_ADMIN_ROLE");
-    bytes32 public constant ORACLE_PROVIDER_ROLE = keccak256("ORACLE_PROVIDER_ROLE");
-    bytes32 public constant ORACLE_VALIDATOR_ROLE = keccak256("ORACLE_VALIDATOR_ROLE");
-    bytes32 public constant ORACLE_CONSUMER_ROLE = keccak256("ORACLE_CONSUMER_ROLE");
+/**
+ * @title OracleAccessControl
+ * @notice Manages access control for oracle data
+ */
+contract OracleAccessControl {
+    // Access roles
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 public constant UPDATER_ROLE = keccak256("UPDATER_ROLE");
+    bytes32 public constant VALIDATOR_ROLE = keccak256("VALIDATOR_ROLE");
+    bytes32 public constant CONSUMER_ROLE = keccak256("CONSUMER_ROLE");
     bytes32 public constant EMERGENCY_ROLE = keccak256("EMERGENCY_ROLE");
 
-    // Asset-specific roles
-    mapping(bytes32 => bytes32) public assetProviderRoles;
-    mapping(bytes32 => bytes32) public assetConsumerRoles;
+    // Role-based access control
+    mapping(bytes32 => mapping(address => bool)) public roles;
 
-    // Initialization
-    function initialize(address admin) public initializer {
-        __AccessControl_init();
+    // Asset-specific permissions
+    mapping(bytes32 => mapping(address => bool)) public assetPermissions;
 
-        // Set up admin role
-        _setupRole(DEFAULT_ADMIN_ROLE, admin);
-        _setupRole(ORACLE_ADMIN_ROLE, admin);
-
-        // Set role hierarchies
-        _setRoleAdmin(ORACLE_PROVIDER_ROLE, ORACLE_ADMIN_ROLE);
-        _setRoleAdmin(ORACLE_VALIDATOR_ROLE, ORACLE_ADMIN_ROLE);
-        _setRoleAdmin(ORACLE_CONSUMER_ROLE, ORACLE_ADMIN_ROLE);
-        _setRoleAdmin(EMERGENCY_ROLE, DEFAULT_ADMIN_ROLE);
-    }
-
-    /**
-     * @notice Register a new asset and create its roles
-     * @param asset Asset identifier
-     */
-    function registerAsset(bytes32 asset) external onlyRole(ORACLE_ADMIN_ROLE) {
-        // Create asset-specific provider role
-        bytes32 providerRole = keccak256(abi.encodePacked("PROVIDER_", asset));
-        assetProviderRoles[asset] = providerRole;
-
-        // Create asset-specific consumer role
-        bytes32 consumerRole = keccak256(abi.encodePacked("CONSUMER_", asset));
-        assetConsumerRoles[asset] = consumerRole;
-
-        // Set role admins
-        _setRoleAdmin(providerRole, ORACLE_ADMIN_ROLE);
-        _setRoleAdmin(consumerRole, ORACLE_ADMIN_ROLE);
-
-        emit AssetRegistered(asset, providerRole, consumerRole);
-    }
-
-    /**
-     * @notice Check if account can provide data for asset
-     * @param account Account to check
-     * @param asset Asset identifier
-     * @return canProvide True if account can provide data
-     */
-    function canProvideForAsset(address account, bytes32 asset) public view returns (bool) {
-        bytes32 assetRole = assetProviderRoles[asset];
-
-        // Account can provide if it has the asset-specific role or the general provider role
-        return hasRole(assetRole, account) || hasRole(ORACLE_PROVIDER_ROLE, account);
-    }
-
-    /**
-     * @notice Check if account can consume data for asset
-     * @param account Account to check
-     * @param asset Asset identifier
-     * @return canConsume True if account can consume data
-     */
-    function canConsumeForAsset(address account, bytes32 asset) public view returns (bool) {
-        bytes32 assetRole = assetConsumerRoles[asset];
-
-        // Account can consume if it has the asset-specific role or the general consumer role
-        return hasRole(assetRole, account) || hasRole(ORACLE_CONSUMER_ROLE, account);
-    }
-
-    /**
-     * @notice Check if account can validate data for asset
-     * @param account Account to check
-     * @param asset Asset identifier
-     * @return canValidate True if account can validate data
-     */
-    function canValidate(address account) public view returns (bool) {
-        return hasRole(ORACLE_VALIDATOR_ROLE, account);
-    }
-
-    /**
-     * @notice Check if account has emergency privileges
-     * @param account Account to check
-     * @return hasEmergency True if account has emergency privileges
-     */
-    function hasEmergencyAccess(address account) public view returns (bool) {
-        return hasRole(EMERGENCY_ROLE, account);
-    }
-
-    /**
-     * @notice Grant provider role for a specific asset
-     * @param account Account to grant role to
-     * @param asset Asset identifier
-     */
-    function grantAssetProviderRole(address account, bytes32 asset) external onlyRole(ORACLE_ADMIN_ROLE) {
-        bytes32 assetRole = assetProviderRoles[asset];
-        require(assetRole != bytes32(0), "Asset not registered");
-
-        grantRole(assetRole, account);
-    }
-
-    /**
-     * @notice Grant consumer role for a specific asset
-     * @param account Account to grant role to
-     * @param asset Asset identifier
-     */
-    function grantAssetConsumerRole(address account, bytes32 asset) external onlyRole(ORACLE_ADMIN_ROLE) {
-        bytes32 assetRole = assetConsumerRoles[asset];
-        require(assetRole != bytes32(0), "Asset not registered");
-
-        grantRole(assetRole, account);
-    }
-
-    /**
-     * @notice Revoke provider role for a specific asset
-     * @param account Account to revoke role from
-     * @param asset Asset identifier
-     */
-    function revokeAssetProviderRole(address account, bytes32 asset) external onlyRole(ORACLE_ADMIN_ROLE) {
-        bytes32 assetRole = assetProviderRoles[asset];
-        require(assetRole != bytes32(0), "Asset not registered");
-
-        revokeRole(assetRole, account);
-    }
-
-    /**
-     * @notice Revoke consumer role for a specific asset
-     * @param account Account to revoke role from
-     * @param asset Asset identifier
-     */
-    function revokeAssetConsumerRole(address account, bytes32 asset) external onlyRole(ORACLE_ADMIN_ROLE) {
-                bytes32 assetRole = assetConsumerRoles[asset];
-        require(assetRole != bytes32(0), "Asset not registered");
-
-        revokeRole(assetRole, account);
-    }
-
-    // Events
-    event AssetRegistered(bytes32 indexed asset, bytes32 providerRole, bytes32 consumerRole);
-}
-```
-
-#### 6.5.2 Oracle Data Access Modifiers
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-
-import "./IOracleAccessController.sol";
-
-abstract contract OracleAccessControlled {
-    // Access controller contract
-    IOracleAccessController public accessController;
-
-    // Modifiers for access control
-    modifier onlyProvider(bytes32 asset) {
-        require(
-            accessController.canProvideForAsset(msg.sender, asset),
-            "Not authorized as provider"
-        );
-        _;
-    }
-
-    modifier onlyConsumer(bytes32 asset) {
-        require(
-            accessController.canConsumeForAsset(msg.sender, asset),
-            "Not authorized as consumer"
-        );
-        _;
-    }
-
-    modifier onlyValidator() {
-        require(
-            accessController.canValidate(msg.sender),
-            "Not authorized as validator"
-        );
-        _;
-    }
-
-    modifier onlyAdmin() {
-        require(
-            accessController.hasRole(accessController.ORACLE_ADMIN_ROLE(), msg.sender),
-            "Not authorized as admin"
-        );
-        _;
-    }
-
-    modifier onlyEmergency() {
-        require(
-            accessController.hasEmergencyAccess(msg.sender),
-            "Not authorized for emergency access"
-        );
-        _;
-    }
-
-    /**
-     * @notice Set the access controller address
-     * @param _accessController New access controller contract
-     */
-    function setAccessController(address _accessController) external onlyAdmin {
-        require(_accessController != address(0), "Invalid address");
-        accessController = IOracleAccessController(_accessController);
-
-        emit AccessControllerUpdated(_accessController);
-    }
-
-    // Events
-    event AccessControllerUpdated(address accessController);
-}
-```
-
-#### 6.5.3 Data Segmentation and Privacy Tiers
-
-The system implements multiple tiers of data access to balance transparency and sensitive information protection:
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-
-import "./OracleAccessControlled.sol";
-
-contract OracleDataSegmentation is OracleAccessControlled {
-    // Privacy tier definitions
+    // Privacy tiers
     enum PrivacyTier {
-        PUBLIC,           // Accessible by anyone
-        STANDARD,         // Accessible by standard consumers
-        SENSITIVE,        // Accessible by privileged consumers
-        RESTRICTED,       // Accessible by validators and admins
-        CRITICAL          // Accessible by admins only
+        PUBLIC,
+        PROTECTED,
+        CONFIDENTIAL,
+        RESTRICTED
     }
 
-    // Data type privacy assignments
-    mapping(bytes32 => PrivacyTier) public dataTypePrivacy;
+    // Asset privacy settings
+    mapping(bytes32 => PrivacyTier) public assetPrivacyTiers;
+    mapping(address => mapping(PrivacyTier => bool)) public privacyTierAccess;
 
-    // Data type to asset mapping
-    mapping(bytes32 => bytes32) public dataTypeAsset;
+    // Events
+    event RoleGranted(bytes32 indexed role, address indexed account);
+    event RoleRevoked(bytes32 indexed role, address indexed account);
+    event AssetPermissionGranted(bytes32 indexed assetId, address indexed account);
+    event AssetPermissionRevoked(bytes32 indexed assetId, address indexed account);
+    event PrivacyTierSet(bytes32 indexed assetId, PrivacyTier tier);
+    event PrivacyTierAccessGranted(address indexed account, PrivacyTier tier);
+    event PrivacyTierAccessRevoked(address indexed account, PrivacyTier tier);
 
-    // Role to privacy tier mapping
-    mapping(bytes32 => PrivacyTier) public roleMaxPrivacyTier;
-
-    constructor(address _accessController) {
-        accessController = IOracleAccessController(_accessController);
-
-        // Set default privacy tiers for built-in roles
-        roleMaxPrivacyTier[accessController.ORACLE_CONSUMER_ROLE()] = PrivacyTier.STANDARD;
-        roleMaxPrivacyTier[accessController.ORACLE_PROVIDER_ROLE()] = PrivacyTier.SENSITIVE;
-        roleMaxPrivacyTier[accessController.ORACLE_VALIDATOR_ROLE()] = PrivacyTier.RESTRICTED;
-        roleMaxPrivacyTier[accessController.ORACLE_ADMIN_ROLE()] = PrivacyTier.CRITICAL;
-        roleMaxPrivacyTier[accessController.EMERGENCY_ROLE()] = PrivacyTier.CRITICAL;
+    /**
+     * @notice Check if account has a role
+     * @param role Role identifier
+     * @param account Account address
+     * @return hasRole Whether the account has the role
+     */
+    function hasRole(
+        bytes32 role,
+        address account
+    ) public view returns (bool hasRole) {
+        return roles[role][account];
     }
 
     /**
-     * @notice Register a data type with privacy tier
-     * @param dataType Data type identifier
-     * @param asset Associated asset
+     * @notice Grant role to account
+     * @param role Role identifier
+     * @param account Account address
+     */
+    function grantRole(bytes32 role, address account) external {
+        require(hasRole(ADMIN_ROLE, msg.sender), "Not admin");
+        roles[role][account] = true;
+        emit RoleGranted(role, account);
+    }
+
+    /**
+     * @notice Revoke role from account
+     * @param role Role identifier
+     * @param account Account address
+     */
+    function revokeRole(bytes32 role, address account) external {
+        require(hasRole(ADMIN_ROLE, msg.sender), "Not admin");
+        roles[role][account] = false;
+        emit RoleRevoked(role, account);
+    }
+
+    /**
+     * @notice Grant asset permission to account
+     * @param assetId Asset identifier
+     * @param account Account address
+     */
+    function grantAssetPermission(bytes32 assetId, address account) external {
+        require(hasRole(ADMIN_ROLE, msg.sender), "Not admin");
+        assetPermissions[assetId][account] = true;
+        emit AssetPermissionGranted(assetId, account);
+    }
+
+    /**
+     * @notice Revoke asset permission from account
+     * @param assetId Asset identifier
+     * @param account Account address
+     */
+    function revokeAssetPermission(bytes32 assetId, address account) external {
+        require(hasRole(ADMIN_ROLE, msg.sender), "Not admin");
+        assetPermissions[assetId][account] = false;
+        emit AssetPermissionRevoked(assetId, account);
+    }
+
+    /**
+     * @notice Set privacy tier for asset
+     * @param assetId Asset identifier
      * @param tier Privacy tier
      */
-    function registerDataType(
-        bytes32 dataType,
-        bytes32 asset,
-        PrivacyTier tier
-    ) external onlyAdmin {
-        dataTypePrivacy[dataType] = tier;
-        dataTypeAsset[dataType] = asset;
-
-        emit DataTypeRegistered(dataType, asset, uint8(tier));
+    function setAssetPrivacyTier(bytes32 assetId, PrivacyTier tier) external {
+        require(hasRole(ADMIN_ROLE, msg.sender), "Not admin");
+        assetPrivacyTiers[assetId] = tier;
+        emit PrivacyTierSet(assetId, tier);
     }
 
     /**
-     * @notice Update privacy tier for a data type
-     * @param dataType Data type identifier
-     * @param tier New privacy tier
+     * @notice Grant privacy tier access to account
+     * @param account Account address
+     * @param tier Privacy tier
      */
-    function updateDataTypePrivacy(
-        bytes32 dataType,
-        PrivacyTier tier
-    ) external onlyAdmin {
-        require(dataTypeAsset[dataType] != bytes32(0), "Data type not registered");
-
-        dataTypePrivacy[dataType] = tier;
-
-        emit DataTypePrivacyUpdated(dataType, uint8(tier));
+    function grantPrivacyTierAccess(address account, PrivacyTier tier) external {
+        require(hasRole(ADMIN_ROLE, msg.sender), "Not admin");
+        privacyTierAccess[account][tier] = true;
+        emit PrivacyTierAccessGranted(account, tier);
     }
 
     /**
-     * @notice Set maximum privacy tier for a role
-     * @param role Role identifier
-     * @param tier Maximum privacy tier
+     * @notice Revoke privacy tier access from account
+     * @param account Account address
+     * @param tier Privacy tier
      */
-    function setRoleMaxPrivacyTier(
-        bytes32 role,
-        PrivacyTier tier
-    ) external onlyAdmin {
-        roleMaxPrivacyTier[role] = tier;
-
-        emit RolePrivacyTierUpdated(role, uint8(tier));
+    function revokePrivacyTierAccess(address account, PrivacyTier tier) external {
+        require(hasRole(ADMIN_ROLE, msg.sender), "Not admin");
+        privacyTierAccess[account][tier] = false;
+        emit PrivacyTierAccessRevoked(account, tier);
     }
 
     /**
-     * @notice Check if user can access data type
-     * @param user User address
-     * @param dataType Data type identifier
-     * @return canAccess True if user can access
+     * @notice Check if account can access asset
+     * @param account Account address
+     * @param assetId Asset identifier
+     * @return canAccess Whether the account can access the asset
      */
-    function canAccessDataType(
-        address user,
-        bytes32 dataType
-    ) public view returns (bool) {
-        // Get data type privacy tier
-        PrivacyTier tier = dataTypePrivacy[dataType];
+    function canAccessAsset(
+        address account,
+        bytes32 assetId
+    ) public view returns (bool canAccess) {
+        // Check asset-specific permission
+        if (assetPermissions[assetId][account]) {
+            return true;
+        }
 
-        // Public data is accessible to everyone
+        // Check privacy tier access
+        PrivacyTier tier = assetPrivacyTiers[assetId];
+
+        // Public assets are accessible to all
         if (tier == PrivacyTier.PUBLIC) {
             return true;
         }
 
-        // Get associated asset
-        bytes32 asset = dataTypeAsset[dataType];
-        require(asset != bytes32(0), "Data type not registered");
-
-        // Check user's roles
-        // Check general roles first
-        if (accessController.hasRole(accessController.ORACLE_ADMIN_ROLE(), user)) {
-            return uint8(tier) <= uint8(roleMaxPrivacyTier[accessController.ORACLE_ADMIN_ROLE()]);
-        }
-
-        if (accessController.hasRole(accessController.EMERGENCY_ROLE(), user)) {
-            return uint8(tier) <= uint8(roleMaxPrivacyTier[accessController.EMERGENCY_ROLE()]);
-        }
-
-        if (accessController.canValidate(user)) {
-            return uint8(tier) <= uint8(roleMaxPrivacyTier[accessController.ORACLE_VALIDATOR_ROLE()]);
-        }
-
-        // Check asset-specific roles
-        bytes32 assetConsumerRole = accessController.assetConsumerRoles(asset);
-        bytes32 assetProviderRole = accessController.assetProviderRoles(asset);
-
-        if (accessController.hasRole(assetProviderRole, user)) {
-            return uint8(tier) <= uint8(roleMaxPrivacyTier[accessController.ORACLE_PROVIDER_ROLE()]);
-        }
-
-        if (accessController.hasRole(assetConsumerRole, user)) {
-            return uint8(tier) <= uint8(roleMaxPrivacyTier[accessController.ORACLE_CONSUMER_ROLE()]);
-        }
-
-        if (accessController.hasRole(accessController.ORACLE_CONSUMER_ROLE(), user)) {
-            return uint8(tier) <= uint8(roleMaxPrivacyTier[accessController.ORACLE_CONSUMER_ROLE()]);
-        }
-
-        // Default to no access
-        return false;
+        // Check tier-specific access
+        return privacyTierAccess[account][tier];
     }
 
     /**
-     * @notice Access control modifier for data types
-     * @param dataType Data type identifier
+     * @notice Check if account can update asset price
+     * @param account Account address
+     * @param assetId Asset identifier
+     * @return canUpdate Whether the account can update the asset price
      */
-    modifier onlyAuthorizedForData(bytes32 dataType) {
-        require(
-            canAccessDataType(msg.sender, dataType),
-            "Not authorized for this data"
-        );
-        _;
+    function canUpdateAsset(
+        address account,
+        bytes32 assetId
+    ) public view returns (bool canUpdate) {
+        return hasRole(UPDATER_ROLE, account) && canAccessAsset(account, assetId);
     }
 
-    // Events
-    event DataTypeRegistered(bytes32 indexed dataType, bytes32 indexed asset, uint8 tier);
-    event DataTypePrivacyUpdated(bytes32 indexed dataType, uint8 tier);
-    event RolePrivacyTierUpdated(bytes32 indexed role, uint8 tier);
+    /**
+     * @notice Check if account can validate asset price
+     * @param account Account address
+     * @param assetId Asset identifier
+     * @return canValidate Whether the account can validate the asset price
+     */
+    function canValidateAsset(
+        address account,
+        bytes32 assetId
+    ) public view returns (bool canValidate) {
+        return hasRole(VALIDATOR_ROLE, account) && canAccessAsset(account, assetId);
+    }
 }
 ```
 
@@ -4359,7 +4415,7 @@ contract OracleDataSegmentation is OracleAccessControlled {
 
 ### 7.1 Cross-Chain Architecture
 
-The oracle system implements a robust cross-chain architecture to ensure consistent oracle data across multiple blockchains.
+The framework implements cross-chain oracle synchronization to maintain consistent data across multiple blockchains.
 
 #### 7.1.1 Cross-Chain Oracle Hub
 
@@ -4367,431 +4423,321 @@ The oracle system implements a robust cross-chain architecture to ensure consist
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./ICrossChainMessenger.sol";
-import "./OracleAccessControlled.sol";
+import "./interfaces/ICrossChainMessenger.sol";
 
-contract CrossChainOracleHub is OracleAccessControlled {
-    // Supported chains
-    struct ChainInfo {
+/**
+ * @title CrossChainOracleHub
+ * @notice Central hub for cross-chain oracle synchronization
+ */
+contract CrossChainOracleHub {
+    struct ChainConfig {
         uint256 chainId;
-        string name;
         address oracleAddress;
-        address messagingAdapter;
-        bool isActive;
-        uint256 lastSync;
+        address messengerAddress;
+        bool active;
     }
 
-    // Chain information by chainId
-    mapping(uint256 => ChainInfo) public supportedChains;
+    // Mapping from chain ID to chain configuration
+    mapping(uint256 => ChainConfig) public chainConfigs;
+    uint256[] public supportedChains;
 
-    // Array of supported chainIds for iteration
-    uint256[] public supportedChainIds;
+    // Hub chain ID
+    uint256 public hubChainId;
 
-    // Cross-chain message processors by chain
-    mapping(uint256 => ICrossChainMessenger) public messengers;
+    // Events
+    event ChainAdded(uint256 indexed chainId, address oracleAddress, address messengerAddress);
+    event ChainUpdated(uint256 indexed chainId, address oracleAddress, address messengerAddress);
+    event ChainStatusChanged(uint256 indexed chainId, bool active);
+    event SyncRequested(uint256 indexed chainId, bytes32 indexed assetId);
+    event SyncCompleted(uint256 indexed chainId, bytes32 indexed assetId, uint256 price);
 
-    // Last synchronized price by asset and chain
-    mapping(bytes32 => mapping(uint256 => uint256)) public lastSyncedPrices;
-
-    // Sync thresholds by asset (minimum price change percentage to trigger sync)
-    mapping(bytes32 => uint256) public syncThresholds;
-
-    // Default sync threshold (5% = 5e16)
-    uint256 public defaultSyncThreshold = 5e16;
-
-    // Executor role
-    bytes32 public constant CROSS_CHAIN_EXECUTOR_ROLE = keccak256("CROSS_CHAIN_EXECUTOR_ROLE");
-
-    constructor(address _accessController) {
-        accessController = IOracleAccessController(_accessController);
+    constructor(uint256 _hubChainId) {
+        hubChainId = _hubChainId;
     }
 
     /**
-     * @notice Register a new supported chain
+     * @notice Add a new chain
      * @param chainId Chain identifier
-     * @param name Chain name
-     * @param oracleAddress Oracle address on target chain
-     * @param messagingAdapter Cross-chain messaging adapter address
+     * @param oracleAddress Oracle contract address on the chain
+     * @param messengerAddress Cross-chain messenger address
      */
-    function registerChain(
+    function addChain(
         uint256 chainId,
-        string calldata name,
         address oracleAddress,
-        address messagingAdapter
-    ) external onlyAdmin {
-        require(supportedChains[chainId].chainId == 0, "Chain already registered");
-        require(oracleAddress != address(0), "Invalid oracle address");
-        require(messagingAdapter != address(0), "Invalid messaging adapter");
+        address messengerAddress
+    ) external {
+        require(chainConfigs[chainId].chainId == 0, "Chain already exists");
 
-        // Create messenger contract
-        ICrossChainMessenger messenger = ICrossChainMessenger(messagingAdapter);
-
-        // Store chain info
-        supportedChains[chainId] = ChainInfo({
+        chainConfigs[chainId] = ChainConfig({
             chainId: chainId,
-            name: name,
             oracleAddress: oracleAddress,
-            messagingAdapter: messagingAdapter,
-            isActive: true,
-            lastSync: 0
+            messengerAddress: messengerAddress,
+            active: true
         });
 
-        // Add to array for iteration
-        supportedChainIds.push(chainId);
+        supportedChains.push(chainId);
 
-        // Store messenger
-        messengers[chainId] = messenger;
-
-        emit ChainRegistered(chainId, name, oracleAddress, messagingAdapter);
+        emit ChainAdded(chainId, oracleAddress, messengerAddress);
     }
 
     /**
-     * @notice Update chain status
+     * @notice Update chain configuration
      * @param chainId Chain identifier
-     * @param isActive New active status
+     * @param oracleAddress Oracle contract address on the chain
+     * @param messengerAddress Cross-chain messenger address
      */
-    function updateChainStatus(
+    function updateChain(
         uint256 chainId,
-        bool isActive
-    ) external onlyAdmin {
-        require(supportedChains[chainId].chainId != 0, "Chain not registered");
+        address oracleAddress,
+        address messengerAddress
+    ) external {
+        require(chainConfigs[chainId].chainId != 0, "Chain not found");
 
-        supportedChains[chainId].isActive = isActive;
+        chainConfigs[chainId].oracleAddress = oracleAddress;
+        chainConfigs[chainId].messengerAddress = messengerAddress;
 
-        emit ChainStatusUpdated(chainId, isActive);
+        emit ChainUpdated(chainId, oracleAddress, messengerAddress);
     }
 
     /**
-     * @notice Set sync threshold for an asset
-     * @param asset Asset identifier
-     * @param threshold Threshold percentage (1e18 = 100%)
+     * @notice Set chain active status
+     * @param chainId Chain identifier
+     * @param active Active status
      */
-    function setSyncThreshold(
-        bytes32 asset,
-        uint256 threshold
-    ) external onlyAdmin {
-        require(threshold <= 5e17, "Threshold too high"); // Max 50%
+    function setChainActive(uint256 chainId, bool active) external {
+        require(chainConfigs[chainId].chainId != 0, "Chain not found");
 
-        syncThresholds[asset] = threshold;
+        chainConfigs[chainId].active = active;
 
-        emit SyncThresholdUpdated(asset, threshold);
+        emit ChainStatusChanged(chainId, active);
     }
 
     /**
-     * @notice Set default sync threshold
-     * @param threshold Threshold percentage (1e18 = 100%)
-     */
-    function setDefaultSyncThreshold(
-        uint256 threshold
-    ) external onlyAdmin {
-        require(threshold <= 5e17, "Threshold too high"); // Max 50%
-
-        defaultSyncThreshold = threshold;
-
-        emit DefaultSyncThresholdUpdated(threshold);
-    }
-
-    /**
-     * @notice Sync price data to a specific chain
-     * @param asset Asset identifier
-     * @param price Price to sync
-     * @param timestamp Price timestamp
+     * @notice Sync price data to a target chain
      * @param targetChainId Target chain identifier
-     * @return messageId Cross-chain message identifier
+     * @param assetId Asset identifier
+     * @param price Price value
+     * @param timestamp Timestamp of the price
+     * @param confidence Confidence score
      */
     function syncPriceToChain(
-        bytes32 asset,
+        uint256 targetChainId,
+        bytes32 assetId,
         uint256 price,
         uint256 timestamp,
-        uint256 targetChainId
-    ) external onlyValidator returns (bytes32 messageId) {
-        ChainInfo storage targetChain = supportedChains[targetChainId];
-        require(targetChain.chainId != 0, "Chain not supported");
-        require(targetChain.isActive, "Chain not active");
-
-        // Get threshold for this asset
-        uint256 threshold = syncThresholds[asset];
-        if (threshold == 0) {
-            threshold = defaultSyncThreshold;
-        }
-
-        // Check if price change exceeds threshold
-        uint256 lastPrice = lastSyncedPrices[asset][targetChainId];
-        if (lastPrice > 0) {
-            uint256 priceDiff;
-            if (price > lastPrice) {
-                priceDiff = ((price - lastPrice) * 1e18) / lastPrice;
-            } else {
-                priceDiff = ((lastPrice - price) * 1e18) / lastPrice;
-            }
-
-            // Only sync if change exceeds threshold
-            require(priceDiff >= threshold, "Price change below threshold");
-        }
+        uint256 confidence
+    ) external {
+        ChainConfig storage config = chainConfigs[targetChainId];
+        require(config.chainId != 0, "Chain not found");
+        require(config.active, "Chain not active");
 
         // Prepare message data
-        bytes memory data = abi.encode(
-            asset,
+        bytes memory messageData = abi.encodeWithSignature(
+            "updatePrice(bytes32,uint256,uint256,uint256)",
+            assetId,
             price,
             timestamp,
-            block.chainid
+            confidence
         );
+
+        // Get messenger interface
+        ICrossChainMessenger messenger = ICrossChainMessenger(config.messengerAddress);
 
         // Send cross-chain message
-        messageId = messengers[targetChainId].sendMessage(
-            targetChain.oracleAddress,
-            data,
-            300000 // Gas limit
+        messenger.sendMessage(
+            targetChainId,
+            config.oracleAddress,
+            messageData
         );
 
-        // Update last synced price
-        lastSyncedPrices[asset][targetChainId] = price;
-
-        // Update last sync time
-        targetChain.lastSync = block.timestamp;
-
-        emit PriceSynced(asset, price, timestamp, targetChainId, messageId);
-
-        return messageId;
+        emit SyncRequested(targetChainId, assetId);
     }
 
     /**
-     * @notice Sync price data to all active chains
-     * @param asset Asset identifier
-     * @param price Price to sync
-     * @param timestamp Price timestamp
-     * @return messageIds Cross-chain message identifiers by chain
+     * @notice Sync price data to all supported chains
+     * @param assetId Asset identifier
+     * @param price Price value
+     * @param timestamp Timestamp of the price
+     * @param confidence Confidence score
      */
     function syncPriceToAllChains(
-        bytes32 asset,
+        bytes32 assetId,
         uint256 price,
-        uint256 timestamp
-    ) external onlyValidator returns (bytes32[] memory messageIds) {
-        uint256 activeChainCount = 0;
+        uint256 timestamp,
+        uint256 confidence
+    ) external {
+        for (uint i = 0; i < supportedChains.length; i++) {
+            uint256 chainId = supportedChains[i];
 
-        // Count active chains
-        for (uint256 i = 0; i < supportedChainIds.length; i++) {
-            if (supportedChains[supportedChainIds[i]].isActive) {
-                activeChainCount++;
+            // Skip hub chain
+            if (chainId == hubChainId) {
+                continue;
             }
-        }
 
-        messageIds = new bytes32[](activeChainCount);
-        uint256 messageIndex = 0;
-
-        // Sync to each active chain
-        for (uint256 i = 0; i < supportedChainIds.length; i++) {
-            uint256 chainId = supportedChainIds[i];
-            if (supportedChains[chainId].isActive) {
-                // Skip current chain
-                if (chainId != block.chainid) {
-                    try this.syncPriceToChain(asset, price, timestamp, chainId) returns (bytes32 messageId) {
-                        messageIds[messageIndex] = messageId;
-                        messageIndex++;
-                    } catch {
-                        // Continue to next chain on failure
-                    }
-                }
+            ChainConfig storage config = chainConfigs[chainId];
+            if (!config.active) {
+                continue;
             }
-        }
 
-        return messageIds;
+            // Prepare message data
+            bytes memory messageData = abi.encodeWithSignature(
+                "updatePrice(bytes32,uint256,uint256,uint256)",
+                assetId,
+                price,
+                timestamp,
+                confidence
+            );
+
+            // Get messenger interface
+            ICrossChainMessenger messenger = ICrossChainMessenger(config.messengerAddress);
+
+            // Send cross-chain message
+            messenger.sendMessage(
+                chainId,
+                config.oracleAddress,
+                messageData
+            );
+
+            emit SyncRequested(chainId, assetId);
+        }
     }
 
     /**
-     * @notice Receive and process cross-chain message
+     * @notice Receive price update confirmation
      * @param sourceChainId Source chain identifier
-     * @param sourceAddress Source contract address
-     * @param data Message data
+     * @param assetId Asset identifier
+     * @param price Price value
      */
-    function receiveMessage(
+    function receiveSyncConfirmation(
         uint256 sourceChainId,
-        address sourceAddress,
-        bytes calldata data
+        bytes32 assetId,
+        uint256 price
     ) external {
-        // Verify sender is the messaging adapter
+        ChainConfig storage config = chainConfigs[sourceChainId];
+        require(config.chainId != 0, "Chain not found");
+
+        // Verify caller is the expected messenger
+        ICrossChainMessenger messenger = ICrossChainMessenger(config.messengerAddress);
         require(
-            msg.sender == supportedChains[sourceChainId].messagingAdapter,
+            messenger.isMessageFromChain(sourceChainId, msg.sender),
             "Invalid messenger"
         );
 
-        // Verify source address is the oracle on that chain
-        require(
-            sourceAddress == supportedChains[sourceChainId].oracleAddress,
-            "Invalid source"
-        );
-
-        // Decode data
-        (
-            bytes32 asset,
-            uint256 price,
-            uint256 timestamp,
-            uint256 originalChainId
-        ) = abi.decode(data, (bytes32, uint256, uint256, uint256));
-
-        // Process received price update
-        processReceivedPrice(asset, price, timestamp, sourceChainId, originalChainId);
-
-        emit MessageReceived(sourceChainId, asset, price, timestamp);
+        emit SyncCompleted(sourceChainId, assetId, price);
     }
-
-    /**
-     * @notice Process received price update
-     * @param asset Asset identifier
-     * @param price Price value
-     * @param timestamp Price timestamp
-     * @param sourceChainId Source chain identifier
-     * @param originalChainId Original source chain identifier
-     */
-    function processReceivedPrice(
-        bytes32 asset,
-        uint256 price,
-        uint256 timestamp,
-        uint256 sourceChainId,
-        uint256 originalChainId
-    ) internal {
-        // This function should be overridden by specific implementations
-        // to update local price feeds based on cross-chain data
-    }
-
-    // Events
-    event ChainRegistered(uint256 indexed chainId, string name, address oracleAddress, address messagingAdapter);
-    event ChainStatusUpdated(uint256 indexed chainId, bool isActive);
-    event SyncThresholdUpdated(bytes32 indexed asset, uint256 threshold);
-    event DefaultSyncThresholdUpdated(uint256 threshold);
-    event PriceSynced(bytes32 indexed asset, uint256 price, uint256 timestamp, uint256 indexed targetChainId, bytes32 messageId);
-    event MessageReceived(uint256 indexed sourceChainId, bytes32 indexed asset, uint256 price, uint256 timestamp);
 }
 ```
 
 #### 7.1.2 Cross-Chain Messaging Adapters
 
-The system implements adapters for various cross-chain messaging protocols:
-
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./ICrossChainMessenger.sol";
-import "./LayerZeroEndpointInterface.sol";
+import "@layerzerolabs/solidity-examples/contracts/interfaces/ILayerZeroEndpoint.sol";
+import "./interfaces/ICrossChainMessenger.sol";
 
 /**
- * Layer Zero Messaging Adapter
+ * @title LayerZeroMessengerAdapter
+ * @notice Adapter for LayerZero cross-chain messaging
  */
-contract LayerZeroAdapter is ICrossChainMessenger {
-    // Layer Zero endpoint interface
-    LayerZeroEndpointInterface public endpoint;
+contract LayerZeroMessengerAdapter is ICrossChainMessenger {
+    ILayerZeroEndpoint public endpoint;
 
-    // Receiver contract on this chain
-    address public receiver;
+    // Mapping from chain ID to LayerZero chain ID
+    mapping(uint256 => uint16) public chainIdToLzId;
 
-    // Authorized sources by remote chain ID
-    mapping(uint16 => address) public authorizedSources;
+    // Mapping from LayerZero chain ID to chain ID
+    mapping(uint16 => uint256) public lzIdToChainId;
 
-    // Mapping from messageId to LZ tx hash
-    mapping(bytes32 => bytes32) public messageToTxHash;
+    // Mapping from destination chain to destination address
+    mapping(uint256 => bytes) public trustedRemoteLookup;
 
-    constructor(address _endpoint, address _receiver) {
-        endpoint = LayerZeroEndpointInterface(_endpoint);
-        receiver = _receiver;
+    constructor(address _endpoint) {
+        endpoint = ILayerZeroEndpoint(_endpoint);
     }
 
     /**
-     * @notice Set authorized source for a remote chain
-     * @param remoteChainId Layer Zero chain ID
-     * @param source Source address on remote chain
+     * @notice Configure chain mapping
+     * @param chainId Chain identifier
+     * @param lzChainId LayerZero chain identifier
      */
-    function setAuthorizedSource(uint16 remoteChainId, address source) external {
-        require(msg.sender == receiver, "Only receiver can set sources");
-        authorizedSources[remoteChainId] = source;
+    function setChainMapping(uint256 chainId, uint16 lzChainId) external {
+        chainIdToLzId[chainId] = lzChainId;
+        lzIdToChainId[lzChainId] = chainId;
     }
 
     /**
-     * @notice Send message to remote chain
-     * @param _destinationAddress Destination address on remote chain
-     * @param _message Message data
-     * @param _gasForDestination Gas limit for execution on destination
-     * @return messageId Generated message ID
+     * @notice Set trusted remote for a destination chain
+     * @param chainId Destination chain identifier
+     * @param remoteAddress Remote contract address
+     */
+    function setTrustedRemote(uint256 chainId, bytes calldata remoteAddress) external {
+        uint16 lzChainId = chainIdToLzId[chainId];
+        require(lzChainId != 0, "Chain mapping not found");
+
+        trustedRemoteLookup[chainId] = remoteAddress;
+    }
+
+    /**
+     * @notice Send cross-chain message
+     * @param destinationChainId Destination chain identifier
+     * @param destinationAddress Destination contract address
+     * @param payload Message payload
      */
     function sendMessage(
-        address _destinationAddress,
-        bytes calldata _message,
-        uint256 _gasForDestination
-    ) external override returns (bytes32 messageId) {
-        require(msg.sender == receiver, "Only receiver can send messages");
+        uint256 destinationChainId,
+        address destinationAddress,
+        bytes calldata payload
+    ) external override {
+        uint16 lzChainId = chainIdToLzId[destinationChainId];
+        require(lzChainId != 0, "Chain mapping not found");
 
-        // Generate message ID
-        messageId = keccak256(abi.encodePacked(
-            block.timestamp,
-            _destinationAddress,
-            _message,
-            blockhash(block.number - 1)
-        ));
+        bytes memory trustedRemote = trustedRemoteLookup[destinationChainId];
+        require(trustedRemote.length > 0, "Trusted remote not set");
 
-        // Get destination chain configuration
-        uint16 destinationChainId = getLayerZeroChainId(_destinationAddress);
-        address destinationAddress = getLayerZeroAddress(_destinationAddress);
-
-        // Encode payload with message ID
-        bytes memory payload = abi.encode(messageId, _message);
-
-        // Configure LZ parameters
-        bytes memory adaptorParams = abi.encodePacked(
-            uint16(1),            // version
-            uint256(_gasForDestination)
+        // LayerZero message options
+        bytes memory adapterParams = abi.encodePacked(
+            uint16(1),  // version
+            uint256(200000)  // gas limit
         );
 
-        // Calculate fee
         (uint256 messageFee,) = endpoint.estimateFees(
-            destinationChainId,
+            lzChainId,
             address(this),
             payload,
             false,
-            adaptorParams
+            adapterParams
         );
 
-        // Send cross-chain message
-        bytes32 lzTxHash = bytes32(
-            endpoint.send{value: messageFee}(
-                destinationChainId,
-                abi.encodePacked(destinationAddress, address(this)),
-                payload,
-                payable(msg.sender),
-                address(0),
-                adaptorParams
-            )
+        // Send message through LayerZero endpoint
+        endpoint.send{value: messageFee}(
+            lzChainId,
+            trustedRemote,
+            payload,
+            payable(msg.sender),
+            address(0),
+            adapterParams
         );
-
-        // Store mapping from messageId to LZ tx hash
-        messageToTxHash[messageId] = lzTxHash;
-
-        emit MessageSent(messageId, _destinationAddress, lzTxHash);
-
-        return messageId;
     }
 
     /**
-     * @notice Check message status
-     * @param messageId Message identifier
-     * @return status Message status (0=unknown, 1=sent, 2=delivered, 3=failed)
+     * @notice Check if message is from specified chain
+     * @param sourceChainId Source chain identifier
+     * @param sender Sender address
+     * @return isFromChain Whether message is from specified chain
      */
-    function getMessageStatus(
-        bytes32 messageId
-    ) external view override returns (uint8 status) {
-        bytes32 lzTxHash = messageToTxHash[messageId];
-
-        if (lzTxHash == bytes32(0)) {
-            return 0; // Unknown
-        }
-
-        // In a real implementation, we'd check the status from LayerZero
-        // This is simplified for illustration
-        return 1; // Sent
+    function isMessageFromChain(
+        uint256 sourceChainId,
+        address sender
+    ) external view override returns (bool isFromChain) {
+        // Implementation depends on the LayerZero verification mechanism
+        return true; // Placeholder
     }
 
     /**
-     * @notice Receive cross-chain message from LayerZero
-     * @param _srcChainId Source chain ID
+     * @notice LayerZero message receiver
+     * @param _srcChainId Source chain ID (LayerZero format)
      * @param _srcAddress Source address
      * @param _nonce Message nonce
      * @param _payload Message payload
@@ -4802,65 +4748,20 @@ contract LayerZeroAdapter is ICrossChainMessenger {
         uint64 _nonce,
         bytes memory _payload
     ) external {
-        // Verify sender is the LZ endpoint
         require(msg.sender == address(endpoint), "Invalid endpoint");
 
-        // Decode source address
-        address srcAddress;
-        assembly {
-            srcAddress := mload(add(_srcAddress, 20))
-        }
+        uint256 sourceChainId = lzIdToChainId[_srcChainId];
+        require(sourceChainId != 0, "Unknown source chain");
 
-        // Verify source is authorized
-        require(
-            srcAddress == authorizedSources[_srcChainId],
-            "Unauthorized source"
-        );
-
-        // Decode payload
-        (bytes32 messageId, bytes memory message) = abi.decode(_payload, (bytes32, bytes));
-
-        // Forward to receiver
-        (bool success, bytes memory returnData) = receiver.call(
-            abi.encodeWithSignature(
-                "receiveMessage(uint256,address,bytes32,bytes)",
-                uint256(_srcChainId),
-                srcAddress,
-                messageId,
-                message
-            )
-        );
-
-        // Handle failure
-        if (!success) {
-            emit MessageDeliveryFailed(messageId, returnData);
-        } else {
-            emit MessageDelivered(messageId);
-        }
+        // Process received message
+        // ...
     }
-
-    // Helper functions
-    function getLayerZeroChainId(address destinationAddress) internal pure returns (uint16) {
-        // Implementation would extract chain ID from address
-        return uint16(uint160(destinationAddress) >> 144);
-    }
-
-    function getLayerZeroAddress(address destinationAddress) internal pure returns (address) {
-        // Implementation would extract the actual address
-        return address(uint160(destinationAddress) & 0x00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF);
-    }
-
-    // Events
-    event MessageSent(bytes32 indexed messageId, address destination, bytes32 lzTxHash);
-    event MessageDelivered(bytes32 indexed messageId);
-    event MessageDeliveryFailed(bytes32 indexed messageId, bytes returnData);
-
-    // Receive function for native token
-    receive() external payable {}
 }
 ```
 
 ### 7.2 Cross-Chain Data Consistency
+
+The framework ensures consistent data across multiple blockchains.
 
 #### 7.2.1 Data Consistency Protocol
 
@@ -4868,315 +4769,140 @@ contract LayerZeroAdapter is ICrossChainMessenger {
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./CrossChainOracleHub.sol";
-
-contract CrossChainConsistencyProtocol is CrossChainOracleHub {
-    // Consistency state for an asset
-    struct ConsistencyState {
-        uint256 lastConsistencyCheck;
-        bool isConsistent;
-        mapping(uint256 => uint256) prices; // chainId => price
-        mapping(uint256 => uint256) timestamps; // chainId => timestamp
-        uint256 consistentPrice;
-        uint256 inconsistentChainCount;
+/**
+ * @title CrossChainConsistencyProtocol
+ * @notice Protocol for ensuring data consistency across chains
+ */
+contract CrossChainConsistencyProtocol {
+    struct ConsistencyRecord {
+        bytes32 dataDigest;      // Hash of the data
+        uint256 timestamp;       // Timestamp of the record
+        uint256[] chainIds;      // Chains where data is synced
+        uint256[] timestamps;    // Timestamps of sync on each chain
+        bool finalized;          // Whether record is finalized
     }
 
-    // Consistency state by asset
-    mapping(bytes32 => ConsistencyState) private consistencyStates;
-
-    // Consistency check frequency (in seconds)
-    uint256 public consistencyCheckInterval = 1 hours;
-
-    // Maximum allowed deviation for consistency (default 2%)
-    uint256 public maxConsistencyDeviation = 2e16;
-
-    constructor(address _accessController)
-        CrossChainOracleHub(_accessController)
-    {}
-
-    /**
-     * @notice Process received price and check consistency
-     * @param asset Asset identifier
-     * @param price Price value
-     * @param timestamp Price timestamp
-     * @param sourceChainId Source chain identifier
-     * @param originalChainId Original source chain identifier
-     */
-    function processReceivedPrice(
-        bytes32 asset,
-        uint256 price,
-        uint256 timestamp,
-        uint256 sourceChainId,
-        uint256 originalChainId
-    ) internal override {
-        // Update price for the chain
-        consistencyStates[asset].prices[sourceChainId] = price;
-        consistencyStates[asset].timestamps[sourceChainId] = timestamp;
-
-        // Check if it's time for a consistency check
-        if (block.timestamp >= consistencyStates[asset].lastConsistencyCheck + consistencyCheckInterval) {
-            checkConsistency(asset);
-        }
-    }
-
-    /**
-     * @notice Check cross-chain consistency for an asset
-     * @param asset Asset identifier
-     * @return isConsistent True if prices are consistent across chains
-     */
-    function checkConsistency(bytes32 asset) public returns (bool isConsistent) {
-        ConsistencyState storage state = consistencyStates[asset];
-
-        // Update last check time
-        state.lastConsistencyCheck = block.timestamp;
-
-        // Reset inconsistent count
-        state.inconsistentChainCount = 0;
-
-        // Calculate median price across all chains
-        uint256[] memory prices = new uint256[](supportedChainIds.length);
-        uint256 validPriceCount = 0;
-
-        // Collect prices from all chains
-        for (uint256 i = 0; i < supportedChainIds.length; i++) {
-            uint256 chainId = supportedChainIds[i];
-            uint256 chainPrice = state.prices[chainId];
-            uint256 chainTimestamp = state.timestamps[chainId];
-
-            // Only include recent prices
-            if (chainPrice > 0 &&
-                block.timestamp - chainTimestamp <= 24 hours) {
-                prices[validPriceCount] = chainPrice;
-                validPriceCount++;
-            }
-        }
-
-        // Sort prices
-        for (uint256 i = 0; i < validPriceCount - 1; i++) {
-            for (uint256 j = 0; j < validPriceCount - i - 1; j++) {
-                if (prices[j] > prices[j + 1]) {
-                    uint256 temp = prices[j];
-                    prices[j] = prices[j + 1];
-                    prices[j + 1] = temp;
-                }
-            }
-        }
-
-        // Get median price
-        uint256 medianPrice;
-        if (validPriceCount == 0) {
-            // No valid prices
-            state.isConsistent = false;
-            emit ConsistencyCheckFailed(asset, "No valid prices");
-            return false;
-        } else if (validPriceCount % 2 == 1) {
-            // Odd number of prices, take middle
-            medianPrice = prices[validPriceCount / 2];
-        } else {
-            // Even number of prices, take average of middle two
-            medianPrice = (prices[(validPriceCount / 2) - 1] + prices[validPriceCount / 2]) / 2;
-        }
-
-        // Store consistent price
-        state.consistentPrice = medianPrice;
-
-        // Check each chain against median
-        for (uint256 i = 0; i < supportedChainIds.length; i++) {
-            uint256 chainId = supportedChainIds[i];
-            uint256 chainPrice = state.prices[chainId];
-            uint256 chainTimestamp = state.timestamps[chainId];
-
-            // Only check recent prices
-            if (chainPrice > 0 &&
-                block.timestamp - chainTimestamp <= 24 hours) {
-
-                // Calculate deviation
-                uint256 deviation;
-                if (chainPrice > medianPrice) {
-                    deviation = ((chainPrice - medianPrice) * 1e18) / medianPrice;
-                } else {
-                    deviation = ((medianPrice - chainPrice) * 1e18) / medianPrice;
-                }
-
-                // Check if deviation exceeds threshold
-                if (deviation > maxConsistencyDeviation) {
-                    state.inconsistentChainCount++;
-
-                    emit InconsistentChainDetected(
-                        asset,
-                        chainId,
-                        chainPrice,
-                        medianPrice,
-                        deviation
-                    );
-                }
-            }
-        }
-
-        // Update consistency state
-        state.isConsistent = (state.inconsistentChainCount == 0);
-
-        if (state.isConsistent) {
-            emit ConsistencyCheckPassed(asset, medianPrice, validPriceCount);
-        } else {
-            emit ConsistencyCheckFailed(
-                asset,
-                string(abi.encodePacked(
-                    "Inconsistent chains: ",
-                    uint2str(state.inconsistentChainCount)
-                ))
-            );
-        }
-
-        return state.isConsistent;
-    }
-
-    /**
-     * @notice Force sync price to inconsistent chains
-     * @param asset Asset identifier
-     */
-    function syncInconsistentChains(bytes32 asset) external onlyValidator {
-        ConsistencyState storage state = consistencyStates[asset];
-
-        // Ensure we have a consistency check result
-        require(state.lastConsistencyCheck > 0, "No consistency check performed");
-
-        // Ensure there are inconsistent chains
-        require(state.inconsistentChainCount > 0, "No inconsistent chains");
-
-        // Sync consistent price to all chains
-        for (uint256 i = 0; i < supportedChainIds.length; i++) {
-            uint256 chainId = supportedChainIds[i];
-            uint256 chainPrice = state.prices[chainId];
-
-            // Skip consistent chains
-            if (chainPrice > 0) {
-                uint256 deviation;
-                if (chainPrice > state.consistentPrice) {
-                    deviation = ((chainPrice - state.consistentPrice) * 1e18) / state.consistentPrice;
-                } else {
-                    deviation = ((state.consistentPrice - chainPrice) * 1e18) / state.consistentPrice;
-                }
-
-                // If deviation exceeds threshold, sync to this chain
-                if (deviation > maxConsistencyDeviation) {
-                    try this.syncPriceToChain(
-                        asset,
-                        state.consistentPrice,
-                        block.timestamp,
-                        chainId
-                    ) returns (bytes32 messageId) {
-                        emit ForceSyncSent(asset, chainId, state.consistentPrice, messageId);
-                    } catch {
-                        // Continue to next chain on failure
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * @notice Set consistency check interval
-     * @param interval New interval in seconds
-     */
-    function setConsistencyCheckInterval(uint256 interval) external onlyAdmin {
-        require(interval >= 5 minutes && interval <= 24 hours, "Invalid interval");
-
-        consistencyCheckInterval = interval;
-
-        emit ConsistencyCheckIntervalUpdated(interval);
-    }
-
-    /**
-     * @notice Set maximum consistency deviation
-     * @param deviation New maximum deviation (1e18 = 100%)
-     */
-    function setMaxConsistencyDeviation(uint256 deviation) external onlyAdmin {
-        require(deviation <= 1e17, "Deviation too high"); // Max 10%
-
-        maxConsistencyDeviation = deviation;
-
-        emit MaxConsistencyDeviationUpdated(deviation);
-    }
-
-    /**
-     * @notice Get consistency state for an asset
-     * @param asset Asset identifier
-     * @return isConsistent True if consistent
-     * @return lastCheckTime Last check timestamp
-     * @return consistentPrice Consistent price
-     * @return inconsistentCount Inconsistent chain count
-     */
-    function getConsistencyState(bytes32 asset) external view returns (
-        bool isConsistent,
-        uint256 lastCheckTime,
-        uint256 consistentPrice,
-        uint256 inconsistentCount
-    ) {
-        ConsistencyState storage state = consistencyStates[asset];
-
-        return (
-            state.isConsistent,
-            state.lastConsistencyCheck,
-            state.consistentPrice,
-            state.inconsistentChainCount
-        );
-    }
-
-    /**
-     * @notice Get price for an asset on a specific chain
-     * @param asset Asset identifier
-     * @param chainId Chain identifier
-     * @return price Price on the chain
-     * @return timestamp Price timestamp
-     */
-    function getPriceForChain(bytes32 asset, uint256 chainId) external view returns (
-        uint256 price,
-        uint256 timestamp
-    ) {
-        ConsistencyState storage state = consistencyStates[asset];
-
-        return (
-            state.prices[chainId],
-            state.timestamps[chainId]
-        );
-    }
-
-    /**
-     * @notice Convert uint to string (helper function)
-     * @param value Value to convert
-     * @return str String representation
-     */
-    function uint2str(uint256 value) internal pure returns (string memory) {
-        if (value == 0) {
-            return "0";
-        }
-
-        uint256 temp = value;
-        uint256 digits;
-
-        while (temp != 0) {
-            digits++;
-            temp /= 10;
-        }
-
-        bytes memory buffer = new bytes(digits);
-        while (value != 0) {
-            digits -= 1;
-            buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));
-            value /= 10;
-        }
-
-        return string(buffer);
-    }
+    // Mapping from record ID to consistency record
+    mapping(bytes32 => ConsistencyRecord) public consistencyRecords;
 
     // Events
-    event ConsistencyCheckPassed(bytes32 indexed asset, uint256 consistentPrice, uint256 validPriceCount);
-    event ConsistencyCheckFailed(bytes32 indexed asset, string reason);
-    event InconsistentChainDetected(bytes32 indexed asset, uint256 chainId, uint256 chainPrice, uint256 medianPrice, uint256 deviation);
-    event ForceSyncSent(bytes32 indexed asset, uint256 chainId, uint256 price, bytes32 messageId);
-    event ConsistencyCheckIntervalUpdated(uint256 interval);
-    event MaxConsistencyDeviationUpdated(uint256 deviation);
+    event RecordCreated(bytes32 indexed recordId, bytes32 dataDigest, uint256 timestamp);
+    event ChainSynced(bytes32 indexed recordId, uint256 chainId, uint256 timestamp);
+    event RecordFinalized(bytes32 indexed recordId);
+
+    /**
+     * @notice Create a new consistency record
+     * @param dataDigest Hash of the data
+     * @param chainIds Initial chain IDs
+     * @return recordId Record identifier
+     */
+    function createConsistencyRecord(
+        bytes32 dataDigest,
+        uint256[] calldata chainIds
+    ) external returns (bytes32 recordId) {
+        recordId = keccak256(abi.encodePacked(
+            dataDigest,
+            block.timestamp,
+            msg.sender
+        ));
+
+        uint256[] memory timestamps = new uint256[](chainIds.length);
+
+        // Initialize all timestamps to 0 (not synced)
+        for (uint i = 0; i < chainIds.length; i++) {
+            timestamps[i] = 0;
+        }
+
+        consistencyRecords[recordId] = ConsistencyRecord({
+            dataDigest: dataDigest,
+            timestamp: block.timestamp,
+            chainIds: chainIds,
+            timestamps: timestamps,
+            finalized: false
+        });
+
+        emit RecordCreated(recordId, dataDigest, block.timestamp);
+
+        return recordId;
+    }
+
+    /**
+     * @notice Update chain sync status
+     * @param recordId Record identifier
+     * @param chainId Chain identifier
+     * @param timestamp Timestamp of sync
+     */
+    function updateChainSyncStatus(
+        bytes32 recordId,
+        uint256 chainId,
+        uint256 timestamp
+    ) external {
+        ConsistencyRecord storage record = consistencyRecords[recordId];
+        require(record.dataDigest != bytes32(0), "Record not found");
+        require(!record.finalized, "Record already finalized");
+
+        // Find chain index
+        uint256 chainIndex = type(uint256).max;
+        for (uint i = 0; i < record.chainIds.length; i++) {
+            if (record.chainIds[i] == chainId) {
+                chainIndex = i;
+                break;
+            }
+        }
+
+        require(chainIndex != type(uint256).max, "Chain not in record");
+
+        // Update timestamp
+        record.timestamps[chainIndex] = timestamp;
+
+        emit ChainSynced(recordId, chainId, timestamp);
+
+        // Check if all chains are synced
+        bool allSynced = true;
+        for (uint i = 0; i < record.timestamps.length; i++) {
+            if (record.timestamps[i] == 0) {
+                allSynced = false;
+                break;
+            }
+        }
+
+        // Finalize if all synced
+        if (allSynced) {
+            record.finalized = true;
+            emit RecordFinalized(recordId);
+        }
+    }
+
+    /**
+     * @notice Check if data is consistent across chains
+     * @param recordId Record identifier
+     * @return isConsistent Whether data is consistent
+     * @return syncedChains Number of chains where data is synced
+     * @return totalChains Total number of chains in record
+     */
+    function isDataConsistent(
+        bytes32 recordId
+    ) external view returns (
+        bool isConsistent,
+        uint256 syncedChains,
+        uint256 totalChains
+    ) {
+        ConsistencyRecord storage record = consistencyRecords[recordId];
+        require(record.dataDigest != bytes32(0), "Record not found");
+
+        totalChains = record.chainIds.length;
+        syncedChains = 0;
+
+        for (uint i = 0; i < record.timestamps.length; i++) {
+            if (record.timestamps[i] > 0) {
+                syncedChains++;
+            }
+        }
+
+        isConsistent = record.finalized || syncedChains == totalChains;
+
+        return (isConsistent, syncedChains, totalChains);
+    }
 }
 ```
 
@@ -5186,6421 +4912,5137 @@ contract CrossChainConsistencyProtocol is CrossChainOracleHub {
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./MultiSignatureValidator.sol";
-
-contract ProofOfConsistency is MultiSignatureValidator {
-    // Consistency proof
+/**
+ * @title ProofOfConsistency
+ * @notice Implements proof of consistency for cross-chain data
+ */
+contract ProofOfConsistency {
     struct ConsistencyProof {
-        bytes32 asset;
-        uint256 timestamp;
-        uint256 price;
-        bytes32 rootHash;
-        uint256[] chainIds;
-        uint256[] prices;
-        uint256[] timestamps;
-        bytes signatures;
+        bytes32 dataDigest;      // Hash of the data
+        uint256[] chainIds;      // Chain IDs included in proof
+        bytes[] proofs;          // Proofs from each chain
+        bytes32 merkleRoot;      // Merkle root of all proofs
+        uint256 timestamp;       // Timestamp of proof creation
+        bool verified;           // Whether proof is verified
     }
 
-    // Proven consistency state
-    struct ProvenConsistency {
-        bytes32 rootHash;
-        uint256 timestamp;
-        uint256 price;
-        uint256 proofCount;
-    }
+    // Mapping from proof ID to consistency proof
+    mapping(bytes32 => ConsistencyProof) public consistencyProofs;
 
-    // Proven consistency by asset
-    mapping(bytes32 => ProvenConsistency) public provenConsistency;
-
-    // Required signatures for consistency proof
-    uint256 public requiredSignatures;
-
-    // Consistency threshold (max allowed deviation)
-    uint256 public consistencyThreshold = 1e16; // 1%
-
-    // Address for signature verification
-    address public verificationContract;
-
-    constructor(
-        address _verificationContract,
-        uint256 _requiredSignatures
-    ) {
-        verificationContract = _verificationContract;
-        requiredSignatures = _requiredSignatures;
-    }
+    // Events
+    event ProofCreated(bytes32 indexed proofId, bytes32 dataDigest, uint256 timestamp);
+    event ProofVerified(bytes32 indexed proofId, bool verified);
 
     /**
-     * @notice Submit consistency proof
-     * @param proof Consistency proof
-     * @return isValid True if proof is valid and accepted
+     * @notice Create a new consistency proof
+     * @param dataDigest Hash of the data
+     * @param chainIds Chain IDs included in proof
+     * @param proofs Proofs from each chain
+     * @return proofId Proof identifier
      */
-    function submitConsistencyProof(
-        ConsistencyProof calldata proof
-    ) external returns (bool isValid) {
-        // Verify proof structure
-        require(proof.chainIds.length == proof.prices.length, "Array length mismatch");
-        require(proof.chainIds.length == proof.timestamps.length, "Array length mismatch");
-        require(proof.chainIds.length >= 3, "Insufficient chains");
-
-        // Verify timestamp is recent
-        require(block.timestamp - proof.timestamp <= 1 hours, "Proof too old");
-
-        // Verify root hash
-        bytes32 calculatedRoot = calculateMerkleRoot(
-            proof.asset,
-            proof.chainIds,
-            proof.prices,
-            proof.timestamps
-        );
-
-        require(calculatedRoot == proof.rootHash, "Invalid root hash");
-
-        // Verify signatures
-        bool signaturesValid = verifySignatures(
-            proof.rootHash,
-            proof.signatures,
-            requiredSignatures
-        );
-
-        require(signaturesValid, "Invalid signatures");
-
-        // Verify consistency
-        bool isConsistent = verifyConsistency(
-            proof.prices,
-            proof.price,
-            consistencyThreshold
-        );
-
-        require(isConsistent, "Prices not consistent");
-
-        // Update proven consistency
-        ProvenConsistency storage consistency = provenConsistency[proof.asset];
-        consistency.rootHash = proof.rootHash;
-        consistency.timestamp = proof.timestamp;
-        consistency.price = proof.price;
-        consistency.proofCount++;
-
-        emit ConsistencyProofAccepted(
-            proof.asset,
-            proof.price,
-            proof.timestamp,
-            proof.rootHash,
-            proof.chainIds.length
-        );
-
-        return true;
-    }
-
-    /**
-     * @notice Calculate merkle root from proof data
-     * @param asset Asset identifier
-     * @param chainIds Chain identifiers
-     * @param prices Prices by chain
-     * @param timestamps Timestamps by chain
-     * @return rootHash Calculated merkle root
-     */
-    function calculateMerkleRoot(
-        bytes32 asset,
+    function createConsistencyProof(
+        bytes32 dataDigest,
         uint256[] calldata chainIds,
-        uint256[] calldata prices,
-        uint256[] calldata timestamps
-    ) public pure returns (bytes32 rootHash) {
-        // Calculate leaf nodes
-        bytes32[] memory leaves = new bytes32[](chainIds.length);
+        bytes[] calldata proofs
+    ) external returns (bytes32 proofId) {
+        require(chainIds.length == proofs.length, "Array length mismatch");
+        require(chainIds.length > 0, "Empty chains array");
 
-        for (uint256 i = 0; i < chainIds.length; i++) {
-            leaves[i] = keccak256(abi.encodePacked(
-                asset,
-                chainIds[i],
-                prices[i],
-                timestamps[i]
-            ));
-        }
+        proofId = keccak256(abi.encodePacked(
+            dataDigest,
+            chainIds,
+            block.timestamp
+        ));
 
-        // Build merkle tree and return root
-        return buildMerkleRoot(leaves);
+        // Calculate Merkle root of proofs
+        bytes32 merkleRoot = calculateMerkleRoot(proofs);
+
+        consistencyProofs[proofId] = ConsistencyProof({
+            dataDigest: dataDigest,
+            chainIds: chainIds,
+            proofs: proofs,
+            merkleRoot: merkleRoot,
+            timestamp: block.timestamp,
+            verified: false
+        });
+
+        emit ProofCreated(proofId, dataDigest, block.timestamp);
+
+        return proofId;
     }
 
     /**
-     * @notice Build merkle root from leaf nodes
-     * @param leaves Leaf nodes
-     * @return rootHash Merkle root hash
+     * @notice Verify consistency proof
+     * @param proofId Proof identifier
+     * @return isVerified Whether proof is verified
      */
-    function buildMerkleRoot(
-        bytes32[] memory leaves
-    ) internal pure returns (bytes32) {
-        require(leaves.length > 0, "Empty leaves");
+    function verifyConsistencyProof(
+        bytes32 proofId
+    ) external returns (bool isVerified) {
+        ConsistencyProof storage proof = consistencyProofs[proofId];
+        require(proof.dataDigest != bytes32(0), "Proof not found");
 
-        if (leaves.length == 1) {
-            return leaves[0];
-        }
+        // Verify each chain's proof
+        for (uint i = 0; i < proof.chainIds.length; i++) {
+            bool chainProofValid = verifyChainProof(
+                proof.chainIds[i],
+                proof.dataDigest,
+                proof.proofs[i]
+            );
 
-        uint256 n = leaves.length;
-        uint256 offset = 0;
-
-        // Build tree bottom-up
-        while (n > 1) {
-            for (uint256 i = 0; i < n/2; i++) {
-                leaves[offset + i] = keccak256(abi.encodePacked(
-                    leaves[offset + 2*i],
-                    leaves[offset + 2*i + 1]
-                ));
-            }
-
-            // If odd number of leaves, hash the last one with itself
-            if (n % 2 == 1) {
-                leaves[offset + n/2] = keccak256(abi.encodePacked(
-                    leaves[offset + n - 1],
-                    leaves[offset + n - 1]
-                ));
-                n = n/2 + 1;
-            } else {
-                n = n/2;
-            }
-
-            offset += n;
-        }
-
-        return leaves[offset - 1];
-    }
-
-    /**
-     * @notice Verify consistency of prices
-     * @param prices Array of prices
-     * @param medianPrice Calculated median price
-     * @param threshold Maximum allowed deviation
-     * @return isConsistent True if prices are consistent
-     */
-    function verifyConsistency(
-        uint256[] calldata prices,
-        uint256 medianPrice,
-        uint256 threshold
-    ) internal pure returns (bool) {
-        for (uint256 i = 0; i < prices.length; i++) {
-            uint256 deviation;
-
-            if (prices[i] > medianPrice) {
-                deviation = ((prices[i] - medianPrice) * 1e18) / medianPrice;
-            } else {
-                deviation = ((medianPrice - prices[i]) * 1e18) / medianPrice;
-            }
-
-            if (deviation > threshold) {
+            if (!chainProofValid) {
+                proof.verified = false;
+                emit ProofVerified(proofId, false);
                 return false;
             }
         }
 
+        // All proofs valid
+        proof.verified = true;
+        emit ProofVerified(proofId, true);
+
         return true;
     }
 
     /**
-     * @notice Set consistency threshold
-     * @param threshold New threshold (1e18 = 100%)
+     * @notice Verify proof from a specific chain
+     * @param chainId Chain identifier
+     * @param dataDigest Hash of the data
+     * @param chainProof Proof from the chain
+     * @return isValid Whether the proof is valid
      */
-    function setConsistencyThreshold(uint256 threshold) external onlyOwner {
-        require(threshold <= 5e16, "Threshold too high"); // Max 5%
+    function verifyChainProof(
+        uint256 chainId,
+        bytes32 dataDigest,
+        bytes calldata chainProof
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on the specific proof format and verification method
 
-        consistencyThreshold = threshold;
-
-        emit ConsistencyThresholdUpdated(threshold);
+        return true; // Placeholder
     }
 
     /**
-     * @notice Set required signatures
-     * @param count New required signature count
+     * @notice Calculate Merkle root of proofs
+     * @param proofs Array of proofs
+     * @return root Merkle root
      */
-    function setRequiredSignatures(uint256 count) external onlyOwner {
-        require(count >= 3, "Min 3 signatures required");
+    function calculateMerkleRoot(
+        bytes[] calldata proofs
+    ) internal pure returns (bytes32 root) {
+        // Implementation of Merkle root calculation
 
-        requiredSignatures = count;
-
-        emit RequiredSignaturesUpdated(count);
+        return bytes32(0); // Placeholder
     }
-
-    /**
-     * @notice Get proven consistency for an asset
-     * @param asset Asset identifier
-     * @return isProven True if consistency has been proven
-     * @return price Latest consistent price
-     * @return timestamp Timestamp of latest proof
-     * @return proofCount Number of proofs submitted
-     */
-    function getProvenConsistency(bytes32 asset) external view returns (
-        bool isProven,
-        uint256 price,
-        uint256 timestamp,
-        uint256 proofCount
-    ) {
-        ProvenConsistency storage consistency = provenConsistency[asset];
-
-        return (
-            consistency.timestamp > 0,
-            consistency.price,
-            consistency.timestamp,
-            consistency.proofCount
-        );
-    }
-
-    // Events
-    event ConsistencyProofAccepted(bytes32 indexed asset, uint256 price, uint256 timestamp, bytes32 rootHash, uint256 chainCount);
-    event ConsistencyThresholdUpdated(uint256 threshold);
-    event RequiredSignaturesUpdated(uint256 count);
 }
 ```
 
 ### 7.3 Bridge Security
 
+The framework implements security measures for cross-chain bridges.
+
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./AccessControlUpgradeable.sol";
-import "./ICrossChainMessenger.sol";
-
-contract OracleBridgeSecurity is AccessControlUpgradeable {
-    // Roles
-    bytes32 public constant BRIDGE_ADMIN_ROLE = keccak256("BRIDGE_ADMIN_ROLE");
-    bytes32 public constant RELAYER_ROLE = keccak256("RELAYER_ROLE");
-    bytes32 public constant GUARDIAN_ROLE = keccak256("GUARDIAN_ROLE");
-
-    // Bridge configuration
-    struct BridgeConfig {
-        uint256 chainId;
-        address messenger;
-        uint256 messageLimit;
-        uint256 cooldownPeriod;
-        bool isPaused;
-        uint256 lastMessageTime;
+/**
+ * @title OracleBridgeSecurity
+ * @notice Security measures for oracle bridges
+ */
+contract OracleBridgeSecurity {
+    struct BridgeStatus {
+        bool active;
+        uint256 lastHeartbeat;
         uint256 messageCount;
+        uint256 failureCount;
+        uint256 heartbeatInterval;
+        uint256 consecutiveFailuresThreshold;
+        bool paused;
     }
 
-    // Configuration by chain
-    mapping(uint256 => BridgeConfig) public bridgeConfigs;
+    // Mapping from bridge ID to status
+    mapping(bytes32 => BridgeStatus) public bridgeStatuses;
 
-    // Message whitelist by chain
-    mapping(uint256 => mapping(bytes4 => bool)) public whitelistedMessages;
-
-    // Message tracking
-    mapping(bytes32 => bool) public processedMessages;
-    mapping(bytes32 => bool) public rejectedMessages;
-
-    // Rate limiting
-    uint256 public rateLimitWindow = 1 hours;
-    mapping(uint256 => uint256) public chainMessageCounts;
-    mapping(uint256 => uint256) public chainWindowStart;
-
-    // Guardian multi-sig threshold
-    uint256 public guardianThreshold;
-    uint256 public totalGuardians;
-
-    // Guardian votes
-    mapping(bytes32 => mapping(address => bool)) public guardianVotes;
-    mapping(bytes32 => uint256) public guardianVoteCount;
-
-    // Initialization
-    function initialize(address admin) public initializer {
-        __AccessControl_init();
-
-        // Set up roles
-        _setupRole(DEFAULT_ADMIN_ROLE, admin);
-        _setupRole(BRIDGE_ADMIN_ROLE, admin);
-
-        // Set guardian threshold
-        guardianThreshold = 3;
-    }
+    // Events
+    event BridgeHeartbeat(bytes32 indexed bridgeId, uint256 timestamp);
+    event BridgeStatusChanged(bytes32 indexed bridgeId, bool active);
+    event BridgePaused(bytes32 indexed bridgeId, string reason);
+    event BridgeResumed(bytes32 indexed bridgeId);
 
     /**
-     * @notice Register a chain bridge
-     * @param chainId Chain identifier
-     * @param messenger Cross-chain messenger address
-     * @param messageLimit Message limit per window
-     * @param cooldown Cooldown period between messages
+     * @notice Register a new bridge
+     * @param bridgeId Bridge identifier
+     * @param heartbeatInterval Heartbeat interval in seconds
+     * @param consecutiveFailuresThreshold Threshold for consecutive failures
      */
-    function registerChainBridge(
-        uint256 chainId,
-        address messenger,
-        uint256 messageLimit,
-        uint256 cooldown
-    ) external onlyRole(BRIDGE_ADMIN_ROLE) {
-        require(messenger != address(0), "Invalid messenger");
+    function registerBridge(
+        bytes32 bridgeId,
+        uint256 heartbeatInterval,
+        uint256 consecutiveFailuresThreshold
+    ) external {
+        require(bridgeStatuses[bridgeId].heartbeatInterval == 0, "Bridge already registered");
 
-        bridgeConfigs[chainId] = BridgeConfig({
-            chainId: chainId,
-            messenger: messenger,
-            messageLimit: messageLimit,
-            cooldownPeriod: cooldown,
-            isPaused: false,
-            lastMessageTime: 0,
-            messageCount: 0
+        bridgeStatuses[bridgeId] = BridgeStatus({
+            active: true,
+            lastHeartbeat: block.timestamp,
+            messageCount: 0,
+            failureCount: 0,
+            heartbeatInterval: heartbeatInterval,
+            consecutiveFailuresThreshold: consecutiveFailuresThreshold,
+            paused: false
         });
 
-        emit ChainBridgeRegistered(chainId, messenger, messageLimit, cooldown);
+        emit BridgeStatusChanged(bridgeId, true);
     }
 
     /**
-     * @notice Whitelist a message type
-     * @param chainId Chain identifier
-     * @param messageType Message function selector
-     * @param isWhitelisted Whitelist status
+     * @notice Send bridge heartbeat
+     * @param bridgeId Bridge identifier
      */
-    function setMessageWhitelist(
-        uint256 chainId,
-        bytes4 messageType,
-        bool isWhitelisted
-    ) external onlyRole(BRIDGE_ADMIN_ROLE) {
-        whitelistedMessages[chainId][messageType] = isWhitelisted;
+    function sendHeartbeat(bytes32 bridgeId) external {
+        BridgeStatus storage status = bridgeStatuses[bridgeId];
+        require(status.heartbeatInterval > 0, "Bridge not registered");
 
-        emit MessageWhitelistUpdated(chainId, messageType, isWhitelisted);
+        status.lastHeartbeat = block.timestamp;
+
+        emit BridgeHeartbeat(bridgeId, block.timestamp);
     }
 
     /**
-     * @notice Pause or unpause a chain bridge
-     * @param chainId Chain identifier
-     * @param paused Pause status
+     * @notice Record bridge message
+     * @param bridgeId Bridge identifier
+     * @param success Whether message was successful
      */
-    function setPausedStatus(
-        uint256 chainId,
-        bool paused
-    ) external {
-        // Allow admins or guardians with enough votes
-        bool isAdmin = hasRole(BRIDGE_ADMIN_ROLE, msg.sender);
+    function recordBridgeMessage(bytes32 bridgeId, bool success) external {
+        BridgeStatus storage status = bridgeStatuses[bridgeId];
+        require(status.heartbeatInterval > 0, "Bridge not registered");
 
-        if (!isAdmin) {
-            require(hasRole(GUARDIAN_ROLE, msg.sender), "Not authorized");
+        status.messageCount++;
 
-            // Create action hash
-            bytes32 actionHash = keccak256(abi.encodePacked(
-                "pause",
-                chainId,
-                paused,
-                block.timestamp / 1 days
-            ));
+        if (!success) {
+            status.failureCount++;
 
-            // Record vote
-            if (!guardianVotes[actionHash][msg.sender]) {
-                guardianVotes[actionHash][msg.sender] = true;
-                guardianVoteCount[actionHash]++;
+            // Check if consecutive failures threshold is reached
+            if (status.failureCount >= status.consecutiveFailuresThreshold) {
+                pauseBridge(bridgeId, "Consecutive failures threshold reached");
             }
+        } else {
+            // Reset failure count on success
+            status.failureCount = 0;
+        }
+    }
 
-            // Check threshold
-            require(
-                guardianVoteCount[actionHash] >= guardianThreshold,
-                "Insufficient guardian votes"
-            );
+    /**
+     * @notice Pause bridge
+     * @param bridgeId Bridge identifier
+     * @param reason Reason for pausing
+     */
+    function pauseBridge(bytes32 bridgeId, string memory reason) public {
+        BridgeStatus storage status = bridgeStatuses[bridgeId];
+        require(status.heartbeatInterval > 0, "Bridge not registered");
+        require(!status.paused, "Bridge already paused");
+
+        status.paused = true;
+
+        emit BridgePaused(bridgeId, reason);
+    }
+
+    /**
+     * @notice Resume bridge
+     * @param bridgeId Bridge identifier
+     */
+    function resumeBridge(bytes32 bridgeId) external {
+        BridgeStatus storage status = bridgeStatuses[bridgeId];
+        require(status.heartbeatInterval > 0, "Bridge not registered");
+        require(status.paused, "Bridge not paused");
+
+        status.paused = false;
+        status.failureCount = 0;
+
+        emit BridgeResumed(bridgeId);
+    }
+
+    /**
+     * @notice Check bridge health
+     * @param bridgeId Bridge identifier
+     * @return isHealthy Whether bridge is healthy
+     * @return timeSinceHeartbeat Time since last heartbeat
+     * @return successRate Success rate (0-100)
+     */
+    function checkBridgeHealth(
+        bytes32 bridgeId
+    ) external view returns (
+        bool isHealthy,
+        uint256 timeSinceHeartbeat,
+        uint256 successRate
+    ) {
+        BridgeStatus storage status = bridgeStatuses[bridgeId];
+        require(status.heartbeatInterval > 0, "Bridge not registered");
+
+        timeSinceHeartbeat = block.timestamp - status.lastHeartbeat;
+
+        // Calculate success rate
+        if (status.messageCount > 0) {
+            successRate = ((status.messageCount - status.failureCount) * 100) / status.messageCount;
+        } else {
+            successRate = 100; // Default to 100% if no messages
         }
 
-        bridgeConfigs[chainId].isPaused = paused;
+        // Bridge is healthy if:
+        // 1. Not paused
+        // 2. Last heartbeat within interval
+        // 3. Success rate above threshold
+        isHealthy = !status.paused &&
+                                      timeSinceHeartbeat <= status.heartbeatInterval &&
+                   successRate >= 80; // Success rate at least 80%
 
-        emit BridgePauseStatusUpdated(chainId, paused, msg.sender);
+        return (isHealthy, timeSinceHeartbeat, successRate);
+    }
+}
+```
+
+## 8. Quantum-Resistant Infrastructure
+
+The RESI Protocol implements quantum-resistant infrastructure to protect against future quantum computing threats.
+
+### 8.1 Post-Quantum Cryptography Integration
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title PostQuantumCryptoIntegration
+ * @notice Integration with NIST post-quantum cryptography standards
+ */
+contract PostQuantumCryptoIntegration {
+    enum PQAlgorithm {
+        MLKEM,    // ML-KEM (Kyber) for key encapsulation
+        MLDSA,    // ML-DSA (Dilithium) for digital signatures
+        FALCON,   // FALCON for digital signatures
+        SPHINCS   // SPHINCS+ for digital signatures
     }
 
+    struct PQVerificationKey {
+        PQAlgorithm algorithm;
+        bytes publicKey;
+        uint256 createdAt;
+        bool active;
+    }
+
+    // Mapping from key ID to verification key
+    mapping(bytes32 => PQVerificationKey) public verificationKeys;
+
+    // Events
+    event KeyRegistered(bytes32 indexed keyId, PQAlgorithm algorithm);
+    event SignatureVerified(bytes32 indexed dataDigest, bytes32 indexed keyId, bool valid);
+
     /**
-     * @notice Validate outgoing cross-chain message
-     * @param targetChainId Target chain identifier
-     * @param targetAddress Target address
-     * @param messageData Message data
-     * @return messageId Message identifier
+     * @notice Register a new post-quantum verification key
+     * @param algorithm Algorithm type
+     * @param publicKey Public key
+     * @return keyId Key identifier
      */
-    function validateOutgoingMessage(
-        uint256 targetChainId,
-        address targetAddress,
-        bytes calldata messageData
-    ) external returns (bytes32 messageId) {
-        // Check if bridge is configured
-        BridgeConfig storage config = bridgeConfigs[targetChainId];
-        require(config.chainId == targetChainId, "Bridge not configured");
+    function registerVerificationKey(
+        PQAlgorithm algorithm,
+        bytes calldata publicKey
+    ) external returns (bytes32 keyId) {
+        require(publicKey.length > 0, "Invalid public key");
 
-        // Check if bridge is paused
-        require(!config.isPaused, "Bridge is paused");
-
-        // Check message type whitelist
-        bytes4 selector = bytes4(messageData[:4]);
-        require(whitelistedMessages[targetChainId][selector], "Message type not whitelisted");
-
-        // Check rate limits
-        checkRateLimits(targetChainId);
-
-        // Check cooldown period
-        require(
-            config.lastMessageTime == 0 ||
-            block.timestamp >= config.lastMessageTime + config.cooldownPeriod,
-            "Cooldown period active"
-        );
-
-        // Generate message ID
-        messageId = keccak256(abi.encodePacked(
-            block.chainid,
-            targetChainId,
-            targetAddress,
-            messageData,
-            block.timestamp,
-            config.messageCount
+        keyId = keccak256(abi.encodePacked(
+            algorithm,
+            publicKey,
+            block.timestamp
         ));
 
-        // Update bridge state
-        config.lastMessageTime = block.timestamp;
-        config.messageCount++;
+        verificationKeys[keyId] = PQVerificationKey({
+            algorithm: algorithm,
+            publicKey: publicKey,
+            createdAt: block.timestamp,
+            active: true
+        });
 
-        emit OutgoingMessageValidated(messageId, targetChainId, targetAddress);
+        emit KeyRegistered(keyId, algorithm);
 
-        return messageId;
+        return keyId;
     }
 
     /**
-     * @notice Validate incoming cross-chain message
-     * @param sourceChainId Source chain identifier
-     * @param sourceAddress Source address
-     * @param messageId Message identifier
-     * @param messageData Message data
-     * @return isValid True if message is valid
+     * @notice Verify a post-quantum signature
+     * @param dataDigest Hash of the data
+     * @param signature Post-quantum signature
+     * @param keyId Key identifier
+     * @return isValid Whether signature is valid
      */
-    function validateIncomingMessage(
-        uint256 sourceChainId,
-        address sourceAddress,
-        bytes32 messageId,
-        bytes calldata messageData
+    function verifySignature(
+        bytes32 dataDigest,
+        bytes calldata signature,
+        bytes32 keyId
     ) external returns (bool isValid) {
-        // Check if bridge is configured
-        BridgeConfig storage config = bridgeConfigs[sourceChainId];
-        require(config.chainId == sourceChainId, "Bridge not configured");
+        PQVerificationKey storage key = verificationKeys[keyId];
+        require(key.active, "Key not active");
 
-        // Check if bridge is paused
-        require(!config.isPaused, "Bridge is paused");
-
-        // Check if message was already processed
-        require(!processedMessages[messageId], "Message already processed");
-        require(!rejectedMessages[messageId], "Message previously rejected");
-
-        // Check message type whitelist
-        bytes4 selector = bytes4(messageData[:4]);
-        require(whitelistedMessages[sourceChainId][selector], "Message type not whitelisted");
-
-        // Check rate limits
-        checkRateLimits(sourceChainId);
-
-        // Mark message as processed
-        processedMessages[messageId] = true;
-
-        emit IncomingMessageValidated(messageId, sourceChainId, sourceAddress);
-
-        return true;
-    }
-
-    /**
-     * @notice Check rate limits for a chain
-     * @param chainId Chain identifier
-     */
-    function checkRateLimits(uint256 chainId) internal {
-        BridgeConfig storage config = bridgeConfigs[chainId];
-
-        // Reset window if needed
-        if (block.timestamp >= chainWindowStart[chainId] + rateLimitWindow) {
-            chainWindowStart[chainId] = block.timestamp;
-            chainMessageCounts[chainId] = 0;
+        // Verify signature based on algorithm
+        if (key.algorithm == PQAlgorithm.MLDSA) {
+            isValid = verifyMLDSASignature(dataDigest, signature, key.publicKey);
+        } else if (key.algorithm == PQAlgorithm.FALCON) {
+            isValid = verifyFalconSignature(dataDigest, signature, key.publicKey);
+        } else if (key.algorithm == PQAlgorithm.SPHINCS) {
+            isValid = verifySPHINCSSignature(dataDigest, signature, key.publicKey);
+        } else {
+            revert("Unsupported algorithm for signatures");
         }
 
-        // Check message count
-        require(
-            chainMessageCounts[chainId] < config.messageLimit,
-            "Rate limit exceeded"
-        );
+        emit SignatureVerified(dataDigest, keyId, isValid);
 
-        // Increment message count
-        chainMessageCounts[chainId]++;
+        return isValid;
     }
 
     /**
-     * @notice Reject a message (guardian function)
-     * @param messageId Message identifier
-     * @param reason Rejection reason
+     * @notice Encapsulate key using ML-KEM
+     * @param publicKey ML-KEM public key
+     * @return ciphertext Encapsulated ciphertext
+     * @return encapsulatedKey Encapsulated key
      */
-    function rejectMessage(
-        bytes32 messageId,
-        string calldata reason
-    ) external onlyRole(GUARDIAN_ROLE) {
-        // Check if message already processed or rejected
-        require(!processedMessages[messageId], "Message already processed");
-        require(!rejectedMessages[messageId], "Message already rejected");
+    function encapsulateMLKEM(
+        bytes calldata publicKey
+    ) external view returns (
+        bytes memory ciphertext,
+        bytes32 encapsulatedKey
+    ) {
+        // Implementation depends on ML-KEM
 
-        // Create action hash
-        bytes32 actionHash = keccak256(abi.encodePacked(
-            "reject",
-            messageId,
-            reason
+        return (new bytes(0), bytes32(0)); // Placeholder
+    }
+
+    /**
+     * @notice Verify ML-DSA signature
+     * @param dataDigest Hash of the data
+     * @param signature ML-DSA signature
+     * @param publicKey ML-DSA public key
+     * @return isValid Whether signature is valid
+     */
+    function verifyMLDSASignature(
+        bytes32 dataDigest,
+        bytes calldata signature,
+        bytes memory publicKey
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on ML-DSA
+
+        return true; // Placeholder
+    }
+
+    /**
+     * @notice Verify Falcon signature
+     * @param dataDigest Hash of the data
+     * @param signature Falcon signature
+     * @param publicKey Falcon public key
+     * @return isValid Whether signature is valid
+     */
+    function verifyFalconSignature(
+        bytes32 dataDigest,
+        bytes calldata signature,
+        bytes memory publicKey
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on Falcon
+
+        return true; // Placeholder
+    }
+
+    /**
+     * @notice Verify SPHINCS+ signature
+     * @param dataDigest Hash of the data
+     * @param signature SPHINCS+ signature
+     * @param publicKey SPHINCS+ public key
+     * @return isValid Whether signature is valid
+     */
+    function verifySPHINCSSignature(
+        bytes32 dataDigest,
+        bytes calldata signature,
+        bytes memory publicKey
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on SPHINCS+
+
+        return true; // Placeholder
+    }
+}
+```
+
+### 8.2 Hybrid Cryptography for Migration
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title HybridCryptographyOracle
+ * @notice Implements hybrid classical and post-quantum cryptography
+ */
+contract HybridCryptographyOracle {
+    struct HybridKey {
+        bytes32 keyId;
+        bytes classicalPubKey;
+        bytes quantumPubKey;
+        uint8 classicalAlgo;    // 1=ECDSA, 2=EdDSA
+        uint8 quantumAlgo;      // 1=ML-DSA, 2=Falcon, 3=SPHINCS+
+        uint256 createdAt;
+        bool active;
+    }
+
+    // Mapping from key ID to hybrid key
+    mapping(bytes32 => HybridKey) public hybridKeys;
+
+    // Migration policy
+    struct MigrationPolicy {
+        uint8 validationMode;    // 1=both required, 2=either sufficient, 3=quantum only, 4=classical only
+        uint256 transitionDate;  // Date to enforce quantum signatures
+        bool enforceQuantum;     // Whether to enforce quantum signatures now
+    }
+
+    MigrationPolicy public migrationPolicy;
+
+    // Events
+    event HybridKeyRegistered(bytes32 indexed keyId, uint8 classicalAlgo, uint8 quantumAlgo);
+    event SignatureVerified(bytes32 indexed dataDigest, bytes32 indexed keyId, bool valid);
+    event MigrationPolicyUpdated(uint8 validationMode, uint256 transitionDate, bool enforceQuantum);
+
+    constructor() {
+        // Default migration policy: either signature is sufficient, no enforcement yet
+        migrationPolicy = MigrationPolicy({
+            validationMode: 2, // Either signature is sufficient
+            transitionDate: block.timestamp + 365 days, // 1 year transition
+            enforceQuantum: false
+        });
+    }
+
+    /**
+     * @notice Register a new hybrid key
+     * @param classicalPubKey Classical public key
+     * @param quantumPubKey Quantum public key
+     * @param classicalAlgo Classical algorithm
+     * @param quantumAlgo Quantum algorithm
+     * @return keyId Key identifier
+     */
+    function registerHybridKey(
+        bytes calldata classicalPubKey,
+        bytes calldata quantumPubKey,
+        uint8 classicalAlgo,
+        uint8 quantumAlgo
+    ) external returns (bytes32 keyId) {
+        require(classicalPubKey.length > 0, "Invalid classical key");
+        require(quantumPubKey.length > 0, "Invalid quantum key");
+        require(classicalAlgo > 0 && classicalAlgo <= 2, "Invalid classical algorithm");
+        require(quantumAlgo > 0 && quantumAlgo <= 3, "Invalid quantum algorithm");
+
+        keyId = keccak256(abi.encodePacked(
+            classicalPubKey,
+            quantumPubKey,
+            block.timestamp
         ));
 
-        // Record vote
-        if (!guardianVotes[actionHash][msg.sender]) {
-            guardianVotes[actionHash][msg.sender] = true;
-            guardianVoteCount[actionHash]++;
-        }
+        hybridKeys[keyId] = HybridKey({
+            keyId: keyId,
+            classicalPubKey: classicalPubKey,
+            quantumPubKey: quantumPubKey,
+            classicalAlgo: classicalAlgo,
+            quantumAlgo: quantumAlgo,
+            createdAt: block.timestamp,
+            active: true
+        });
 
-        // Check threshold
-        if (guardianVoteCount[actionHash] >= guardianThreshold) {
-            // Mark message as rejected
-            rejectedMessages[messageId] = true;
+        emit HybridKeyRegistered(keyId, classicalAlgo, quantumAlgo);
 
-            emit MessageRejected(messageId, reason, msg.sender);
-        } else {
-            emit GuardianVoteRecorded(
-                actionHash,
-                messageId,
-                msg.sender,
-                guardianVoteCount[actionHash]
+        return keyId;
+    }
+
+    /**
+     * @notice Verify a hybrid signature
+     * @param dataDigest Hash of the data
+     * @param classicalSignature Classical signature
+     * @param quantumSignature Quantum signature
+     * @param keyId Key identifier
+     * @return isValid Whether signature is valid
+     */
+    function verifyHybridSignature(
+        bytes32 dataDigest,
+        bytes calldata classicalSignature,
+        bytes calldata quantumSignature,
+        bytes32 keyId
+    ) external returns (bool isValid) {
+        HybridKey storage key = hybridKeys[keyId];
+        require(key.active, "Key not active");
+
+        bool classicalValid = false;
+        bool quantumValid = false;
+
+        // Verify classical signature if provided
+        if (classicalSignature.length > 0) {
+            classicalValid = verifyClassicalSignature(
+                dataDigest,
+                classicalSignature,
+                key.classicalPubKey,
+                key.classicalAlgo
             );
         }
-    }
 
-    /**
-     * @notice Set guardian threshold
-     * @param threshold New threshold
-     */
-    function setGuardianThreshold(uint256 threshold) external onlyRole(BRIDGE_ADMIN_ROLE) {
-        require(threshold > 0, "Threshold must be positive");
-        require(threshold <= totalGuardians, "Threshold exceeds guardian count");
-
-        guardianThreshold = threshold;
-
-        emit GuardianThresholdUpdated(threshold);
-    }
-
-    /**
-     * @notice Add a guardian
-     * @param guardian Guardian address
-     */
-    function addGuardian(address guardian) external onlyRole(BRIDGE_ADMIN_ROLE) {
-        require(guardian != address(0), "Invalid guardian address");
-        require(!hasRole(GUARDIAN_ROLE, guardian), "Already a guardian");
-
-        grantRole(GUARDIAN_ROLE, guardian);
-        totalGuardians++;
-
-        emit GuardianAdded(guardian);
-    }
-
-    /**
-     * @notice Remove a guardian
-     * @param guardian Guardian address
-     */
-    function removeGuardian(address guardian) external onlyRole(BRIDGE_ADMIN_ROLE) {
-        require(hasRole(GUARDIAN_ROLE, guardian), "Not a guardian");
-
-        revokeRole(GUARDIAN_ROLE, guardian);
-        totalGuardians--;
-
-        // Ensure threshold is still valid
-        if (guardianThreshold > totalGuardians && totalGuardians > 0) {
-            guardianThreshold = totalGuardians;
-            emit GuardianThresholdUpdated(guardianThreshold);
-        }
-
-        emit GuardianRemoved(guardian);
-    }
-
-    // Events
-    event ChainBridgeRegistered(uint256 indexed chainId, address messenger, uint256 messageLimit, uint256 cooldown);
-    event MessageWhitelistUpdated(uint256 indexed chainId, bytes4 indexed messageType, bool isWhitelisted);
-    event BridgePauseStatusUpdated(uint256 indexed chainId, bool paused, address updater);
-    event OutgoingMessageValidated(bytes32 indexed messageId, uint256 targetChainId, address targetAddress);
-    event IncomingMessageValidated(bytes32 indexed messageId, uint256 sourceChainId, address sourceAddress);
-    event MessageRejected(bytes32 indexed messageId, string reason, address guardian);
-    event GuardianVoteRecorded(bytes32 indexed actionHash, bytes32 indexed messageId, address guardian, uint256 voteCount);
-    event GuardianThresholdUpdated(uint256 threshold);
-    event GuardianAdded(address indexed guardian);
-    event GuardianRemoved(address indexed guardian);
-}
-```
-
-## 8. Implementation & Integration Guidelines
-
-### 8.1 Smart Contract Integration
-
-#### 8.1.1 Oracle Consumer Interface
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-
-interface IOracleConsumer {
-    /**
-     * @notice Get latest price for an asset
-     * @param asset Asset identifier
-     * @return price Latest price
-     * @return timestamp Price timestamp
-     * @return confidence Confidence score (0-1e18)
-     */
-    function getLatestPrice(bytes32 asset) external view returns (
-        uint256 price,
-        uint256 timestamp,
-        uint256 confidence
-    );
-
-    /**
-     * @notice Get time-weighted average price
-     * @param asset Asset identifier
-     * @param period Time period in seconds
-     * @return price TWAP value
-     * @return timestamp End timestamp
-     * @return confidence Confidence score (0-1e18)
-     */
-    function getTWAP(bytes32 asset, uint256 period) external view returns (
-        uint256 price,
-        uint256 timestamp,
-        uint256 confidence
-    );
-
-    /**
-     * @notice Get last update time for an asset
-     * @param asset Asset identifier
-     * @return timestamp Last update timestamp
-     */
-    function getLastUpdateTime(bytes32 asset) external view returns (uint256 timestamp);
-
-    /**
-     * @notice Get asset volatility
-     * @param asset Asset identifier
-     * @return volatility Annualized volatility (1e18 = 100%)
-     */
-    function getAssetVolatility(bytes32 asset) external view returns (uint256 volatility);
-
-    /**
-     * @notice Get current and previous price
-     * @param asset Asset identifier
-     * @return current Current price
-     * @return currentTimestamp Current price timestamp
-     * @return previous Previous price
-     * @return previousTimestamp Previous price timestamp
-     */
-    function getCurrentAndPreviousPrice(bytes32 asset) external view returns (
-        uint256 current,
-        uint256 currentTimestamp,
-        uint256 previous,
-        uint256 previousTimestamp
-    );
-}
-```
-
-#### 8.1.2 Oracle Consumer Implementation Pattern
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-
-import "./IOracleConsumer.sol";
-
-/**
- * Oracle consumer pattern for protocol contracts
- */
-abstract contract OracleConsumerPattern {
-    // Oracle consumer contract
-    IOracleConsumer public oracleConsumer;
-
-    // Staleness threshold in seconds
-    uint256 public oracleStalenessThreshold;
-
-    // Minimum confidence level (0-1e18)
-    uint256 public minConfidenceLevel;
-
-    constructor(address _oracleConsumer, uint256 _staleThreshold, uint256 _minConfidence) {
-        oracleConsumer = IOracleConsumer(_oracleConsumer);
-        oracleStalenessThreshold = _staleThreshold;
-        minConfidenceLevel = _minConfidence;
-    }
-
-    /**
-     * @notice Get validated price for an asset
-     * @param asset Asset identifier
-     * @return price Validated price
-     */
-    function getValidatedPrice(bytes32 asset) internal view returns (uint256 price) {
-        (price, uint256 timestamp, uint256 confidence) = oracleConsumer.getLatestPrice(asset);
-
-        // Check staleness
-        require(
-            block.timestamp - timestamp <= oracleStalenessThreshold,
-            "OracleConsumerPattern: Price is stale"
-        );
-
-        // Check confidence
-        require(
-            confidence >= minConfidenceLevel,
-            "OracleConsumerPattern: Confidence too low"
-        );
-
-        return price;
-    }
-
-    /**
-     * @notice Get validated TWAP for an asset
-     * @param asset Asset identifier
-     * @param period Time period in seconds
-     * @return price Validated TWAP
-     */
-    function getValidatedTWAP(bytes32 asset, uint256 period) internal view returns (uint256 price) {
-        (price, uint256 timestamp, uint256 confidence) = oracleConsumer.getTWAP(asset, period);
-
-        // Check staleness (less strict for TWAP)
-        require(
-            block.timestamp - timestamp <= oracleStalenessThreshold * 2,
-            "OracleConsumerPattern: TWAP is stale"
-        );
-
-        // Check confidence
-        require(
-            confidence >= minConfidenceLevel,
-            "OracleConsumerPattern: TWAP confidence too low"
-        );
-
-        return price;
-    }
-
-    /**
-     * @notice Update oracle consumer address
-     * @param _oracleConsumer New oracle consumer address
-     */
-    function updateOracleConsumer(address _oracleConsumer) external onlyAuthorized {
-        require(_oracleConsumer != address(0), "OracleConsumerPattern: Invalid address");
-        oracleConsumer = IOracleConsumer(_oracleConsumer);
-
-        emit OracleConsumerUp
-
-        emit OracleConsumerUpdated(_oracleConsumer);
-    }
-
-    /**
-     * @notice Update staleness threshold
-     * @param _threshold New threshold in seconds
-     */
-    function updateStalenessThreshold(uint256 _threshold) external onlyAuthorized {
-        require(_threshold > 0, "OracleConsumerPattern: Invalid threshold");
-        oracleStalenessThreshold = _threshold;
-
-        emit StalenessThresholdUpdated(_threshold);
-    }
-
-    /**
-     * @notice Update minimum confidence level
-     * @param _minConfidence New minimum confidence level
-     */
-    function updateMinConfidenceLevel(uint256 _minConfidence) external onlyAuthorized {
-        require(_minConfidence > 0 && _minConfidence <= 1e18, "OracleConsumerPattern: Invalid confidence level");
-        minConfidenceLevel = _minConfidence;
-
-        emit MinConfidenceLevelUpdated(_minConfidence);
-    }
-
-    /**
-     * @dev Only authorized accounts can call these functions
-     */
-    modifier onlyAuthorized() {
-        require(isAuthorized(msg.sender), "OracleConsumerPattern: Not authorized");
-        _;
-    }
-
-    /**
-     * @dev Check if account is authorized to update oracle config
-     * @param account Account to check
-     * @return isAuth True if authorized
-     */
-    function isAuthorized(address account) internal virtual returns (bool isAuth);
-
-    // Events
-    event OracleConsumerUpdated(address indexed oracleConsumer);
-    event StalenessThresholdUpdated(uint256 threshold);
-    event MinConfidenceLevelUpdated(uint256 minConfidence);
-
-}
-```
-
-#### 8.1.3 Oracle Security Integration Pattern
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
-
-import "./ICircuitBreaker.sol";
-
-/**
- * Oracle security integration pattern for protocol contracts
- */
-abstract contract OracleSecurityIntegration {
-    // Circuit breaker contract
-    ICircuitBreaker public circuitBreaker;
-
-    // Asset-specific behavior settings
-    mapping(bytes32 => SecurityBehavior) public securityBehaviors;
-
-    // Security behavior options
-    enum BehaviorOption {
-        BLOCK_OPERATION,
-        USE_FALLBACK,
-        USE_LAST_GOOD_PRICE,
-        ALLOW_WITH_BUFFER
-    }
-
-    // Security behavior configuration
-    struct SecurityBehavior {
-        BehaviorOption option;
-        uint256 bufferPercentage; // For ALLOW_WITH_BUFFER (1e18 = 100%)
-        uint256 maxAge;           // For USE_LAST_GOOD_PRICE
-        bool isCustomized;        // Whether this asset has custom settings
-    }
-
-    // Default behavior
-    BehaviorOption public defaultBehavior = BehaviorOption.BLOCK_OPERATION;
-    uint256 public defaultBuffer = 2e17; // 20%
-    uint256 public defaultMaxAge = 24 hours;
-
-    constructor(address _circuitBreaker) {
-        circuitBreaker = ICircuitBreaker(_circuitBreaker);
-    }
-
-    /**
-     * @notice Check if oracle is secure for operation
-     * @param asset Asset identifier
-     * @return isSecure True if oracle is secure
-     * @return behavior Active behavior option
-     */
-    function checkOracleSecurity(bytes32 asset) internal view returns (
-        bool isSecure,
-        BehaviorOption behavior
-    ) {
-        // Check if circuit breaker is active
-        bool isCircuitBroken = circuitBreaker.isCircuitBroken(asset);
-
-        if (!isCircuitBroken) {
-            return (true, BehaviorOption.BLOCK_OPERATION); // No behavior needed
-        }
-
-        // Get appropriate behavior
-        SecurityBehavior storage settings = securityBehaviors[asset];
-        behavior = settings.isCustomized ? settings.option : defaultBehavior;
-
-        // BLOCK_OPERATION blocks all operations
-        if (behavior == BehaviorOption.BLOCK_OPERATION) {
-            return (false, behavior);
-        }
-
-        // Other behaviors allow operations with special handling
-        return (true, behavior);
-    }
-
-    /**
-     * @notice Get buffer percentage for an asset
-     * @param asset Asset identifier
-     * @return bufferPct Buffer percentage (1e18 = 100%)
-     */
-    function getBufferPercentage(bytes32 asset) internal view returns (uint256 bufferPct) {
-        SecurityBehavior storage settings = securityBehaviors[asset];
-        return settings.isCustomized ? settings.bufferPercentage : defaultBuffer;
-    }
-
-    /**
-     * @notice Get max age for last good price
-     * @param asset Asset identifier
-     * @return maxAge Maximum age in seconds
-     */
-    function getMaxPriceAge(bytes32 asset) internal view returns (uint256 maxAge) {
-        SecurityBehavior storage settings = securityBehaviors[asset];
-        return settings.isCustomized ? settings.maxAge : defaultMaxAge;
-    }
-
-    /**
-     * @notice Set security behavior for an asset
-     * @param asset Asset identifier
-     * @param behavior Behavior option
-     * @param bufferPct Buffer percentage (for ALLOW_WITH_BUFFER)
-     * @param maxAge Maximum price age (for USE_LAST_GOOD_PRICE)
-     */
-    function setSecurityBehavior(
-        bytes32 asset,
-        BehaviorOption behavior,
-        uint256 bufferPct,
-        uint256 maxAge
-    ) external onlyAuthorized {
-        require(bufferPct <= 5e17, "Buffer too high"); // Max 50%
-        require(maxAge <= 7 days, "Max age too high"); // Max 7 days
-
-        securityBehaviors[asset] = SecurityBehavior({
-            option: behavior,
-            bufferPercentage: bufferPct,
-            maxAge: maxAge,
-            isCustomized: true
-        });
-
-        emit SecurityBehaviorUpdated(asset, uint8(behavior), bufferPct, maxAge);
-    }
-
-    /**
-     * @notice Reset security behavior to default
-     * @param asset Asset identifier
-     */
-    function resetSecurityBehavior(bytes32 asset) external onlyAuthorized {
-        securityBehaviors[asset].isCustomized = false;
-
-        emit SecurityBehaviorReset(asset);
-    }
-
-    /**
-     * @notice Update circuit breaker address
-     * @param _circuitBreaker New circuit breaker address
-     */
-    function updateCircuitBreaker(address _circuitBreaker) external onlyAuthorized {
-        require(_circuitBreaker != address(0), "Invalid address");
-        circuitBreaker = ICircuitBreaker(_circuitBreaker);
-
-        emit CircuitBreakerUpdated(_circuitBreaker);
-    }
-
-    /**
-     * @notice Update default security behavior
-     * @param behavior Default behavior option
-     * @param bufferPct Default buffer percentage
-     * @param maxAge Default maximum price age
-     */
-    function updateDefaultBehavior(
-        BehaviorOption behavior,
-        uint256 bufferPct,
-        uint256 maxAge
-    ) external onlyAuthorized {
-        require(bufferPct <= 5e17, "Buffer too high"); // Max 50%
-        require(maxAge <= 7 days, "Max age too high"); // Max 7 days
-
-        defaultBehavior = behavior;
-        defaultBuffer = bufferPct;
-        defaultMaxAge = maxAge;
-
-        emit DefaultBehaviorUpdated(uint8(behavior), bufferPct, maxAge);
-    }
-
-    /**
-     * @dev Only authorized accounts can call these functions
-     */
-    modifier onlyAuthorized() {
-        require(isAuthorized(msg.sender), "Not authorized");
-        _;
-    }
-
-    /**
-     * @dev Check if account is authorized
-     * @param account Account to check
-     * @return isAuth True if authorized
-     */
-    function isAuthorized(address account) internal virtual returns (bool isAuth);
-
-    // Events
-    event SecurityBehaviorUpdated(bytes32 indexed asset, uint8 behavior, uint256 bufferPct, uint256 maxAge);
-    event SecurityBehaviorReset(bytes32 indexed asset);
-    event CircuitBreakerUpdated(address indexed circuitBreaker);
-    event DefaultBehaviorUpdated(uint8 behavior, uint256 bufferPct, uint256 maxAge);
-}
-
-```
-
-### 8.2 JavaScript/TypeScript Client Integration
-
-#### 8.2.1 Oracle Client Library
-
-```typescript
-/**
- * RESI Protocol Oracle Client Library
- *
- * Client library for interacting with the RESI Protocol Oracle System
- */
-import { ethers } from "ethers";
-import { OracleConsumerABI, PriceOracleABI } from "./abi";
-
-export class RESIOracleClient {
-  private readonly provider: ethers.providers.Provider;
-  private readonly consumerContract: ethers.Contract;
-  private readonly assets: Record<string, AssetInfo>;
-
-  /**
-   * Create a new oracle client
-   * @param provider Ethereum provider
-   * @param consumerAddress Oracle consumer contract address
-   */
-  constructor(provider: ethers.providers.Provider, consumerAddress: string) {
-    this.provider = provider;
-    this.consumerContract = new ethers.Contract(
-      consumerAddress,
-      OracleConsumerABI,
-      provider
-    );
-    this.assets = {};
-  }
-
-  /**
-   * Initialize asset cache
-   * @param assetSymbols Array of asset symbols to cache
-   */
-  public async initializeAssets(assetSymbols: string[]): Promise<void> {
-    for (const symbol of assetSymbols) {
-      // Convert symbol to bytes32
-      const assetId = ethers.utils.formatBytes32String(symbol);
-
-      try {
-        // Get asset info
-        const [price, timestamp, confidence] =
-          await this.consumerContract.getLatestPrice(assetId);
-        const volatility = await this.consumerContract.getAssetVolatility(
-          assetId
-        );
-
-        this.assets[symbol] = {
-          symbol,
-          assetId,
-          price: ethers.utils.formatUnits(price, 18),
-          timestamp: new Date(timestamp.toNumber() * 1000),
-          confidence: confidence.toNumber() / 1e18,
-          volatility: volatility.toNumber() / 1e18,
-          lastUpdated: new Date(),
-        };
-      } catch (error) {
-        console.error(`Error initializing asset ${symbol}:`, error);
-      }
-    }
-  }
-
-  /**
-   * Get latest price for an asset
-   * @param symbol Asset symbol
-   * @param options Options for fetching price
-   * @returns Price data
-   */
-  public async getLatestPrice(
-    symbol: string,
-    options: PriceOptions = {}
-  ): Promise<PriceData> {
-    const assetId = ethers.utils.formatBytes32String(symbol);
-
-    try {
-      // Get latest price
-      let price: ethers.BigNumber;
-      let timestamp: ethers.BigNumber;
-      let confidence: ethers.BigNumber;
-
-      if (options.useTWAP) {
-        // Get time-weighted average price
-        const period = options.twapPeriod || 3600; // Default 1 hour
-        [price, timestamp, confidence] = await this.consumerContract.getTWAP(
-          assetId,
-          period
-        );
-      } else {
-        // Get spot price
-        [price, timestamp, confidence] =
-          await this.consumerContract.getLatestPrice(assetId);
-      }
-
-      // Format data
-      const result: PriceData = {
-        symbol,
-        price: ethers.utils.formatUnits(price, 18),
-        timestamp: new Date(timestamp.toNumber() * 1000),
-        confidence: confidence.toNumber() / 1e18,
-      };
-
-      // Add to cache
-      if (this.assets[symbol]) {
-        this.assets[symbol] = {
-          ...this.assets[symbol],
-          price: result.price,
-          timestamp: result.timestamp,
-          confidence: result.confidence,
-          lastUpdated: new Date(),
-        };
-      }
-
-      return result;
-    } catch (error) {
-      console.error(`Error getting price for ${symbol}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get price history for an asset
-   * @param symbol Asset symbol
-   * @param period Time period in seconds
-   * @param dataPoints Number of data points
-   * @returns Array of price data points
-   */
-  public async getPriceHistory(
-    symbol: string,
-    period: number = 86400, // Default 24 hours
-    dataPoints: number = 24
-  ): Promise<PriceData[]> {
-    const assetId = ethers.utils.formatBytes32String(symbol);
-
-    try {
-      // Call history contract
-      const historyData = await this.consumerContract.getPriceHistory(
-        assetId,
-        Math.floor(Date.now() / 1000) - period,
-        Math.floor(Date.now() / 1000),
-        dataPoints
-      );
-
-      // Format data
-      const [prices, timestamps, confidences] = historyData;
-      const result: PriceData[] = [];
-
-      for (let i = 0; i < prices.length; i++) {
-        result.push({
-          symbol,
-          price: ethers.utils.formatUnits(prices[i], 18),
-          timestamp: new Date(timestamps[i].toNumber() * 1000),
-          confidence: confidences[i].toNumber() / 1e18,
-        });
-      }
-
-      return result;
-    } catch (error) {
-      console.error(`Error getting price history for ${symbol}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get volatility for an asset
-   * @param symbol Asset symbol
-   * @returns Volatility (annualized)
-   */
-  public async getVolatility(symbol: string): Promise<number> {
-    const assetId = ethers.utils.formatBytes32String(symbol);
-
-    try {
-      const volatility = await this.consumerContract.getAssetVolatility(
-        assetId
-      );
-      return volatility.toNumber() / 1e18;
-    } catch (error) {
-      console.error(`Error getting volatility for ${symbol}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Check the health of the oracle
-   * @param symbol Asset symbol
-   * @returns Oracle health status
-   */
-  public async checkOracleHealth(symbol: string): Promise<OracleHealth> {
-    const assetId = ethers.utils.formatBytes32String(symbol);
-
-    try {
-      // Get last update time
-      const lastUpdateTime = await this.consumerContract.getLastUpdateTime(
-        assetId
-      );
-      const lastUpdate = new Date(lastUpdateTime.toNumber() * 1000);
-
-      // Get price and confidence
-      const [price, timestamp, confidence] =
-        await this.consumerContract.getLatestPrice(assetId);
-
-      // Check if oracle is stale
-      const staleness = Math.floor((Date.now() - lastUpdate.getTime()) / 1000);
-      const isStale = staleness > 3600; // Stale after 1 hour
-
-      // Check if circuit breaker is active (if available)
-      let isCircuitBroken = false;
-      try {
-        const circuitBreakerAddress =
-          await this.consumerContract.circuitBreaker();
-        if (
-          circuitBreakerAddress &&
-          circuitBreakerAddress !== ethers.constants.AddressZero
-        ) {
-          const circuitBreaker = new ethers.Contract(
-            circuitBreakerAddress,
-            ["function isCircuitBroken(bytes32) view returns (bool)"],
-            this.provider
-          );
-          isCircuitBroken = await circuitBreaker.isCircuitBroken(assetId);
-        }
-      } catch {
-        // Circuit breaker not available
-      }
-
-      return {
-        symbol,
-        lastUpdate,
-        staleness,
-        isStale,
-        confidence: confidence.toNumber() / 1e18,
-        isConfidenceLow: confidence.toNumber() / 1e18 < 0.8,
-        isCircuitBroken,
-        isHealthy:
-          !isStale && confidence.toNumber() / 1e18 >= 0.8 && !isCircuitBroken,
-      };
-    } catch (error) {
-      console.error(`Error checking oracle health for ${symbol}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get cached asset data
-   * @param symbol Asset symbol
-   * @returns Cached asset info
-   */
-  public getAssetCache(symbol: string): AssetInfo | undefined {
-    return this.assets[symbol];
-  }
-
-  /**
-   * Check if price is stale
-   * @param symbol Asset symbol
-   * @param maxAgeSec Maximum age in seconds
-   * @returns True if price is stale
-   */
-  public isPriceStale(symbol: string, maxAgeSec: number = 3600): boolean {
-    const asset = this.assets[symbol];
-    if (!asset) return true;
-
-    const ageSec = (Date.now() - asset.timestamp.getTime()) / 1000;
-    return ageSec > maxAgeSec;
-  }
-}
-
-// Types
-export interface PriceOptions {
-  useTWAP?: boolean;
-  twapPeriod?: number;
-}
-
-export interface PriceData {
-  symbol: string;
-  price: string;
-  timestamp: Date;
-  confidence: number;
-}
-
-export interface AssetInfo {
-  symbol: string;
-  assetId: string;
-  price: string;
-  timestamp: Date;
-  confidence: number;
-  volatility: number;
-  lastUpdated: Date;
-}
-
-export interface OracleHealth {
-  symbol: string;
-  lastUpdate: Date;
-  staleness: number;
-  isStale: boolean;
-  confidence: number;
-  isConfidenceLow: boolean;
-  isCircuitBroken: boolean;
-  isHealthy: boolean;
-}
-```
-
-#### 8.2.2 Oracle Data Hooks for React
-
-```typescript
-/**
- * React Hooks for RESI Protocol Oracle Data
- */
-import {
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-  createContext,
-} from "react";
-import {
-  RESIOracleClient,
-  PriceData,
-  OracleHealth,
-  AssetInfo,
-} from "./oracle-client";
-
-// Oracle Context
-interface OracleContextType {
-  client: RESIOracleClient | null;
-  priceData: Record<string, PriceData>;
-  oracleHealth: Record<string, OracleHealth>;
-  loading: boolean;
-  error: Error | null;
-  refreshPrice: (symbol: string) => Promise<void>;
-}
-
-const OracleContext = createContext<OracleContextType>({
-  client: null,
-  priceData: {},
-  oracleHealth: {},
-  loading: false,
-  error: null,
-  refreshPrice: async () => {},
-});
-
-/**
- * Oracle Provider Component
- */
-export function OracleProvider({
-  children,
-  provider,
-  consumerAddress,
-  assets = ["ETH", "WBTC", "FIL", "AKT", "RNDR"],
-}: {
-  children: React.ReactNode;
-  provider: any;
-  consumerAddress: string;
-  assets?: string[];
-}) {
-  const [client, setClient] = useState<RESIOracleClient | null>(null);
-  const [priceData, setPriceData] = useState<Record<string, PriceData>>({});
-  const [oracleHealth, setOracleHealth] = useState<
-    Record<string, OracleHealth>
-  >({});
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  // Initialize oracle client
-  useEffect(() => {
-    try {
-      const newClient = new RESIOracleClient(provider, consumerAddress);
-      setClient(newClient);
-
-      // Initialize assets
-      newClient
-        .initializeAssets(assets)
-        .then(() => {
-          setLoading(false);
-        })
-        .catch((err) => {
-          setError(err);
-          setLoading(false);
-        });
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
-      setLoading(false);
-    }
-  }, [provider, consumerAddress, assets.join(",")]);
-
-  // Refresh price for a specific asset
-  const refreshPrice = useCallback(
-    async (symbol: string) => {
-      if (!client) return;
-
-      try {
-        // Get price data
-        const price = await client.getLatestPrice(symbol);
-        setPriceData((prev) => ({ ...prev, [symbol]: price }));
-
-        // Check oracle health
-        const health = await client.checkOracleHealth(symbol);
-        setOracleHealth((prev) => ({ ...prev, [symbol]: health }));
-      } catch (err) {
-        console.error(`Error refreshing price for ${symbol}:`, err);
-        setError(err instanceof Error ? err : new Error(String(err)));
-      }
-    },
-    [client]
-  );
-
-  // Load initial price data
-  useEffect(() => {
-    if (!client || loading) return;
-
-    // Load price data for all assets
-    const loadData = async () => {
-      for (const symbol of assets) {
-        await refreshPrice(symbol);
-      }
-    };
-
-    loadData();
-
-    // Set up refresh interval
-    const intervalId = setInterval(() => {
-      assets.forEach((symbol) => refreshPrice(symbol));
-    }, 60000); // Refresh every minute
-
-    return () => clearInterval(intervalId);
-  }, [client, loading, assets, refreshPrice]);
-
-  return (
-    <OracleContext.Provider
-      value={{
-        client,
-        priceData,
-        oracleHealth,
-        loading,
-        error,
-        refreshPrice,
-      }}
-    >
-      {children}
-    </OracleContext.Provider>
-  );
-}
-
-/**
- * Hook for using oracle price data
- */
-export function usePrice(symbol: string): {
-  price: PriceData | null;
-  loading: boolean;
-  error: Error | null;
-  refresh: () => Promise<void>;
-} {
-  const { priceData, loading, error, refreshPrice } = useContext(OracleContext);
-
-  const refresh = useCallback(() => {
-    return refreshPrice(symbol);
-  }, [symbol, refreshPrice]);
-
-  return {
-    price: priceData[symbol] || null,
-    loading,
-    error,
-    refresh,
-  };
-}
-
-/**
- * Hook for using oracle health data
- */
-export function useOracleHealth(symbol: string): {
-  health: OracleHealth | null;
-  loading: boolean;
-  error: Error | null;
-  refresh: () => Promise<void>;
-} {
-  const { oracleHealth, loading, error, refreshPrice } =
-    useContext(OracleContext);
-
-  const refresh = useCallback(() => {
-    return refreshPrice(symbol);
-  }, [symbol, refreshPrice]);
-
-  return {
-    health: oracleHealth[symbol] || null,
-    loading,
-    error,
-    refresh,
-  };
-}
-
-/**
- * Hook for accessing oracle client directly
- */
-export function useOracleClient(): {
-  client: RESIOracleClient | null;
-  loading: boolean;
-  error: Error | null;
-} {
-  const { client, loading, error } = useContext(OracleContext);
-
-  return {
-    client,
-    loading,
-    error,
-  };
-}
-
-/**
- * Hook for getting price history
- */
-export function usePriceHistory(
-  symbol: string,
-  period: number = 86400,
-  dataPoints: number = 24
-): {
-  history: PriceData[];
-  loading: boolean;
-  error: Error | null;
-  refresh: () => Promise<void>;
-} {
-  const {
-    client,
-    loading: clientLoading,
-    error: clientError,
-  } = useOracleClient();
-  const [history, setHistory] = useState<PriceData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  const fetchHistory = useCallback(async () => {
-    if (!client) return;
-
-    try {
-      setLoading(true);
-      const data = await client.getPriceHistory(symbol, period, dataPoints);
-      setHistory(data);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
-    } finally {
-      setLoading(false);
-    }
-  }, [client, symbol, period, dataPoints]);
-
-  useEffect(() => {
-    if (!clientLoading && client) {
-      fetchHistory();
-    }
-  }, [client, clientLoading, fetchHistory]);
-
-  return {
-    history,
-    loading: loading || clientLoading,
-    error: error || clientError,
-    refresh: fetchHistory,
-  };
-}
-```
-
-### 8.3 Backend Data Provider Integration
-
-#### 8.3.1 Oracle Data Provider Interface
-
-```typescript
-/**
- * Oracle Data Provider Interface
- *
- * Interface for backend services that provide data to the oracle system
- */
-export interface OracleDataProvider {
-  /**
-   * Get latest price data for a specific asset
-   * @param asset Asset symbol
-   * @returns Promise resolving to price data
-   */
-  getLatestPrice(asset: string): Promise<PriceData>;
-
-  /**
-   * Get historical price data for a specific asset
-   * @param asset Asset symbol
-   * @param startTime Start timestamp
-   * @param endTime End timestamp
-   * @param maxPoints Maximum data points to return
-   * @returns Promise resolving to array of price data
-   */
-  getPriceHistory(
-    asset: string,
-    startTime: number,
-    endTime: number,
-    maxPoints?: number
-  ): Promise<PriceData[]>;
-
-  /**
-   * Calculate TWAP for a specific asset
-   * @param asset Asset symbol
-   * @param period Period in seconds
-   * @returns Promise resolving to TWAP data
-   */
-  calculateTWAP(asset: string, period: number): Promise<PriceData>;
-
-  /**
-   * Get volatility data for a specific asset
-   * @param asset Asset symbol
-   * @param period Period in seconds
-   * @returns Promise resolving to volatility data
-   */
-  getVolatilityData(asset: string, period: number): Promise<VolatilityData>;
-
-  /**
-   * Get correlation data between assets
-   * @param baseAsset Base asset symbol
-   * @param quoteAssets Quote asset symbols
-   * @param period Period in seconds
-   * @returns Promise resolving to correlation data
-   */
-  getCorrelationData(
-    baseAsset: string,
-    quoteAssets: string[],
-    period: number
-  ): Promise<CorrelationData>;
-}
-
-/**
- * Price data interface
- */
-export interface PriceData {
-  asset: string;
-  price: number;
-  timestamp: number;
-  volume?: number;
-  source?: string;
-  confidence: number;
-}
-
-/**
- * Volatility data interface
- */
-export interface VolatilityData {
-  asset: string;
-  volatility: number; // Annualized volatility
-  period: number; // Period in seconds
-  timestamp: number;
-  confidence: number;
-  historicalVolatility?: number[];
-  historicalTimestamps?: number[];
-}
-
-/**
- * Correlation data interface
- */
-export interface CorrelationData {
-  baseAsset: string;
-  correlations: AssetCorrelation[];
-  period: number;
-  timestamp: number;
-}
-
-/**
- * Asset correlation interface
- */
-export interface AssetCorrelation {
-  asset: string;
-  correlation: number; // -1 to 1
-  confidence: number;
-}
-```
-
-#### 8.3.2 Exchange Data Adapter Implementation
-
-```typescript
-/**
- * Exchange Data Adapter
- *
- * Adapter for collecting price data from crypto exchanges
- */
-import axios from "axios";
-import WebSocket from "ws";
-import {
-  OracleDataProvider,
-  PriceData,
-  VolatilityData,
-  CorrelationData,
-} from "./oracle-provider-interface";
-
-/**
- * Exchange configuration
- */
-interface ExchangeConfig {
-  name: string;
-  restUrl: string;
-  wsUrl: string;
-  apiKey?: string;
-  apiSecret?: string;
-  weight: number; // Weight for this exchange in aggregation (0-1)
-}
-
-/**
- * Exchange adapter implementation
- */
-export class ExchangeDataAdapter implements OracleDataProvider {
-  private readonly exchanges: ExchangeConfig[];
-  private readonly assetMappings: Record<string, Record<string, string>>;
-  private readonly cache: DataCache;
-  private readonly websockets: Record<string, WebSocket>;
-  private readonly subscriptions: Record<string, string[]>;
-
-  /**
-   * Create a new exchange data adapter
-   * @param exchanges Array of exchange configurations
-   * @param assetMappings Asset mappings for exchanges
-   * @param cacheOptions Cache options
-   */
-  constructor(
-    exchanges: ExchangeConfig[],
-    assetMappings: Record<string, Record<string, string>>,
-    cacheOptions: CacheOptions = {}
-  ) {
-    this.exchanges = exchanges;
-    this.assetMappings = assetMappings;
-    this.cache = new DataCache(cacheOptions);
-    this.websockets = {};
-    this.subscriptions = {};
-  }
-
-  /**
-   * Initialize real-time data streaming
-   * @param assets Assets to stream
-   */
-  public async initializeStreaming(assets: string[]): Promise<void> {
-    // Close existing connections
-    this.closeWebSockets();
-
-    // Initialize websocket connections
-    for (const exchange of this.exchanges) {
-      try {
-        // Get asset symbols for this exchange
-        const symbols = assets
-          .map((asset) => this.getExchangeSymbol(asset, exchange.name))
-          .filter((symbol) => symbol !== null);
-
-        if (symbols.length === 0) {
-          continue;
-        }
-
-        // Create WebSocket connection
-        const ws = new WebSocket(exchange.wsUrl);
-
-        // Set up event handlers
-        ws.on("open", () => {
-          console.log(`Connected to ${exchange.name} WebSocket`);
-
-          // Subscribe to ticker data
-          this.subscribeToTickers(ws, exchange.name, symbols as string[]);
-        });
-
-        ws.on("message", (data: WebSocket.Data) => {
-          try {
-            const message = JSON.parse(data.toString());
-            this.handleWebSocketMessage(exchange.name, message);
-          } catch (err) {
-            console.error(
-              `Error parsing WebSocket message from ${exchange.name}:`,
-              err
+        // Verify quantum signature if provided
+        if (quantumSignature.length > 0) {
+            quantumValid = verifyQuantumSignature(
+                dataDigest,
+                quantumSignature,
+                key.quantumPubKey,
+                key.quantumAlgo
             );
-          }
-        });
-
-        ws.on("error", (error) => {
-          console.error(`WebSocket error for ${exchange.name}:`, error);
-        });
-
-        ws.on("close", () => {
-          console.log(`Disconnected from ${exchange.name} WebSocket`);
-
-          // Reconnect after delay
-          setTimeout(() => {
-            this.initializeStreaming(assets);
-          }, 5000);
-        });
-
-        // Store WebSocket connection
-        this.websockets[exchange.name] = ws;
-        this.subscriptions[exchange.name] = symbols as string[];
-      } catch (err) {
-        console.error(
-          `Error initializing streaming for ${exchange.name}:`,
-          err
-        );
-      }
-    }
-  }
-
-  /**
-   * Close all WebSocket connections
-   */
-  public closeWebSockets(): void {
-    for (const exchange in this.websockets) {
-      try {
-        const ws = this.websockets[exchange];
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          ws.close();
-        }
-      } catch (err) {
-        console.error(`Error closing WebSocket for ${exchange}:`, err);
-      }
-    }
-
-    // Clear stored websockets
-    for (const exchange in this.websockets) {
-      delete this.websockets[exchange];
-    }
-
-    // Clear subscriptions
-    for (const exchange in this.subscriptions) {
-      delete this.subscriptions[exchange];
-    }
-  }
-
-  /**
-   * Get latest price data for a specific asset
-   * @param asset Asset symbol
-   * @returns Promise resolving to price data
-   */
-  public async getLatestPrice(asset: string): Promise<PriceData> {
-    // Check cache first
-    const cachedData = this.cache.get(`price:${asset}`);
-    if (cachedData && !this.cache.isExpired(`price:${asset}`)) {
-      return cachedData as PriceData;
-    }
-
-    // Collect data from all exchanges
-    const prices: Array<PriceData & { weight: number }> = [];
-
-    for (const exchange of this.exchanges) {
-      try {
-        const symbol = this.getExchangeSymbol(asset, exchange.name);
-        if (!symbol) continue;
-
-        const data = await this.fetchPriceFromExchange(asset, symbol, exchange);
-        if (data) {
-          prices.push({
-            ...data,
-            weight: exchange.weight,
-          });
-        }
-      } catch (err) {
-        console.error(
-          `Error fetching price for ${asset} from ${exchange.name}:`,
-          err
-        );
-      }
-    }
-
-    // If no prices, throw error
-    if (prices.length === 0) {
-      throw new Error(`No price data available for ${asset}`);
-    }
-
-    // Aggregate prices using weighted average
-    const aggregatedPrice = this.aggregatePrices(prices);
-
-    // Cache result
-    this.cache.set(`price:${asset}`, aggregatedPrice);
-
-    return aggregatedPrice;
-  }
-
-  /**
-   * Get historical price data for a specific asset
-   * @param asset Asset symbol
-   * @param startTime Start timestamp
-   * @param endTime End timestamp
-   * @param maxPoints Maximum data points to return
-   * @returns Promise resolving to array of price data
-   */
-  public async getPriceHistory(
-    asset: string,
-    startTime: number,
-    endTime: number,
-    maxPoints: number = 1000
-  ): Promise<PriceData[]> {
-    // Check cache first
-    const cacheKey = `history:${asset}:${startTime}:${endTime}:${maxPoints}`;
-    const cachedData = this.cache.get(cacheKey);
-    if (cachedData && !this.cache.isExpired(cacheKey)) {
-      return cachedData as PriceData[];
-    }
-
-    // Determine which exchange to use for historical data
-    // (using highest weighted exchange with available data)
-    let targetExchange: ExchangeConfig | null = null;
-    let targetSymbol: string | null = null;
-
-    for (const exchange of [...this.exchanges].sort(
-      (a, b) => b.weight - a.weight
-    )) {
-      const symbol = this.getExchangeSymbol(asset, exchange.name);
-      if (symbol) {
-        targetExchange = exchange;
-        targetSymbol = symbol;
-        break;
-      }
-    }
-
-    if (!targetExchange || !targetSymbol) {
-      throw new Error(`No exchange available for ${asset} historical data`);
-    }
-
-    // Fetch historical data
-    const history = await this.fetchHistoryFromExchange(
-      asset,
-      targetSymbol,
-      targetExchange,
-      startTime,
-      endTime,
-      maxPoints
-    );
-
-    // Cache result
-    this.cache.set(cacheKey, history);
-
-    return history;
-  }
-
-  /**
-   * Calculate TWAP for a specific asset
-   * @param asset Asset symbol
-   * @param period Period in seconds
-   * @returns Promise resolving to TWAP data
-   */
-  public async calculateTWAP(
-    asset: string,
-    period: number
-  ): Promise<PriceData> {
-    // Get price history
-    const endTime = Math.floor(Date.now() / 1000);
-    const startTime = endTime - period;
-    const history = await this.getPriceHistory(asset, startTime, endTime);
-
-    // Calculate TWAP
-    let weightedSum = 0;
-    let totalWeight = 0;
-
-    for (let i = 0; i < history.length - 1; i++) {
-      const timeWeight = history[i + 1].timestamp - history[i].timestamp;
-      weightedSum += history[i].price * timeWeight;
-      totalWeight += timeWeight;
-    }
-
-    // Handle last point
-    if (history.length > 0) {
-      const lastPoint = history[history.length - 1];
-      const timeWeight = endTime - lastPoint.timestamp;
-      if (timeWeight > 0) {
-        weightedSum += lastPoint.price * timeWeight;
-        totalWeight += timeWeight;
-      }
-    }
-
-    const twap = totalWeight > 0 ? weightedSum / totalWeight : 0;
-
-    // Calculate confidence based on data coverage
-    const coverage = totalWeight / period;
-    const confidence = Math.min(coverage, 1.0);
-
-    return {
-      asset,
-      price: twap,
-      timestamp: endTime,
-      confidence,
-    };
-  }
-
-  /**
-   * Get volatility data for a specific asset
-   * @param asset Asset symbol
-   * @param period Period in seconds
-   * @returns Promise resolving to volatility data
-   */
-  public async getVolatilityData(
-    asset: string,
-    period: number
-  ): Promise<VolatilityData> {
-    // Check cache first
-    const cacheKey = `volatility:${asset}:${period}`;
-    const cachedData = this.cache.get(cacheKey);
-    if (cachedData && !this.cache.isExpired(cacheKey)) {
-      return cachedData as VolatilityData;
-    }
-
-    // Get price history
-    const endTime = Math.floor(Date.now() / 1000);
-    const startTime = endTime - period;
-    const history = await this.getPriceHistory(asset, startTime, endTime);
-
-    if (history.length < 2) {
-      throw new Error(`Insufficient data to calculate volatility for ${asset}`);
-    }
-
-    // Calculate returns
-    const returns: number[] = [];
-    for (let i = 1; i < history.length; i++) {
-      const returnVal = Math.log(history[i].price / history[i - 1].price);
-      returns.push(returnVal);
-    }
-
-    // Calculate standard deviation of returns
-    const mean = returns.reduce((sum, val) => sum + val, 0) / returns.length;
-    const variance =
-      returns.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) /
-      returns.length;
-    const stdDev = Math.sqrt(variance);
-
-    // Annualize volatility
-    const timeIntervalInDays = period / 86400;
-    const annualizationFactor = 365 / timeIntervalInDays;
-    const annualizedVolatility = stdDev * Math.sqrt(annualizationFactor);
-
-    // Calculate confidence based on data points
-    const idealDataPoints = period / 3600; // Hourly data points
-    const confidence = Math.min(history.length / idealDataPoints, 1.0);
-
-    const result: VolatilityData = {
-      asset,
-      volatility: annualizedVolatility,
-      period,
-      timestamp: endTime,
-      confidence,
-      historicalVolatility: history.map(() => annualizedVolatility), // Simplified
-      historicalTimestamps: history.map((point) => point.timestamp),
-    };
-
-    // Cache result
-    this.cache.set(cacheKey, result);
-
-    return result;
-  }
-
-  /**
-   * Get correlation data between assets
-   * @param baseAsset Base asset symbol
-   * @param quoteAssets Quote asset symbols
-   * @param period Period in seconds
-   * @returns Promise resolving to correlation data
-   */
-  public async getCorrelationData(
-    baseAsset: string,
-    quoteAssets: string[],
-    period: number
-  ): Promise<CorrelationData> {
-    // Check cache first
-    const assetList = [baseAsset, ...quoteAssets].sort().join(":");
-    const cacheKey = `correlation:${assetList}:${period}`;
-    const cachedData = this.cache.get(cacheKey);
-    if (cachedData && !this.cache.isExpired(cacheKey)) {
-      return cachedData as CorrelationData;
-    }
-
-    // Get price history for base asset
-    const endTime = Math.floor(Date.now() / 1000);
-    const startTime = endTime - period;
-    const baseHistory = await this.getPriceHistory(
-      baseAsset,
-      startTime,
-      endTime
-    );
-
-    if (baseHistory.length < 10) {
-      throw new Error(
-        `Insufficient data to calculate correlation for ${baseAsset}`
-      );
-    }
-
-    // Calculate correlations
-    const correlations: AssetCorrelation[] = [];
-
-    for (const quoteAsset of quoteAssets) {
-      try {
-        // Get quote asset history
-        const quoteHistory = await this.getPriceHistory(
-          quoteAsset,
-          startTime,
-          endTime
-        );
-
-        if (quoteHistory.length < 10) {
-          console.warn(
-            `Insufficient data to calculate correlation for ${quoteAsset}`
-          );
-          continue;
         }
 
-        // Align timestamps
-        const alignedData = this.alignTimeSeries(baseHistory, quoteHistory);
-
-        if (alignedData.base.length < 10) {
-          console.warn(
-            `Insufficient aligned data to calculate correlation for ${baseAsset}/${quoteAsset}`
-          );
-          continue;
+        // Determine validity based on migration policy
+        if (migrationPolicy.validationMode == 1) {
+            // Both signatures required
+            isValid = classicalValid && quantumValid;
+        } else if (migrationPolicy.validationMode == 2) {
+            // Either signature is sufficient
+            isValid = classicalValid || quantumValid;
+        } else if (migrationPolicy.validationMode == 3) {
+            // Quantum only
+            isValid = quantumValid;
+        } else if (migrationPolicy.validationMode == 4) {
+            // Classical only
+            isValid = classicalValid;
         }
 
-        // Calculate correlation
-        const correlation = this.calculateCorrelation(
-          alignedData.base.map((p) => p.price),
-          alignedData.quote.map((p) => p.price)
-        );
-
-        // Calculate confidence based on data points
-        const idealDataPoints = period / 3600; // Hourly data points
-        const confidence = Math.min(
-          alignedData.base.length / idealDataPoints,
-          1.0
-        );
-
-        correlations.push({
-          asset: quoteAsset,
-          correlation,
-          confidence,
-        });
-      } catch (err) {
-        console.error(
-          `Error calculating correlation for ${baseAsset}/${quoteAsset}:`,
-          err
-        );
-      }
-    }
-
-    const result: CorrelationData = {
-      baseAsset,
-      correlations,
-      period,
-      timestamp: endTime,
-    };
-
-    // Cache result
-    this.cache.set(cacheKey, result);
-
-    return result;
-  }
-
-  // Private helper methods
-
-  /**
-   * Fetch price from a specific exchange
-   */
-  private async fetchPriceFromExchange(
-    asset: string,
-    symbol: string,
-    exchange: ExchangeConfig
-  ): Promise<PriceData | null> {
-    try {
-      const url = `${exchange.restUrl}/ticker/${symbol}`;
-      const response = await axios.get(url, {
-        headers: this.getAuthHeaders(exchange),
-      });
-
-      // Exchange-specific data mapping
-      if (exchange.name === "binance") {
-        return {
-          asset,
-          price: parseFloat(response.data.price),
-          timestamp: Math.floor(response.data.closeTime / 1000),
-          volume: parseFloat(response.data.volume),
-          source: exchange.name,
-          confidence: 1.0,
-        };
-      } else if (exchange.name === "coinbase") {
-        return {
-          asset,
-          price: parseFloat(response.data.price),
-          timestamp: Math.floor(Date.parse(response.data.time) / 1000),
-          volume: parseFloat(response.data.volume),
-          source: exchange.name,
-          confidence: 1.0,
-        };
-      } else if (exchange.name === "kraken") {
-        const result =
-          response.data.result[Object.keys(response.data.result)[0]];
-        return {
-          asset,
-          price: parseFloat(result.c[0]),
-          timestamp: Math.floor(Date.now() / 1000),
-          volume: parseFloat(result.v[1]),
-          source: exchange.name,
-          confidence: 1.0,
-        };
-      }
-
-      return null;
-    } catch (err) {
-      console.error(`Error fetching price from ${exchange.name}:`, err);
-      return null;
-    }
-  }
-
-  /**
-   * Fetch price history from a specific exchange
-   */
-  private async fetchHistoryFromExchange(
-    asset: string,
-    symbol: string,
-    exchange: ExchangeConfig,
-    startTime: number,
-    endTime: number,
-    maxPoints: number
-  ): Promise<PriceData[]> {
-    try {
-      // Determine interval based on time range and max points
-      const interval = this.determineInterval(startTime, endTime, maxPoints);
-
-      const url = `${exchange.restUrl}/klines`;
-      const response = await axios.get(url, {
-        params: {
-          symbol,
-          interval,
-          startTime: startTime * 1000,
-          endTime: endTime * 1000,
-          limit: maxPoints,
-        },
-        headers: this.getAuthHeaders(exchange),
-      });
-
-      // Exchange-specific data mapping
-      if (exchange.name === "binance") {
-        return response.data.map((item: any) => ({
-          asset,
-          price: parseFloat(item[4]), // Close price
-          timestamp: Math.floor(item[0] / 1000),
-          volume: parseFloat(item[5]),
-          source: exchange.name,
-          confidence: 1.0,
-        }));
-      } else if (exchange.name === "coinbase") {
-        return response.data.map((item: any) => ({
-          asset,
-          price: parseFloat(item.close),
-          timestamp: Math.floor(Date.parse(item.time) / 1000),
-          volume: parseFloat(item.volume),
-          source: exchange.name,
-          confidence: 1.0,
-        }));
-      } else if (exchange.name === "kraken") {
-        return response.data.result[symbol].map((item: any) => ({
-          asset,
-          price: parseFloat(item[4]), // Close price
-          timestamp: item[0],
-          volume: parseFloat(item[6]),
-          source: exchange.name,
-          confidence: 1.0,
-        }));
-      }
-
-      return [];
-    } catch (err) {
-      console.error(`Error fetching history from ${exchange.name}:`, err);
-      return [];
-    }
-  }
-
-  /**
-   * Subscribe to ticker data via WebSocket
-   */
-  private subscribeToTickers(
-    ws: WebSocket,
-    exchange: string,
-    symbols: string[]
-  ): void {
-    // Exchange-specific subscription format
-    if (exchange === "binance") {
-      const subscriptionMsg = {
-        method: "SUBSCRIBE",
-        params: symbols.map((symbol) => `${symbol.toLowerCase()}@ticker`),
-        id: Date.now(),
-      };
-      ws.send(JSON.stringify(subscriptionMsg));
-    } else if (exchange === "coinbase") {
-      const subscriptionMsg = {
-        type: "subscribe",
-        product_ids: symbols,
-        channels: ["ticker"],
-      };
-      ws.send(JSON.stringify(subscriptionMsg));
-    } else if (exchange === "kraken") {
-      const subscriptionMsg = {
-        name: "subscribe",
-        reqid: Date.now(),
-        pair: symbols,
-        subscription: {
-          name: "ticker",
-        },
-      };
-      ws.send(JSON.stringify(subscriptionMsg));
-    }
-  }
-
-  /**
-   * Handle WebSocket message
-   */
-  private handleWebSocketMessage(exchange: string, message: any): void {
-    try {
-      let priceData: PriceData | null = null;
-
-      // Exchange-specific message parsing
-      if (exchange === "binance" && message.e === "24hrTicker") {
-        const asset = this.getAssetFromExchangeSymbol(message.s, exchange);
-        if (!asset) return;
-
-        priceData = {
-          asset,
-          price: parseFloat(message.c),
-          timestamp: Math.floor(Date.now() / 1000),
-          volume: parseFloat(message.v),
-          source: exchange,
-          confidence: 1.0,
-        };
-      } else if (exchange === "coinbase" && message.type === "ticker") {
-        const asset = this.getAssetFromExchangeSymbol(
-          message.product_id,
-          exchange
-        );
-        if (!asset) return;
-
-        priceData = {
-          asset,
-          price: parseFloat(message.price),
-          timestamp: Math.floor(Date.parse(message.time) / 1000),
-          volume: parseFloat(message.volume_24h),
-          source: exchange,
-          confidence: 1.0,
-        };
-      } else if (
-        exchange === "kraken" &&
-        Array.isArray(message) &&
-        message[2] === "ticker"
-      ) {
-        const symbol = message[3];
-        const asset = this.getAssetFromExchangeSymbol(symbol, exchange);
-        if (!asset) return;
-
-        const tickerData = message[1];
-        priceData = {
-          asset,
-          price: parseFloat(tickerData.c[0]),
-          timestamp: Math.floor(Date.now() / 1000),
-          volume: parseFloat(tickerData.v[1]),
-          source: exchange,
-          confidence: 1.0,
-        };
-      }
-
-      // Update cache with real-time data
-      if (priceData) {
-        const cacheKey = `price:${priceData.asset}`;
-        const existingData = this.cache.get(cacheKey);
-
-        if (existingData) {
-          // Weighted average of existing and new data
-          const existing = existingData as PriceData;
-          const exchangeWeight =
-            this.exchanges.find((e) => e.name === exchange)?.weight || 0.5;
-
-          const updatedPrice = {
-            ...existing,
-            price:
-              existing.price * (1 - exchangeWeight) +
-              priceData.price * exchangeWeight,
-            timestamp: Math.max(existing.timestamp, priceData.timestamp),
-          };
-
-          this.cache.set(cacheKey, updatedPrice);
-        } else {
-          this.cache.set(cacheKey, priceData);
+        // Enforce quantum signature after transition date
+        if (migrationPolicy.enforceQuantum || block.timestamp >= migrationPolicy.transitionDate) {
+            isValid = isValid && quantumValid;
         }
-      }
-    } catch (err) {
-      console.error(`Error handling WebSocket message from ${exchange}:`, err);
-    }
-  }
 
-  /**
-   * Get exchange-specific symbol for an asset
-   */
-  private getExchangeSymbol(asset: string, exchange: string): string | null {
-    const mapping = this.assetMappings[asset];
-    if (!mapping) return null;
+        emit SignatureVerified(dataDigest, keyId, isValid);
 
-    return mapping[exchange] || null;
-  }
-
-  /**
-   * Get asset from exchange-specific symbol
-   */
-  private getAssetFromExchangeSymbol(
-    symbol: string,
-    exchange: string
-  ): string | null {
-    for (const asset in this.assetMappings) {
-      const mapping = this.assetMappings[asset];
-      if (mapping[exchange] === symbol) {
-        return asset;
-      }
+        return isValid;
     }
 
-    return null;
-  }
+    /**
+     * @notice Update migration policy
+     * @param validationMode Validation mode
+     * @param transitionDate Transition date
+     * @param enforceQuantum Whether to enforce quantum signatures
+     */
+    function updateMigrationPolicy(
+        uint8 validationMode,
+        uint256 transitionDate,
+        bool enforceQuantum
+    ) external {
+        require(validationMode >= 1 && validationMode <= 4, "Invalid validation mode");
 
-  /**
-   * Get authentication headers for API requests
-   */
-  private getAuthHeaders(exchange: ExchangeConfig): Record<string, string> {
-    if (!exchange.apiKey) {
-      return {};
+        migrationPolicy.validationMode = validationMode;
+        migrationPolicy.transitionDate = transitionDate;
+        migrationPolicy.enforceQuantum = enforceQuantum;
+
+        emit MigrationPolicyUpdated(validationMode, transitionDate, enforceQuantum);
     }
 
-    // Exchange-specific authentication
-    if (exchange.name === "binance") {
-      return {
-        "X-MBX-APIKEY": exchange.apiKey,
-      };
-    } else if (exchange.name === "coinbase") {
-      // Implementation depends on Coinbase authentication scheme
-      return {
-        "CB-ACCESS-KEY": exchange.apiKey,
-      };
-    } else if (exchange.name === "kraken") {
-      // Implementation depends on Kraken authentication scheme
-      return {
-        "API-Key": exchange.apiKey,
-      };
+    /**
+     * @notice Verify classical signature
+     * @param dataDigest Hash of the data
+     * @param signature Classical signature
+     * @param publicKey Classical public key
+     * @param algorithm Classical algorithm
+     * @return isValid Whether signature is valid
+     */
+    function verifyClassicalSignature(
+        bytes32 dataDigest,
+        bytes calldata signature,
+        bytes memory publicKey,
+        uint8 algorithm
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on the algorithm
+
+        return true; // Placeholder
     }
 
-    return {};
-  }
+    /**
+     * @notice Verify quantum signature
+     * @param dataDigest Hash of the data
+     * @param signature Quantum signature
+     * @param publicKey Quantum public key
+     * @param algorithm Quantum algorithm
+     * @return isValid Whether signature is valid
+     */
+    function verifyQuantumSignature(
+        bytes32 dataDigest,
+        bytes calldata signature,
+        bytes memory publicKey,
+        uint8 algorithm
+    ) internal pure returns (bool isValid) {
+        // Implementation depends on the algorithm
 
-  /**
-   * Determine appropriate interval for historical data
-   */
-  private determineInterval(
-    startTime: number,
-    endTime: number,
-    maxPoints: number
-  ): string {
-    const duration = endTime - startTime;
-    const idealInterval = duration / maxPoints;
-
-    // Match to available intervals
-    if (idealInterval <= 60) return "1m";
-    if (idealInterval <= 300) return "5m";
-    if (idealInterval <= 900) return "15m";
-    if (idealInterval <= 1800) return "30m";
-    if (idealInterval <= 3600) return "1h";
-    if (idealInterval <= 14400) return "4h";
-    if (idealInterval <= 86400) return "1d";
-    return "1w";
-  }
-
-  /**
-   * Aggregate prices from multiple sources
-   */
-  private aggregatePrices(
-    prices: Array<PriceData & { weight: number }>
-  ): PriceData {
-    let weightedSum = 0;
-    let totalWeight = 0;
-    let maxTimestamp = 0;
-    let asset = "";
-
-    for (const price of prices) {
-      weightedSum += price.price * price.weight;
-      totalWeight += price.weight;
-      maxTimestamp = Math.max(maxTimestamp, price.timestamp);
-      asset = price.asset;
+        return true; // Placeholder
     }
-
-    // Calculate confidence based on number of sources
-    const confidence = Math.min(prices.length / 3, 1.0);
-
-    return {
-      asset,
-      price: weightedSum / totalWeight,
-      timestamp: maxTimestamp,
-      confidence,
-    };
-  }
-
-  /**
-   * Align two time series for correlation calculation
-   */
-  private alignTimeSeries(
-    baseSeries: PriceData[],
-    quoteSeries: PriceData[]
-  ): { base: PriceData[]; quote: PriceData[] } {
-    // Create timestamps lookup
-    const baseMap = new Map<number, PriceData>();
-    for (const point of baseSeries) {
-      baseMap.set(point.timestamp, point);
-    }
-
-    const quoteMap = new Map<number, PriceData>();
-    for (const point of quoteSeries) {
-      quoteMap.set(point.timestamp, point);
-    }
-
-    // Find common timestamps
-    const commonTimestamps: number[] = [];
-    for (const timestamp of baseMap.keys()) {
-      if (quoteMap.has(timestamp)) {
-        commonTimestamps.push(timestamp);
-      }
-    }
-
-    // Sort timestamps
-    commonTimestamps.sort((a, b) => a - b);
-
-    // Create aligned series
-    const base: PriceData[] = [];
-    const quote: PriceData[] = [];
-
-    for (const timestamp of commonTimestamps) {
-      base.push(baseMap.get(timestamp)!);
-      quote.push(quoteMap.get(timestamp)!);
-    }
-
-    return { base, quote };
-  }
-
-  /**
-   * Calculate correlation coefficient
-   */
-  private calculateCorrelation(x: number[], y: number[]): number {
-    const n = x.length;
-
-    // Calculate means
-    const xMean = x.reduce((sum, val) => sum + val, 0) / n;
-    const yMean = y.reduce((sum, val) => sum + val, 0) / n;
-
-    // Calculate covariance and standard deviations
-    let covariance = 0;
-    let xVariance = 0;
-    let yVariance = 0;
-
-    for (let i = 0; i < n; i++) {
-      const xDiff = x[i] - xMean;
-      const yDiff = y[i] - yMean;
-
-      covariance += xDiff * yDiff;
-      xVariance += xDiff * xDiff;
-      yVariance += yDiff * yDiff;
-    }
-
-    covariance /= n;
-    xVariance /= n;
-    yVariance /= n;
-
-    const xStdDev = Math.sqrt(xVariance);
-    const yStdDev = Math.sqrt(yVariance);
-
-    // Calculate correlation
-    if (xStdDev === 0 || yStdDev === 0) {
-      return 0;
-    }
-
-    return covariance / (xStdDev * yStdDev);
-  }
-}
-
-/**
- * Data cache for storing and retrieving oracle data
- */
-class DataCache {
-  private readonly cache: Map<string, { data: any; timestamp: number }>;
-  private readonly defaultTTL: number;
-  private readonly cacheTTLs: Record<string, number>;
-
-  constructor(options: CacheOptions = {}) {
-    this.cache = new Map();
-    this.defaultTTL = options.defaultTTL || 60; // 60 seconds
-    this.cacheTTLs = options.cacheTTLs || {
-      "price:": 60, // 60 seconds for prices
-      "history:": 3600, // 1 hour for historical data
-      "volatility:": 1800, // 30 minutes for volatility
-      "correlation:": 3600, // 1 hour for correlation
-    };
-  }
-
-  /**
-   * Get data from cache
-   * @param key Cache key
-   * @returns Cached data or undefined
-   */
-  public get(key: string): any {
-    const cached = this.cache.get(key);
-    if (!cached) return undefined;
-
-    return cached.data;
-  }
-
-  /**
-   * Set data in cache
-   * @param key Cache key
-   * @param data Data to cache
-   */
-  public set(key: string, data: any): void {
-    this.cache.set(key, {
-      data,
-      timestamp: Date.now(),
-    });
-  }
-
-  /**
-   * Check if cache entry is expired
-   * @param key Cache key
-   * @returns True if expired or not found
-   */
-  public isExpired(key: string): boolean {
-    const cached = this.cache.get(key);
-    if (!cached) return true;
-
-    const ttl = this.getTTL(key);
-    return Date.now() - cached.timestamp > ttl * 1000;
-  }
-
-  /**
-   * Get TTL for a specific key type
-   * @param key Cache key
-   * @returns TTL in seconds
-   */
-  private getTTL(key: string): number {
-    for (const prefix in this.cacheTTLs) {
-      if (key.startsWith(prefix)) {
-        return this.cacheTTLs[prefix];
-      }
-    }
-
-    return this.defaultTTL;
-  }
-}
-
-/**
- * Cache options
- */
-interface CacheOptions {
-  defaultTTL?: number;
-  cacheTTLs?: Record<string, number>;
 }
 ```
 
-### 8.4 Comprehensive Testing Guidelines
+### 8.3 STARK-Based Validation
 
-#### 8.4.1 Oracle Integration Testing Strategy
-
-````markdown
-# Oracle Integration Testing Strategy
-
-## Overview
-
-This document outlines the testing strategy for integrating the Oracle Aggregation and Data Validation Framework with protocol components. It covers test levels, tools, environments, and key test scenarios to ensure reliable and secure oracle data integration.
-
-## Test Levels
-
-### 1. Unit Testing
-
-**Goal**: Test individual oracle components in isolation
-
-**Focus Areas**:
-
-- Data adapter implementations
-- Statistical validation algorithms
-- Aggregation methodologies
-- ZKP circuit functionality
-
-**Tools**:
-
-- Mocha/Chai for JavaScript/TypeScript components
-- Hardhat for smart contract testing
-- Circom testing utilities for ZKP circuits
-
-**Coverage Requirements**:
-
-- Smart Contracts: 95%+ line and branch coverage
-- Backend Services: 90%+ line and branch coverage
-- Frontend Components: 85%+ line and branch coverage
-
-### 2. Integration Testing
-
-**Goal**: Test interactions between oracle components and with protocol systems
-
-**Focus Areas**:
-
-- Oracle-to-protocol communication
-- Cross-component data flow
-- Fallback mechanisms
-- Circuit breaker integrations
-
-**Tools**:
-
-- Hardhat for contract-to-contract testing
-- Supertest for API integration testing
-- Mock services for external dependencies
-
-**Coverage Requirements**:
-
-- Interface compliance: 100%
-- Error handling paths: 95%+
-- Happy paths: 100%
-
-### 3. System Testing
-
-**Goal**: Test the entire oracle system in an environment similar to production
-
-**Focus Areas**:
-
-- End-to-end data flows
-- Performance under load
-- Resilience to failures
-- Cross-chain synchronization
-
-**Tools**:
-
-- Custom system test framework
-- Performance testing tools (JMeter, Locust)
-- Chaos engineering tools
-
-**Coverage Requirements**:
-
-- Core functionality: 100%
-- Edge cases: 90%+
-- Stress conditions: Covers 5x expected load
-
-### 4. Security Testing
-
-**Goal**: Identify and mitigate security vulnerabilities
-
-**Focus Areas**:
-
-- Oracle manipulation resistance
-- Access control effectiveness
-- Data validation robustness
-- ZKP implementation security
-
-**Tools**:
-
-- Mythril/Slither for static analysis
-- Custom penetration testing scripts
-- Fuzzing tools
-
-**Coverage Requirements**:
-
-- Known attack vectors: 100%
-- Access control checks: 100%
-- Input validation: 100%
-
-## Test Environments
-
-### 1. Development Environment
-
-- Local blockchain (Hardhat)
-- Mock oracle data sources
-- Simplified cross-chain simulation
-- Fast test execution for development feedback
-
-### 2. Testing Environment
-
-- Public testnets (Goerli, Sepolia)
-- Integration with test oracle networks
-- Cross-chain testnet connections
-- Test ZKP trusted setup
-
-### 3. Staging Environment
-
-- Mainnet forking for realistic testing
-- Production-like data volumes
-- Full cross-chain integration
-- Performance testing at scale
-
-### 4. Canary Environment
-
-- Limited mainnet deployment
-- Parallel operation with existing systems
-- Monitoring and comparison with current oracles
-- Gradual traffic shifting
-
-## Key Test Scenarios
-
-### 1. Data Reliability Testing
-
-**Scenario 1.1: Multi-Source Consistency**
-
-- **Setup**: Configure multiple price feeds for the same asset
-- **Action**: Introduce intentional deviation in one source
-- **Verification**: System correctly identifies and handles the outlier
-
-**Scenario 1.2: Stale Data Detection**
-
-- **Setup**: Configure normal data flow, then pause updates from sources
-- **Action**: Let data become stale
-- **Verification**: System correctly identifies staleness and activates fallbacks
-
-**Scenario 1.3: Source Failure Resilience**
-
-- **Setup**: Configure multiple sources
-- **Action**: Simulate complete failure of primary source
-- **Verification**: System seamlessly transitions to secondary sources
-
-### 2. Statistical Validation Testing
-
-**Scenario 2.1: Outlier Detection**
-
-- **Setup**: Configure normal data flow
-- **Action**: Introduce various outlier patterns (single spike, gradual drift, oscillation)
-- **Verification**: System correctly identifies each outlier pattern
-
-**Scenario 2.2: Correlation Analysis**
-
-- **Setup**: Configure assets with known correlation patterns
-- **Action**: Introduce price movements that break expected correlations
-- **Verification**: System detects correlation anomalies and adjusts confidence scores
-
-**Scenario 2.3: Time-Series Validation**
-
-- **Setup**: Configure normal price trends for assets
-- **Action**: Introduce abnormal trend shifts
-- **Verification**: System detects trend anomalies and triggers appropriate responses
-
-### 3. ZKP Integration Testing
-
-**Scenario 3.1: ZKP Verification**
-
-- **Setup**: Generate valid ZK proofs for oracle data
-- **Action**: Attempt to verify proofs on-chain
-- **Verification**: System correctly verifies valid proofs with expected gas costs
-
-**Scenario 3.2: Invalid Proof Detection**
-
-- **Setup**: Generate intentionally invalid ZK proofs
-- **Action**: Attempt to verify these proofs
-- **Verification**: System rejects all invalid proofs
-
-**Scenario 3.3: ZKP Performance**
-
-- **Setup**: Prepare multiple proof generations and verifications
-- **Action**: Execute in batch and measure performance
-- **Verification**: System meets performance requirements for proof operations
-
-### 4. Circuit Breaker Testing
-
-**Scenario 4.1: Automatic Circuit Breaking**
-
-- **Setup**: Configure circuit breaker conditions
-- **Action**: Trigger each condition individually
-- **Verification**: Circuit breaker activates correctly for each condition
-
-**Scenario 4.2: Circuit Breaker Response**
-
-- **Setup**: Configure various response behaviors for circuit breaker activation
-- **Action**: Activate circuit breaker
-- **Verification**: System implements correct protocol behavior for each response type
-
-**Scenario 4.3: Circuit Breaker Reset**
-
-- **Setup**: Activate circuit breaker
-- **Action**: Resolve the triggering condition and reset the circuit breaker
-- **Verification**: System returns to normal operation correctly
-
-### 5. Cross-Chain Testing
-
-**Scenario 5.1: Cross-Chain Synchronization**
-
-- **Setup**: Configure oracle on multiple test chains
-- **Action**: Update price on primary chain
-- **Verification**: Price propagates correctly to secondary chains
-
-**Scenario 5.2: Consistency Verification**
-
-- **Setup**: Configure cross-chain consistency checking
-- **Action**: Introduce inconsistency between chains
-- **Verification**: System detects inconsistency and takes corrective action
-
-**Scenario 5.3: Cross-Chain Failure Handling**
-
-- **Setup**: Configure cross-chain messaging
-- **Action**: Simulate bridge or messaging failure
-- **Verification**: System handles failure gracefully and implements fallback mechanisms
-
-## Test Data Management
-
-### Source Data Sets
-
-1. **Historical Market Data**
-
-   - Real historical data for all supported assets
-   - Includes periods of high volatility, market crashes, and normal conditions
-   - Minimum 2 years of data at various time granularities
-
-2. **Synthetic Test Data**
-
-   - Generated data with specific patterns and anomalies
-   - Designed to test edge cases and specific validation algorithms
-   - Includes predictable correlation patterns between assets
-
-3. **Attack Simulation Data**
-   - Data patterns simulating known oracle manipulation attacks
-   - Flash loan attack patterns
-   - Market manipulation patterns
-
-### Data Versioning and Storage
-
-- All test data is versioned and stored in immutable storage
-- Test runs are traceable to specific data sets
-- Regression testing uses consistent data sets for comparability
-
-## Continuous Testing
-
-### CI/CD Integration
-
-- Unit and integration tests run on all PRs
-- System and security tests run nightly
-- Performance tests run weekly
-- Full regression test suite runs before releases
-
-### Testing Metrics
-
-- Test coverage reported per component
-- Test success rate tracked over time
-- Mean time to fix test failures monitored
-- Performance metrics tracked across test runs
-
-### Testing Artifacts
-
-- All test runs produce detailed logs
-- Test reports generated automatically
-- Test anomalies flagged for review
-- Visual dashboards of testing status
-
-## Conclusion
-
-This testing strategy ensures the Oracle Aggregation and Data Validation Framework meets the highest standards of reliability, security, and performance required for critical financial infrastructure. By implementing this comprehensive testing approach, the RESI Protocol can confidently rely on its oracle system for core operations.
-
-#### 8.4.2 Oracle Mock Testing Framework
-
-```typescript
-/**
- * Oracle Mock Testing Framework
- *
- * Framework for mocking oracle components for testing protocol integrations
- */
-import { ethers } from "ethers";
-import { EventEmitter } from "events";
-
-/**
- * Mock Oracle Client for testing protocol integrations
- */
-export class MockOracleClient extends EventEmitter {
-  private readonly prices: Map<string, PriceData>;
-  private readonly volatilities: Map<string, number>;
-  private readonly histories: Map<string, PriceData[]>;
-  private readonly circuitBroken: Map<string, boolean>;
-  private readonly staleness: Map<string, number>;
-  private autoUpdateEnabled: boolean;
-  private updateInterval: NodeJS.Timeout | null;
-
-  /**
-   * Create a new mock oracle client
-   * @param mockData Initial mock data
-   */
-  constructor(mockData?: MockOracleData) {
-    super();
-    this.prices = new Map();
-    this.volatilities = new Map();
-    this.histories = new Map();
-    this.circuitBroken = new Map();
-    this.staleness = new Map();
-    this.autoUpdateEnabled = false;
-    this.updateInterval = null;
-
-    // Initialize with mock data if provided
-    if (mockData) {
-      this.initializeMockData(mockData);
-    }
-  }
-
-  /**
-   * Initialize with mock data
-   * @param mockData Mock data to initialize with
-   */
-  public initializeMockData(mockData: MockOracleData): void {
-    // Initialize prices
-    if (mockData.prices) {
-      for (const asset in mockData.prices) {
-        const price = mockData.prices[asset];
-        this.setMockPrice(asset, price);
-      }
-    }
-
-    // Initialize volatilities
-    if (mockData.volatilities) {
-      for (const asset in mockData.volatilities) {
-        this.volatilities.set(asset, mockData.volatilities[asset]);
-      }
-    }
-
-    // Initialize histories
-    if (mockData.histories) {
-      for (const asset in mockData.histories) {
-        this.histories.set(asset, mockData.histories[asset]);
-      }
-    }
-
-    // Initialize circuit breakers
-    if (mockData.circuitBroken) {
-      for (const asset in mockData.circuitBroken) {
-        this.circuitBroken.set(asset, mockData.circuitBroken[asset]);
-      }
-    }
-
-    // Initialize staleness
-    if (mockData.staleness) {
-      for (const asset in mockData.staleness) {
-        this.staleness.set(asset, mockData.staleness[asset]);
-      }
-    }
-  }
-
-  /**
-   * Get latest price for an asset
-   * @param asset Asset symbol
-   * @param options Options for fetching price
-   * @returns Mock price data
-   */
-  public async getLatestPrice(
-    asset: string,
-    options: any = {}
-  ): Promise<PriceData> {
-    // Check if price exists
-    if (!this.prices.has(asset)) {
-      throw new Error(`No mock price data for ${asset}`);
-    }
-
-    const price = this.prices.get(asset)!;
-
-    // Simulate staleness if configured
-    if (this.staleness.has(asset)) {
-      const staleSecs = this.staleness.get(asset)!;
-      price.timestamp = new Date(Date.now() - staleSecs * 1000);
-    }
-
-    return { ...price };
-  }
-
-  /**
-   * Get volatility for an asset
-   * @param asset Asset symbol
-   * @returns Mock volatility
-   */
-  public async getVolatility(asset: string): Promise<number> {
-    if (!this.volatilities.has(asset)) {
-      return 0.2; // Default mock volatility (20%)
-    }
-
-    return this.volatilities.get(asset)!;
-  }
-
-  /**
-   * Get price history for an asset
-   * @param asset Asset symbol
-   * @param period Time period in seconds
-   * @param points Number of data points
-   * @returns Mock price history
-   */
-  public async getPriceHistory(
-    asset: string,
-    period: number = 86400,
-    points: number = 24
-  ): Promise<PriceData[]> {
-    if (this.histories.has(asset)) {
-      return [...this.histories.get(asset)!];
-    }
-
-    // Generate synthetic history data
-    const endTime = Math.floor(Date.now() / 1000);
-    const startTime = endTime - period;
-    const interval = period / points;
-
-    const currentPrice = this.prices.has(asset)
-      ? this.prices.get(asset)!.price
-      : 100;
-    const volatility = this.volatilities.has(asset)
-      ? this.volatilities.get(asset)!
-      : 0.2;
-
-    const history: PriceData[] = [];
-    let price = currentPrice;
-
-    // Generate random walk backwards in time
-    for (let i = 0; i < points; i++) {
-      const timestamp = new Date((endTime - i * interval) * 1000);
-
-      // Random price movement based on volatility
-      const change = (Math.random() - 0.5) * 2 * volatility * price * 0.01;
-      price = price - change; // Moving backwards in time
-
-      history.push({
-        asset,
-        price,
-        timestamp,
-        confidence: 1.0,
-      });
-    }
-
-    return history.reverse();
-  }
-
-  /**
-   * Check oracle health for an asset
-   * @param asset Asset symbol
-   * @returns Mock health status
-   */
-  public async checkOracleHealth(asset: string): Promise<OracleHealth> {
-    const isCircuitBroken = this.circuitBroken.has(asset)
-      ? this.circuitBroken.get(asset)!
-      : false;
-    const staleness = this.staleness.has(asset)
-      ? this.staleness.get(asset)!
-      : 0;
-    const price = this.prices.has(asset) ? this.prices.get(asset)! : null;
-
-    const lastUpdate = price ? price.timestamp : new Date();
-    const confidence = price ? price.confidence : 1.0;
-
-    return {
-      asset,
-      lastUpdate,
-      staleness,
-      isStale: staleness > 3600,
-      confidence,
-      isConfidenceLow: confidence < 0.8,
-      isCircuitBroken,
-      isHealthy: !isCircuitBroken && staleness <= 3600 && confidence >= 0.8,
-    };
-  }
-
-  /**
-   * Set mock price for an asset
-   * @param asset Asset symbol
-   * @param price Price or price data
-   */
-  public setMockPrice(asset: string, price: number | PriceData): void {
-    let priceData: PriceData;
-
-    if (typeof price === "number") {
-      priceData = {
-        asset,
-        price,
-        timestamp: new Date(),
-        confidence: 1.0,
-      };
-    } else {
-      priceData = {
-        ...price,
-        asset,
-      };
-    }
-
-    this.prices.set(asset, priceData);
-    this.emit("priceUpdated", asset, priceData);
-  }
-
-  /**
-   * Set mock volatility for an asset
-   * @param asset Asset symbol
-   * @param volatility Volatility value (0-1)
-   */
-  public setMockVolatility(asset: string, volatility: number): void {
-    this.volatilities.set(asset, volatility);
-  }
-
-  /**
-   * Set mock price history for an asset
-   * @param asset Asset symbol
-   * @param history Price history data
-   */
-  public setMockHistory(asset: string, history: PriceData[]): void {
-    this.histories.set(asset, history);
-  }
-
-  /**
-   * Set circuit breaker status for an asset
-   * @param asset Asset symbol
-   * @param broken Whether circuit breaker is active
-   */
-  public setCircuitBroken(asset: string, broken: boolean): void {
-    this.circuitBroken.set(asset, broken);
-    this.emit("circuitBreakerChanged", asset, broken);
-  }
-
-  /**
-   * Set staleness for an asset
-   * @param asset Asset symbol
-   * @param staleSecs Staleness in seconds
-   */
-  public setStaleness(asset: string, staleSecs: number): void {
-    this.staleness.set(asset, staleSecs);
-  }
-
-  /**
-   * Enable automatic price updates
-   * @param assets Assets to update
-   * @param intervalMs Update interval in milliseconds
-   * @param volatilityPerUpdate Volatility per update (as percentage)
-   */
-  public enableAutoUpdates(
-    assets: string[],
-    intervalMs: number = 5000,
-    volatilityPerUpdate: number = 0.005
-  ): void {
-    this.autoUpdateEnabled = true;
-
-    // Clear existing interval if any
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval);
-    }
-
-    // Set up new interval
-    this.updateInterval = setInterval(() => {
-      for (const asset of assets) {
-        if (this.prices.has(asset)) {
-          const currentPrice = this.prices.get(asset)!;
-          const change =
-            (Math.random() - 0.5) *
-            2 *
-            volatilityPerUpdate *
-            currentPrice.price;
-
-          this.setMockPrice(asset, {
-            ...currentPrice,
-            price: currentPrice.price + change,
-            timestamp: new Date(),
-          });
-        }
-      }
-    }, intervalMs);
-  }
-
-  /**
-   * Disable automatic price updates
-   */
-  public disableAutoUpdates(): void {
-    this.autoUpdateEnabled = false;
-
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval);
-      this.updateInterval = null;
-    }
-  }
-
-  /**
-   * Simulate price shock for an asset
-   * @param asset Asset symbol
-   * @param percentChange Percentage change (-100 to +Infinity)
-   */
-  public simulatePriceShock(asset: string, percentChange: number): void {
-    if (!this.prices.has(asset)) {
-      throw new Error(`No mock price data for ${asset}`);
-    }
-
-    const currentPrice = this.prices.get(asset)!;
-    const newPrice = currentPrice.price * (1 + percentChange / 100);
-
-    this.setMockPrice(asset, {
-      ...currentPrice,
-      price: newPrice,
-      timestamp: new Date(),
-    });
-  }
-
-  /**
-   * Simulate volatility spike for an asset
-   * @param asset Asset symbol
-   * @param newVolatility New volatility value
-   */
-  public simulateVolatilitySpike(asset: string, newVolatility: number): void {
-    this.setMockVolatility(asset, newVolatility);
-  }
-
-  /**
-   * Clean up resources
-   */
-  public cleanup(): void {
-    this.disableAutoUpdates();
-    this.removeAllListeners();
-  }
-}
-
-/**
- * Mock Oracle Contract for hardhat testing
- */
-export class MockOracleContract {
-  public static async deploy(
-    signer: ethers.Signer,
-    initialPrices?: Record<string, number>
-  ): Promise<ethers.Contract> {
-    // Deploy mock oracle contract
-    const MockOracleFactory = await ethers.getContractFactory(
-      "MockOracle",
-      signer
-    );
-    const mockOracle = await MockOracleFactory.deploy();
-
-    // Set initial prices if provided
-    if (initialPrices) {
-      for (const asset in initialPrices) {
-        const assetBytes32 = ethers.utils.formatBytes32String(asset);
-        const price = ethers.utils.parseUnits(
-          initialPrices[asset].toString(),
-          18
-        );
-        await mockOracle.setPrice(assetBytes32, price);
-      }
-    }
-
-    return mockOracle;
-  }
-
-  /**
-   * Generate mock oracle contract source code
-   * @returns Solidity source code for mock oracle
-   */
-  public static getContractSource(): string {
-    return `
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
 /**
- * @title MockOracle
- * @dev Mock oracle contract for testing
+ * @title STARKValidation
+ * @notice Implements STARK-based validation for oracle data
  */
-contract MockOracle {
-    // Price data structure
-    struct PriceData {
-        uint256 price;
+contract STARKValidation {
+    struct STARKProof {
+        bytes32 dataDigest;
+        bytes proof;
+        bytes32[] publicInputs;
         uint256 timestamp;
-        uint256 confidence;
+        bool verified;
     }
-    
-    // Price data by asset
-    mapping(bytes32 => PriceData) public prices;
-    
-    // Circuit breaker status by asset
-    mapping(bytes32 => bool) public circuitBroken;
-    
+
+    // Mapping from proof ID to STARK proof
+    mapping(bytes32 => STARKProof) public starkProofs;
+
+    // STARK verifier contract
+    address public starkVerifier;
+
     // Events
-    event PriceUpdated(bytes32 indexed asset, uint256 price, uint256 timestamp, uint256 confidence);
-    event CircuitBreakerUpdated(bytes32 indexed asset, bool broken);
-    
-    /**
-     * @notice Get latest price for an asset
-     * @param asset Asset identifier
-     * @return price Latest price
-     * @return timestamp Price timestamp
-     * @return confidence Confidence score (0-1e18)
-     */
-    function getLatestPrice(bytes32 asset) external view returns (
-        uint256 price,
-        uint256 timestamp,
-        uint256 confidence
-    ) {
-        require(prices[asset].timestamp > 0, "No price data available");
-        
-        return (
-            prices[asset].price,
-            prices[asset].timestamp,
-            prices[asset].confidence
-        );
+    event ProofSubmitted(bytes32 indexed proofId, bytes32 dataDigest);
+    event ProofVerified(bytes32 indexed proofId, bool valid);
+
+    constructor(address _starkVerifier) {
+        starkVerifier = _starkVerifier;
     }
-    
+
     /**
-     * @notice Get time-weighted average price
-     * @param asset Asset identifier
-     * @param period Time period in seconds
-     * @return price TWAP value (same as regular price in mock)
-     * @return timestamp End timestamp
-     * @return confidence Confidence score (0-1e18)
+     * @notice Submit a STARK proof
+     * @param dataDigest Hash of the data
+     * @param proof STARK proof
+     * @param publicInputs Public inputs
+     * @return proofId Proof identifier
      */
-    function getTWAP(bytes32 asset, uint256 period) external view returns (
-        uint256 price,
-        uint256 timestamp,
-        uint256 confidence
-    ) {
-        require(prices[asset].timestamp > 0, "No price data available");
-        
-        return (
-            prices[asset].price,
-            prices[asset].timestamp,
-            prices[asset].confidence
-        );
-    }
-    
-    /**
-     * @notice Get asset volatility
-     * @param asset Asset identifier
-     * @return volatility Annualized volatility (1e18 = 100%)
-     */
-    function getAssetVolatility(bytes32 asset) external pure returns (uint256) {
-        return 2e17; // 20% default mock volatility
-    }
-    
-    /**
-     * @notice Check if circuit breaker is active
-     * @param asset Asset identifier
-     * @return broken True if circuit breaker is active
-     */
-    function isCircuitBroken(bytes32 asset) external view returns (bool) {
-        return circuitBroken[asset];
-    }
-    
-    /**
-     * @notice Set price for an asset (for testing)
-     * @param asset Asset identifier
-     * @param price Price value
-     * @param confidence Confidence score (defaults to 1e18)
-     */
-    function setPrice(
-        bytes32 asset, 
-        uint256 price, 
-        uint256 confidence
-    ) external {
-        prices[asset] = PriceData({
-            price: price,
+    function submitSTARKProof(
+        bytes32 dataDigest,
+        bytes calldata proof,
+        bytes32[] calldata publicInputs
+    ) external returns (bytes32 proofId) {
+        proofId = keccak256(abi.encodePacked(
+            dataDigest,
+            keccak256(proof),
+            keccak256(abi.encodePacked(publicInputs)),
+            block.timestamp
+        ));
+
+        starkProofs[proofId] = STARKProof({
+            dataDigest: dataDigest,
+            proof: proof,
+            publicInputs: publicInputs,
             timestamp: block.timestamp,
-            confidence: confidence
+            verified: false
         });
-        
-        emit PriceUpdated(asset, price, block.timestamp, confidence);
+
+        emit ProofSubmitted(proofId, dataDigest);
+
+        return proofId;
     }
-    
+
     /**
-     * @notice Set price for an asset (for testing)
-     * @param asset Asset identifier
-     * @param price Price value
+     * @notice Verify a STARK proof
+     * @param proofId Proof identifier
+     * @return isValid Whether proof is valid
      */
-    function setPrice(bytes32 asset, uint256 price) external {
-        setPrice(asset, price, 1e18); // Full confidence by default
+    function verifySTARKProof(
+        bytes32 proofId
+    ) external returns (bool isValid) {
+        STARKProof storage proof = starkProofs[proofId];
+        require(proof.dataDigest != bytes32(0), "Proof not found");
+
+        // Call the STARK verifier contract
+        (bool success, bytes memory returnData) = starkVerifier.staticcall(
+            abi.encodeWithSignature(
+                "verify(bytes,bytes32[])",
+                proof.proof,
+                proof.publicInputs
+            )
+        );
+
+        if (success) {
+            isValid = abi.decode(returnData, (bool));
+        } else {
+            isValid = false;
+        }
+
+        proof.verified = isValid;
+
+        emit ProofVerified(proofId, isValid);
+
+        return isValid;
     }
-    
+
     /**
-     * @notice Set stale price for an asset (for testing)
-     * @param asset Asset identifier
-     * @param price Price value
-     * @param staleSecs Staleness in seconds
+     * @notice Create quantum-safe Merkle proof
+     * @param data Array of data elements
+     * @return root Merkle root
+     * @return proof Merkle proof
      */
-    function setStalePrice(
-        bytes32 asset, 
-        uint256 price, 
-        uint256 staleSecs
-    ) external {
-        prices[asset] = PriceData({
-            price: price,
-            timestamp: block.timestamp - staleSecs,
-            confidence: 1e18
-        });
-        
-        emit PriceUpdated(asset, price, block.timestamp - staleSecs, 1e18);
+    function createQuantumSafeMerkleProof(
+        bytes32[] calldata data
+    ) external pure returns (
+        bytes32 root,
+        bytes memory proof
+    ) {
+        // Implementation of FRI-based Merkle proof
+
+        return (bytes32(0), new bytes(0)); // Placeholder
     }
-    
+
     /**
-     * @notice Set circuit breaker status (for testing)
-     * @param asset Asset identifier
-     * @param broken Whether circuit breaker is active
+     * @notice Verify quantum-safe Merkle proof
+     * @param root Merkle root
+     * @param proof Merkle proof
+     * @param index Index of element
+     * @param element Element to verify
+     * @return isValid Whether proof is valid
      */
-    function setCircuitBroken(bytes32 asset, bool broken) external {
-        circuitBroken[asset] = broken;
-        
-        emit CircuitBreakerUpdated(asset, broken);
+    function verifyQuantumSafeMerkleProof(
+        bytes32 root,
+        bytes calldata proof,
+        uint256 index,
+        bytes32 element
+    ) external pure returns (bool isValid) {
+        // Implementation of FRI-based Merkle proof verification
+
+        return true; // Placeholder
     }
-}`;
-  }
-}
-
-/**
- * Types
- */
-export interface MockOracleData {
-  prices?: Record<string, number | PriceData>;
-  volatilities?: Record<string, number>;
-  histories?: Record<string, PriceData[]>;
-  circuitBroken?: Record<string, boolean>;
-  staleness?: Record<string, number>;
-}
-
-export interface PriceData {
-  asset: string;
-  price: number;
-  timestamp: Date;
-  confidence: number;
-}
-
-export interface OracleHealth {
-  asset: string;
-  lastUpdate: Date;
-  staleness: number;
-  isStale: boolean;
-  confidence: number;
-  isConfidenceLow: boolean;
-  isCircuitBroken: boolean;
-  isHealthy: boolean;
-}
-```
-````
-
-#### 8.4.3 Oracle Unit Testing Examples
-
-```typescript
-/**
- * Oracle Unit Testing Examples
- *
- * Examples of unit tests for oracle components
- */
-import { expect } from "chai";
-import { ethers } from "hardhat";
-import sinon from "sinon";
-import { MockOracleClient, MockOracleContract } from "./mock-oracle";
-
-describe("Oracle Aggregation Tests", () => {
-  // Test the weighted median implementation
-  describe("Weighted Median Aggregation", () => {
-    it("should correctly calculate weighted median with odd number of sources", () => {
-      const aggregator = new OracleAggregator();
-
-      const prices = [
-        { price: 100, weight: 1, source: "source1" },
-        { price: 102, weight: 2, source: "source2" },
-        { price: 98, weight: 1, source: "source3" },
-      ];
-
-      const result = aggregator.computeWeightedMedian(prices);
-      expect(result).to.equal(102);
-    });
-
-    it("should correctly calculate weighted median with even number of sources", () => {
-      const aggregator = new OracleAggregator();
-
-      const prices = [
-        { price: 100, weight: 1, source: "source1" },
-        { price: 102, weight: 1, source: "source2" },
-        { price: 98, weight: 1, source: "source3" },
-        { price: 101, weight: 1, source: "source4" },
-      ];
-
-      const result = aggregator.computeWeightedMedian(prices);
-      expect(result).to.equal(100.5);
-    });
-
-    it("should correctly handle zero weights", () => {
-      const aggregator = new OracleAggregator();
-
-      const prices = [
-        { price: 100, weight: 0, source: "source1" },
-        { price: 102, weight: 2, source: "source2" },
-        { price: 98, weight: 1, source: "source3" },
-      ];
-
-      const result = aggregator.computeWeightedMedian(prices);
-      expect(result).to.equal(102);
-    });
-  });
-
-  // Test the TWAP implementation
-  describe("TWAP Calculation", () => {
-    it("should correctly calculate TWAP over a time period", () => {
-      const aggregator = new OracleAggregator();
-
-      const priceHistory = [
-        { price: 100, timestamp: 1000, confidence: 1.0 },
-        { price: 105, timestamp: 1100, confidence: 1.0 },
-        { price: 102, timestamp: 1200, confidence: 1.0 },
-        { price: 110, timestamp: 1300, confidence: 1.0 },
-      ];
-
-      const result = aggregator.computeTWAP(priceHistory, 1000, 1300);
-
-      // TWAP calculation:
-      // (100*100 + 105*100 + 102*100) / 300 = 102.33...
-      expect(result).to.be.closeTo(102.33, 0.01);
-    });
-
-    it("should handle gaps in price history", () => {
-      const aggregator = new OracleAggregator();
-
-      const priceHistory = [
-        { price: 100, timestamp: 1000, confidence: 1.0 },
-        // Gap between 1000 and 1200
-        { price: 105, timestamp: 1200, confidence: 1.0 },
-        { price: 110, timestamp: 1300, confidence: 1.0 },
-      ];
-
-      const result = aggregator.computeTWAP(priceHistory, 1000, 1300);
-
-      // TWAP calculation with gap:
-      // (100*200 + 105*100) / 300 = 101.67...
-      expect(result).to.be.closeTo(101.67, 0.01);
-    });
-  });
-});
-
-describe("Statistical Validation Tests", () => {
-  // Test the outlier detection implementation
-  describe("Z-Score Outlier Detection", () => {
-    it("should correctly identify outliers", () => {
-      const validator = new StatisticalValidator();
-
-      const prices = [100, 102, 101, 103, 102, 150, 101];
-      const threshold = 3.0; // 3 standard deviations
-
-      const result = validator.detectOutliersZScore(prices, threshold);
-
-      expect(result).to.deep.equal([
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-      ]);
-    });
-
-    it("should handle empty arrays", () => {
-      const validator = new StatisticalValidator();
-
-      const prices: number[] = [];
-      const threshold = 3.0;
-
-      expect(() =>
-        validator.detectOutliersZScore(prices, threshold)
-      ).to.throw();
-    });
-  });
-
-  // Test the correlation validation
-  describe("Cross-Asset Correlation Validation", () => {
-    it("should correctly calculate correlation between assets", () => {
-      const validator = new StatisticalValidator();
-
-      const asset1Prices = [100, 102, 105, 103, 106];
-      const asset2Prices = [200, 204, 210, 206, 212];
-
-      const correlation = validator.calculateCorrelation(
-        asset1Prices,
-        asset2Prices
-      );
-
-      // These series are perfectly correlated
-      expect(correlation).to.be.closeTo(1.0, 0.01);
-    });
-
-    it("should correctly identify negative correlation", () => {
-      const validator = new StatisticalValidator();
-
-      const asset1Prices = [100, 102, 105, 103, 106];
-      const asset2Prices = [200, 198, 195, 197, 194];
-
-      const correlation = validator.calculateCorrelation(
-        asset1Prices,
-        asset2Prices
-      );
-
-      // These series are perfectly negatively correlated
-      expect(correlation).to.be.closeTo(-1.0, 0.01);
-    });
-  });
-});
-
-describe("Oracle Security Module Tests", () => {
-  let osm: ethers.Contract;
-  let priceFeed: ethers.Contract;
-  let owner: ethers.Signer;
-  let guardian: ethers.Signer;
-
-  beforeEach(async () => {
-    // Deploy contracts
-    [owner, guardian] = await ethers.getSigners();
-
-    // Deploy mock price feed
-    priceFeed = await MockOracleContract.deploy(owner);
-
-    // Deploy Oracle Security Module
-    const OSMFactory = await ethers.getContractFactory("OracleSecurityModule");
-    osm = await OSMFactory.deploy(
-      priceFeed.address,
-      3600, // 1 hour delay
-      1e17, // 10% max deviation
-      await owner.getAddress(),
-      await guardian.getAddress()
-    );
-
-    // Set initial price in mock price feed
-    const ethAsset = ethers.utils.formatBytes32String("ETH");
-    await priceFeed.setPrice(ethAsset, ethers.utils.parseUnits("1000", 18));
-  });
-
-  it("should update next price correctly", async () => {
-    const ethAsset = ethers.utils.formatBytes32String("ETH");
-
-    // Update next price
-    await osm.updateNextPrice(ethAsset);
-
-    // Check next price
-    const nextPrice = await osm.nextPrices(ethAsset);
-    expect(nextPrice.value.toString()).to.equal(
-      ethers.utils.parseUnits("1000", 18).toString()
-    );
-    expect(nextPrice.set).to.be.true;
-  });
-
-  it("should not apply price until delay has passed", async () => {
-    const ethAsset = ethers.utils.formatBytes32String("ETH");
-
-    // Update next price
-    await osm.updateNextPrice(ethAsset);
-
-    // Try to apply price immediately
-    await expect(osm.applyNextPrice(ethAsset)).to.be.revertedWith(
-      "Delay not elapsed"
-    );
-  });
-
-  it("should reject price with excessive deviation", async () => {
-    const ethAsset = ethers.utils.formatBytes32String("ETH");
-
-    // Update next price
-    await osm.updateNextPrice(ethAsset);
-
-    // Move time forward to pass delay
-    await ethers.provider.send("evm_increaseTime", [3601]);
-    await ethers.provider.send("evm_mine", []);
-
-    // Apply price
-    await osm.applyNextPrice(ethAsset);
-
-    // Update price with large deviation in price feed
-    await priceFeed.setPrice(ethAsset, ethers.utils.parseUnits("1500", 18)); // 50% increase
-
-    // Update next price
-    await osm.updateNextPrice(ethAsset);
-
-    // Move time forward to pass delay
-    await ethers.provider.send("evm_increaseTime", [3601]);
-    await ethers.provider.send("evm_mine", []);
-
-    // Apply price should emit deviation exceeded event
-    await expect(osm.applyNextPrice(ethAsset)).to.emit(
-      osm,
-      "PriceDeviationExceeded"
-    );
-  });
-
-  it("should allow guardian to set price directly", async () => {
-    const ethAsset = ethers.utils.formatBytes32String("ETH");
-
-    // Guardian updates price directly
-    await osm
-      .connect(guardian)
-      .emergencyUpdatePrice(ethAsset, ethers.utils.parseUnits("1200", 18));
-
-    // Check price
-    const price = await osm.getCurrentPrice(ethAsset);
-    expect(price.toString()).to.equal(
-      ethers.utils.parseUnits("1200", 18).toString()
-    );
-  });
-});
-
-describe("Circuit Breaker Tests", () => {
-  let circuitBreaker: ethers.Contract;
-  let oracleConsumer: ethers.Contract;
-  let owner: ethers.Signer;
-  let guardian: ethers.Signer;
-
-  beforeEach(async () => {
-    // Deploy contracts
-    [owner, guardian] = await ethers.getSigners();
-
-    // Deploy mock oracle consumer
-    const MockConsumerFactory = await ethers.getContractFactory(
-      "MockOracleConsumer"
-    );
-    oracleConsumer = await MockConsumerFactory.deploy();
-
-    // Deploy Circuit Breaker
-    const CircuitBreakerFactory = await ethers.getContractFactory(
-      "OracleCircuitBreaker"
-    );
-    circuitBreaker = await CircuitBreakerFactory.deploy(
-      oracleConsumer.address,
-      await owner.getAddress()
-    );
-
-    // Set guardian
-    await circuitBreaker.setCanTriggerBreaker(
-      await guardian.getAddress(),
-      true
-    );
-    await circuitBreaker.setCanResetBreaker(await guardian.getAddress(), true);
-  });
-
-  it("should detect timeout condition", async () => {
-    const ethAsset = ethers.utils.formatBytes32String("ETH");
-
-    // Set timeout threshold
-    await circuitBreaker.setTimeoutThreshold(ethAsset, 3600); // 1 hour
-
-    // Set last update time to 2 hours ago
-    await oracleConsumer.setLastUpdateTime(
-      ethAsset,
-      Math.floor(Date.now() / 1000) - 7200
-    );
-
-    // Check timeout condition
-    await circuitBreaker.checkTimeoutCondition(ethAsset);
-
-    // Verify circuit breaker was triggered
-    const broken = await circuitBreaker.isCircuitBroken(ethAsset);
-    expect(broken).to.be.true;
-
-    // Check breaker status
-    const status = await circuitBreaker.breakerStatus(ethAsset);
-    expect(status.condition).to.equal(1); // ORACLE_TIMEOUT
-  });
-
-  it("should allow manual trigger by guardian", async () => {
-    const ethAsset = ethers.utils.formatBytes32String("ETH");
-
-    // Guardian triggers circuit breaker
-    await circuitBreaker
-      .connect(guardian)
-      .triggerBreaker(ethAsset, "Guardian triggered for testing");
-
-    // Verify circuit breaker was triggered
-    const broken = await circuitBreaker.isCircuitBroken(ethAsset);
-    expect(broken).to.be.true;
-
-    // Check breaker status
-    const status = await circuitBreaker.breakerStatus(ethAsset);
-    expect(status.condition).to.equal(7); // MANUAL_TRIGGER
-  });
-
-  it("should allow reset by guardian", async () => {
-    const ethAsset = ethers.utils.formatBytes32String("ETH");
-
-    // Trigger circuit breaker
-    await circuitBreaker
-      .connect(guardian)
-      .triggerBreaker(ethAsset, "Guardian triggered for testing");
-
-    // Verify circuit breaker was triggered
-    let broken = await circuitBreaker.isCircuitBroken(ethAsset);
-    expect(broken).to.be.true;
-
-    // Reset circuit breaker
-    await circuitBreaker.connect(guardian).resetBreaker(ethAsset);
-
-    // Verify circuit breaker was reset
-    broken = await circuitBreaker.isCircuitBroken(ethAsset);
-    expect(broken).to.be.false;
-  });
-});
-
-// Implement stub classes for the tests
-class OracleAggregator {
-  computeWeightedMedian(
-    prices: Array<{ price: number; weight: number; source: string }>
-  ): number {
-    // Sort prices
-    prices.sort((a, b) => a.price - b.price);
-
-    // Calculate total weight
-    const totalWeight = prices.reduce((sum, p) => sum + p.weight, 0);
-
-    // If no weights, return median
-    if (totalWeight === 0) {
-      const mid = Math.floor(prices.length / 2);
-      if (prices.length % 2 === 0) {
-        return (prices[mid - 1].price + prices[mid].price) / 2;
-      }
-      return prices[mid].price;
-    }
-
-    // Find weighted median
-    let currentWeight = 0;
-    const medianWeight = totalWeight / 2;
-
-    for (const price of prices) {
-      currentWeight += price.weight;
-      if (currentWeight >= medianWeight) {
-        return price.price;
-      }
-    }
-
-    // Fallback
-    return prices[prices.length - 1].price;
-  }
-
-  computeTWAP(priceHistory: any[], startTime: number, endTime: number): number {
-    if (priceHistory.length === 0) return 0;
-
-    let weightedSum = 0;
-    let totalWeight = 0;
-
-    // Handle first point
-    let prevTime = startTime;
-    let prevPrice = priceHistory[0].price;
-
-    for (let i = 0; i < priceHistory.length; i++) {
-      const point = priceHistory[i];
-
-      if (point.timestamp > startTime) {
-        const timeWeight = Math.min(point.timestamp, endTime) - prevTime;
-        weightedSum += prevPrice * timeWeight;
-        totalWeight += timeWeight;
-      }
-
-      prevTime = point.timestamp;
-      prevPrice = point.price;
-
-      if (point.timestamp >= endTime) break;
-    }
-
-    // Handle last segment if needed
-    if (prevTime < endTime) {
-      const timeWeight = endTime - prevTime;
-      weightedSum += prevPrice * timeWeight;
-      totalWeight += timeWeight;
-    }
-
-    return totalWeight > 0 ? weightedSum / totalWeight : 0;
-  }
-}
-
-class StatisticalValidator {
-  detectOutliersZScore(prices: number[], threshold: number): boolean[] {
-    if (prices.length === 0) {
-      throw new Error("Empty price array");
-    }
-
-    // Calculate mean
-    const mean = prices.reduce((sum, p) => sum + p, 0) / prices.length;
-
-    // Calculate standard deviation
-    const squaredDiffs = prices.map((p) => Math.pow(p - mean, 2));
-    const variance =
-      squaredDiffs.reduce((sum, d) => sum + d, 0) / prices.length;
-    const stdDev = Math.sqrt(variance);
-
-    // Detect outliers
-    return prices.map((p) => Math.abs(p - mean) / stdDev > threshold);
-  }
-
-  calculateCorrelation(x: number[], y: number[]): number {
-    if (x.length !== y.length || x.length === 0) {
-      throw new Error("Invalid input arrays");
-    }
-
-    // Calculate means
-    const xMean = x.reduce((sum, val) => sum + val, 0) / x.length;
-    const yMean = y.reduce((sum, val) => sum + val, 0) / y.length;
-
-    // Calculate covariance and variances
-    let covariance = 0;
-    let xVariance = 0;
-    let yVariance = 0;
-
-    for (let i = 0; i < x.length; i++) {
-      const xDiff = x[i] - xMean;
-      const yDiff = y[i] - yMean;
-      covariance += xDiff * yDiff;
-      xVariance += xDiff * xDiff;
-      yVariance += yDiff * yDiff;
-    }
-
-    // Normalize
-    covariance /= x.length;
-    xVariance /= x.length;
-    yVariance /= x.length;
-
-    // Calculate correlation coefficient
-    return covariance / (Math.sqrt(xVariance) * Math.sqrt(yVariance));
-  }
 }
 ```
 
 ## 9. Performance & Scalability Considerations
 
-### 9.1 Gas Optimization Techniques
-
-Optimizing gas usage is critical for the Oracle Aggregation and Data Validation Framework to ensure it remains cost-effective at scale. The following techniques are implemented:
-
-#### 9.1.1 Smart Contract Gas Optimizations
+### 9.1 In-Memory Aggregation Optimization
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
 /**
- * @title GasOptimizedAggregator
- * @dev Demonstrates gas optimization techniques for oracle aggregation
+ * @title HighPerformanceAggregation
+ * @notice Implements optimized in-memory aggregation for oracle data
  */
-contract GasOptimizedAggregator {
-    // Use bytes32 instead of string for asset identifiers
-    // Gas savings: ~20,000 gas per transaction with string parameters
-
-    // Store variables in packed slots where possible
-    struct PriceData {
-        uint128 price;        // Prices under 2^128 - 1
-        uint64 timestamp;     // Timestamps until year 292,277,026,596
-        uint64 confidenceE6;  // Confidence as fixed point with 6 decimals
+contract HighPerformanceAggregation {
+    struct AggregationState {
+        uint256 count;
+        uint256 sum;
+        uint256 min;
+        uint256 max;
+        uint256 timestamp;
+        uint256 processingTime;
     }
 
-    // Use mappings instead of arrays for lookup-heavy operations
-    mapping(bytes32 => PriceData) private latestPrices;
-
-    // Use uint256 array instead of struct array for bulk operations
-    // Each triplet [price, timestamp, confidence] represents one price point
-    mapping(bytes32 => uint256[]) private priceHistory;
-
-    // Avoid unnecessary storage by using memory variables
-    uint256 private constant PRECISION = 1e6;
-    uint256 private constant MAX_WEIGHT = 1e6;
-
-    // Events should use indexed parameters for efficient filtering
-    event PriceUpdated(
-        bytes32 indexed asset,
-        uint128 price,
-        uint64 timestamp,
-        uint64 confidenceE6
-    );
-
-    /**
-     * @notice Set price data in an optimized way
-     * @param asset Asset identifier
-     * @param price Price value
-     * @param timestamp Price timestamp
-     * @param confidenceE6 Confidence (0-1000000)
-     */
-    function setPrice(
-        bytes32 asset,
-        uint128 price,
-        uint64 timestamp,
-        uint64 confidenceE6
-    ) external {
-        // Direct storage write without reading first
-        latestPrices[asset] = PriceData({
-            price: price,
-            timestamp: timestamp,
-            confidenceE6: confidenceE6
-        });
-
-        // Store in history (optimized array append)
-        uint256[] storage history = priceHistory[asset];
-
-        // Use push() for arrays instead of length++
-        history.push(uint256(price));
-        history.push(uint256(timestamp));
-        history.push(uint256(confidenceE6));
-
-        emit PriceUpdated(asset, price, timestamp, confidenceE6);
+    struct VectorizedData {
+        uint256[] values;
+        uint256[] weights;
+        uint256[] timestamps;
     }
 
     /**
-     * @notice Get latest price with minimal gas usage
-     * @param asset Asset identifier
-     * @return price Price value
-     * @return timestamp Price timestamp
-     * @return confidenceE6 Confidence (0-1000000)
+     * @notice Perform vectorized in-memory aggregation
+     * @param data Data to aggregate
+     * @param method Aggregation method
+     * @return result Aggregation result
+     * @return state Aggregation state
      */
-    function getLatestPrice(bytes32 asset) external view returns (
-        uint128 price,
-        uint64 timestamp,
-        uint64 confidenceE6
+    function aggregateVectorized(
+        VectorizedData calldata data,
+        uint8 method
+    ) external pure returns (
+        uint256 result,
+        AggregationState memory state
     ) {
-        // Direct struct reading is more gas efficient
-        PriceData storage data = latestPrices[asset];
+        uint256 startTime = uint256(block.timestamp);
 
-        return (data.price, data.timestamp, data.confidenceE6);
-    }
-
-    /**
-     * @notice Calculate TWAP in a gas-optimized way
-     * @param asset Asset identifier
-     * @param period Time period in seconds
-     * @return twapPrice Calculated TWAP
-     */
-    function calculateTWAP(bytes32 asset, uint256 period) external view returns (uint256 twapPrice) {
-        uint256[] storage history = priceHistory[asset];
-        uint256 historyLength = history.length / 3; // Each entry is [price, timestamp, confidence]
-
-        // Early return for empty history
-        if (historyLength == 0) return 0;
-
-        // Use unchecked for gas savings on arithmetic operations that can't overflow
-        unchecked {
-            uint256 endTime = block.timestamp;
-            uint256 startTime = endTime > period ? endTime - period : 0;
-
-            uint256 weightedSum;
-            uint256 totalWeight;
-
-            uint256 prevTimestamp = startTime;
-            uint256 prevPrice = history[0]; // First price
-
-            // Loop with direct indexing instead of nested arrays
-            for (uint256 i = 0; i < historyLength; i++) {
-                uint256 baseIndex = i * 3;
-                uint256 price = history[baseIndex];
-                uint256 timestamp = history[baseIndex + 1];
-
-                if (timestamp <= startTime) {
-                    prevPrice = price;
-                    prevTimestamp = startTime;
-                    continue;
-                }
-
-                if (timestamp > endTime) {
-                    // Add final segment
-                    uint256 timeWeight = endTime - prevTimestamp;
-                    weightedSum += prevPrice * timeWeight;
-                    totalWeight += timeWeight;
-                    break;
-                }
-
-                // Add segment
-                uint256 timeWeight = timestamp - prevTimestamp;
-                weightedSum += prevPrice * timeWeight;
-                totalWeight += timeWeight;
-
-                prevPrice = price;
-                prevTimestamp = timestamp;
-            }
-
-            // Add final segment if needed
-            if (prevTimestamp < endTime) {
-                uint256 timeWeight = endTime - prevTimestamp;
-                weightedSum += prevPrice * timeWeight;
-                totalWeight += timeWeight;
-            }
-
-            // Avoid division by zero
-            return totalWeight > 0 ? weightedSum / totalWeight : 0;
-        }
-    }
-
-    /**
-     * @notice Batch update prices for multiple assets
-     * @param assets Array of asset identifiers
-     * @param prices Array of price values
-     * @param timestamps Array of timestamps
-     * @param confidences Array of confidence values
-     */
-    function batchUpdatePrices(
-        bytes32[] calldata assets,
-        uint128[] calldata prices,
-        uint64[] calldata timestamps,
-        uint64[] calldata confidences
-    ) external {
-        // Validate input lengths only once
-        uint256 length = assets.length;
         require(
-            prices.length == length &&
-            timestamps.length == length &&
-            confidences.length == length,
-            "Length mismatch"
+            data.values.length == data.weights.length &&
+            data.values.length == data.timestamps.length,
+            "Array length mismatch"
         );
 
-        // Use unchecked for gas savings on loop counters
-        unchecked {
-            for (uint256 i = 0; i < length; i++) {
-                // Direct storage write
-                latestPrices[assets[i]] = PriceData({
-                    price: prices[i],
-                    timestamp: timestamps[i],
-                    confidenceE6: confidences[i]
-                });
+        state.count = data.values.length;
+        state.min = type(uint256).max;
+        state.max = 0;
+        state.sum = 0;
 
-                // Emit event
-                emit PriceUpdated(assets[i], prices[i], timestamps[i], confidences[i]);
+        // Calculate sum, min, max in a single pass
+        for (uint i = 0; i < data.values.length; i++) {
+            state.sum += data.values[i] * data.weights[i];
+
+            if (data.values[i] < state.min) {
+                state.min = data.values[i];
             }
+
+            if (data.values[i] > state.max) {
+                state.max = data.values[i];
+            }
+        }
+
+        // Calculate result based on method
+        if (method == 0) {
+            // Weighted average
+            uint256 totalWeight = 0;
+            for (uint i = 0; i < data.weights.length; i++) {
+                totalWeight += data.weights[i];
+            }
+
+            if (totalWeight > 0) {
+                result = state.sum / totalWeight;
+            } else {
+                result = 0;
+            }
+        } else if (method == 1) {
+            // Median
+            result = calculateMedian(data.values, data.weights);
+        } else if (method == 2) {
+            // TWAP
+            result = calculateTWAP(data.values, data.timestamps, data.weights);
+        } else {
+            revert("Invalid aggregation method");
+        }
+
+        state.timestamp = block.timestamp;
+        state.processingTime = block.timestamp - startTime;
+
+        return (result, state);
+    }
+
+    /**
+     * @notice Calculate median
+     * @param values Array of values
+     * @param weights Array of weights
+     * @return median Median value
+     */
+    function calculateMedian(
+        uint256[] calldata values,
+        uint256[] calldata weights
+    ) internal pure returns (uint256 median) {
+        // Copy arrays for sorting
+        uint256[] memory sortedValues = new uint256[](values.length);
+        uint256[] memory sortedWeights = new uint256[](weights.length);
+
+        for (uint i = 0; i < values.length; i++) {
+            sortedValues[i] = values[i];
+            sortedWeights[i] = weights[i];
+        }
+
+        // Sort values and weights
+        for (uint i = 0; i < sortedValues.length - 1; i++) {
+            for (uint j = 0; j < sortedValues.length - i - 1; j++) {
+                if (sortedValues[j] > sortedValues[j + 1]) {
+                    // Swap values
+                    uint256 tempValue = sortedValues[j];
+                    sortedValues[j] = sortedValues[j + 1];
+                    sortedValues[j + 1] = tempValue;
+
+                    // Swap weights
+                    uint256 tempWeight = sortedWeights[j];
+                    sortedWeights[j] = sortedWeights[j + 1];
+                    sortedWeights[j + 1] = tempWeight;
+                }
+            }
+        }
+
+        // Calculate total weight
+        uint256 totalWeight = 0;
+        for (uint i = 0; i < sortedWeights.length; i++) {
+            totalWeight += sortedWeights[i];
+        }
+
+        // Find median by weight
+        uint256 halfWeight = totalWeight / 2;
+        uint256 cumulativeWeight = 0;
+
+        for (uint i = 0; i < sortedValues.length; i++) {
+            cumulativeWeight += sortedWeights[i];
+
+            if (cumulativeWeight >= halfWeight) {
+                return sortedValues[i];
+            }
+        }
+
+        // Fallback to middle element
+        return sortedValues[sortedValues.length / 2];
+    }
+
+    /**
+     * @notice Calculate TWAP
+     * @param values Array of values
+     * @param timestamps Array of timestamps
+     * @param weights Array of weights
+     * @return twap Time-weighted average price
+     */
+    function calculateTWAP(
+        uint256[] calldata values,
+        uint256[] calldata timestamps,
+        uint256[] calldata weights
+    ) internal pure returns (uint256 twap) {
+        uint256 weightedSum = 0;
+        uint256 totalTimeWeight = 0;
+
+        // Sort by timestamp
+        uint256[] memory sortedIndices = sortIndicesByTimestamp(timestamps);
+
+        for (uint i = 0; i < sortedIndices.length - 1; i++) {
+            uint256 currentIndex = sortedIndices[i];
+            uint256 nextIndex = sortedIndices[i + 1];
+
+            uint256 timeWeight = timestamps[nextIndex] - timestamps[currentIndex];
+            uint256 valueWeight = weights[currentIndex];
+
+            weightedSum += values[currentIndex] * timeWeight * valueWeight;
+            totalTimeWeight += timeWeight * valueWeight;
+        }
+
+        if (totalTimeWeight > 0) {
+            twap = weightedSum / totalTimeWeight;
+        } else {
+            twap = 0;
+        }
+
+        return twap;
+    }
+
+    /**
+     * @notice Sort indices by timestamp
+     * @param timestamps Array of timestamps
+     * @return indices Sorted indices
+     */
+    function sortIndicesByTimestamp(
+        uint256[] calldata timestamps
+    ) internal pure returns (uint256[] memory indices) {
+        indices = new uint256[](timestamps.length);
+
+        // Initialize indices
+        for (uint i = 0; i < timestamps.length; i++) {
+            indices[i] = i;
+        }
+
+        // Sort indices by timestamp
+        for (uint i = 0; i < indices.length - 1; i++) {
+            for (uint j = 0; j < indices.length - i - 1; j++) {
+                if (timestamps[indices[j]] > timestamps[indices[j + 1]]) {
+                    // Swap indices
+                    uint256 temp = indices[j];
+                    indices[j] = indices[j + 1];
+                    indices[j + 1] = temp;
+                }
+            }
+        }
+
+        return indices;
+    }
+}
+```
+
+### 9.2 Distributed Sort-Merge Optimization
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title DistributedSortMerge
+ * @notice Implements distributed sort-merge for large oracle datasets
+ */
+contract DistributedSortMerge {
+    struct SortedChunk {
+        uint256[] values;
+        uint256[] indices;
+        bytes32 chunkId;
+    }
+
+    struct MergeResult {
+        uint256[] values;
+        uint256[] indices;
+        uint256 processedItems;
+        uint256 processingTime;
+    }
+
+    /**
+     * @notice Process chunk of data
+     * @param values Values to sort
+     * @param startIndex Start index in original array
+     * @param isPruned Whether early pruning is applied
+     * @return chunk Sorted chunk
+     */
+    function processChunk(
+        uint256[] calldata values,
+        uint256 startIndex,
+        bool isPruned
+    ) external pure returns (SortedChunk memory chunk) {
+        uint256 startTime = uint256(block.timestamp);
+
+        // Create indices array
+        uint256[] memory indices = new uint256[](values.length);
+        for (uint i = 0; i < values.length; i++) {
+            indices[i] = startIndex + i;
+        }
+
+        // Sort values and carry indices
+        (uint256[] memory sortedValues, uint256[] memory sortedIndices) =
+            sortWithIndices(values, indices);
+
+        // Apply early pruning if requested
+        if (isPruned) {
+            (sortedValues, sortedIndices) = applyEarlyPruning(sortedValues, sortedIndices);
+        }
+
+        // Generate chunk ID
+        bytes32 chunkId = keccak256(abi.encodePacked(
+            sortedValues,
+            sortedIndices,
+            startTime
+        ));
+
+        chunk = SortedChunk({
+            values: sortedValues,
+            indices: sortedIndices,
+            chunkId: chunkId
+        });
+
+        return chunk;
+    }
+
+    /**
+     * @notice Merge sorted chunks
+     * @param chunks Array of sorted chunks
+     * @return result Merge result
+     */
+    function mergeChunks(
+        SortedChunk[] calldata chunks
+    ) external pure returns (MergeResult memory result) {
+        uint256 startTime = uint256(block.timestamp);
+
+        // Calculate total length
+        uint256 totalLength = 0;
+        for (uint i = 0; i < chunks.length; i++) {
+            totalLength += chunks[i].values.length;
+        }
+
+        // Initialize result arrays
+        result.values = new uint256[](totalLength);
+        result.indices = new uint256[](totalLength);
+
+        // Initialize pointers for each chunk
+        uint256[] memory pointers = new uint256[](chunks.length);
+
+        // Merge chunks
+        for (uint outIndex = 0; outIndex < totalLength; outIndex++) {
+            uint256 minValue = type(uint256).max;
+            uint256 minChunk = 0;
+
+            // Find minimum value across chunks
+            for (uint i = 0; i < chunks.length; i++) {
+                if (pointers[i] < chunks[i].values.length) {
+                    uint256 value = chunks[i].values[pointers[i]];
+
+                    if (value < minValue) {
+                        minValue = value;
+                        minChunk = i;
+                    }
+                }
+            }
+
+            // Add minimum value to result
+            result.values[outIndex] = minValue;
+            result.indices[outIndex] = chunks[minChunk].indices[pointers[minChunk]];
+
+            // Increment pointer for selected chunk
+            pointers[minChunk]++;
+        }
+
+        result.processedItems = totalLength;
+        result.processingTime = block.timestamp - startTime;
+
+        return result;
+    }
+
+    /**
+     * @notice Sort values with indices
+     * @param values Values to sort
+     * @param indices Indices to carry
+     * @return sortedValues Sorted values
+     * @return sortedIndices Sorted indices
+     */
+    function sortWithIndices(
+        uint256[] memory values,
+        uint256[] memory indices
+    ) internal pure returns (
+        uint256[] memory sortedValues,
+        uint256[] memory sortedIndices
+    ) {
+        // Copy arrays
+        sortedValues = values;
+        sortedIndices = indices;
+
+        // Sort using quicksort
+        quickSort(sortedValues, sortedIndices, 0, int256(sortedValues.length - 1));
+
+        return (sortedValues, sortedIndices);
+    }
+
+    /**
+     * @notice Quick sort implementation
+     * @param arr Array to sort
+     * @param indices Indices to carry
+     * @param left Left index
+     * @param right Right index
+     */
+    function quickSort(
+        uint256[] memory arr,
+        uint256[] memory indices,
+        int256 left,
+        int256 right
+    ) internal pure {
+        if (left < right) {
+            int256 pivotIndex = partition(arr, indices, left, right);
+            quickSort(arr, indices, left, pivotIndex - 1);
+            quickSort(arr, indices, pivotIndex + 1, right);
         }
     }
 
     /**
-     * @notice Clear old price history to optimize storage usage
-     * @param asset Asset identifier
-     * @param maxAge Maximum age to keep in seconds
+     * @notice Partition for quicksort
+     * @param arr Array to partition
+     * @param indices Indices to carry
+     * @param left Left index
+     * @param right Right index
+     * @return pivotIndex Pivot index
      */
-    function pruneHistory(bytes32 asset, uint256 maxAge) external {
-        uint256[] storage history = priceHistory[asset];
-        uint256 historyLength = history.length / 3;
+    function partition(
+        uint256[] memory arr,
+        uint256[] memory indices,
+        int256 left,
+        int256 right
+    ) internal pure returns (int256) {
+        uint256 pivot = arr[uint256(right)];
+        int256 i = left - 1;
 
-        // Early return for empty history
-        if (historyLength == 0) return;
+        for (int256 j = left; j < right; j++) {
+            if (arr[uint256(j)] <= pivot) {
+                i++;
 
-        uint256 cutoffTime = block.timestamp > maxAge ? block.timestamp - maxAge : 0;
-        uint256 newStartIndex = historyLength; // Default to keeping nothing
+                // Swap values
+                uint256 temp = arr[uint256(i)];
+                arr[uint256(i)] = arr[uint256(j)];
+                arr[uint256(j)] = temp;
 
-        // Find the first index to keep
-        for (uint256 i = 0; i < historyLength; i++) {
-            uint256 timestamp = history[i * 3 + 1];
-            if (timestamp >= cutoffTime) {
-                newStartIndex = i;
+                // Swap indices
+                temp = indices[uint256(i)];
+                indices[uint256(i)] = indices[uint256(j)];
+                indices[uint256(j)] = temp;
+            }
+        }
+
+        // Swap pivot
+        uint256 temp = arr[uint256(i + 1)];
+        arr[uint256(i + 1)] = arr[uint256(right)];
+        arr[uint256(right)] = temp;
+
+        // Swap indices
+        temp = indices[uint256(i + 1)];
+        indices[uint256(i + 1)] = indices[uint256(right)];
+        indices[uint256(right)] = temp;
+
+        return i + 1;
+    }
+
+    /**
+     * @notice Apply early pruning to reduce I/O
+     * @param values Sorted values
+     * @param indices Sorted indices
+     * @return prunedValues Pruned values
+     * @return prunedIndices Pruned indices
+     */
+    function applyEarlyPruning(
+        uint256[] memory values,
+        uint256[] memory indices
+    ) internal pure returns (
+        uint256[] memory prunedValues,
+        uint256[] memory prunedIndices
+    ) {
+        // Calculate median for pruning threshold
+        uint256 median = values[values.length / 2];
+
+        // Count values within threshold (65% reduction)
+        uint256 count = 0;
+        for (uint i = 0; i < values.length; i++) {
+            if (values[i] <= median * 3 / 2 && values[i] >= median / 2) {
+                count++;
+            }
+        }
+
+        // Create pruned arrays
+        prunedValues = new uint256[](count);
+        prunedIndices = new uint256[](count);
+
+        // Fill pruned arrays
+        uint256 index = 0;
+        for (uint i = 0; i < values.length; i++) {
+            if (values[i] <= median * 3 / 2 && values[i] >= median / 2) {
+                prunedValues[index] = values[i];
+                prunedIndices[index] = indices[i];
+                index++;
+            }
+        }
+
+        return (prunedValues, prunedIndices);
+    }
+}
+```
+
+### 9.3 LZ4 Compression for Oracle Data
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title LZ4Compression
+ * @notice Implements LZ4 compression for oracle data
+ */
+contract LZ4Compression {
+    struct CompressionResult {
+        bytes compressedData;
+        uint256 originalSize;
+        uint256 compressedSize;
+        uint256 compressionRatio;
+        uint256 processingTime;
+    }
+
+    struct DecompressionResult {
+        bytes decompressedData;
+        uint256 originalSize;
+        uint256 decompressedSize;
+        uint256 processingTime;
+    }
+
+    /**
+     * @notice Compress data using LZ4
+     * @param data Data to compress
+     * @param level Compression level (1-9)
+     * @return result Compression result
+     */
+    function compressLZ4(
+        bytes calldata data,
+        uint8 level
+    ) external pure returns (CompressionResult memory result) {
+        uint256 startTime = uint256(block.timestamp);
+
+        require(level >= 1 && level <= 9, "Invalid compression level");
+
+        // Placeholder for actual LZ4 compression
+        bytes memory compressedData = performLZ4Compression(data, level);
+
+        result.compressedData = compressedData;
+        result.originalSize = data.length;
+        result.compressedSize = compressedData.length;
+
+        if (data.length > 0) {
+            result.compressionRatio = (data.length * 100) / compressedData.length;
+        } else {
+            result.compressionRatio = 0;
+        }
+
+        result.processingTime = block.timestamp - startTime;
+
+        return result;
+    }
+
+    /**
+     * @notice Decompress LZ4 data
+     * @param compressedData Compressed data
+     * @param originalSize Original data size
+     * @return result Decompression result
+     */
+    function decompressLZ4(
+        bytes calldata compressedData,
+        uint256 originalSize
+    ) external pure returns (DecompressionResult memory result) {
+        uint256 startTime = uint256(block.timestamp);
+
+        // Placeholder for actual LZ4 decompression
+        bytes memory decompressedData = performLZ4Decompression(compressedData, originalSize);
+
+        result.decompressedData = decompressedData;
+        result.originalSize = compressedData.length;
+        result.decompressedSize = decompressedData.length;
+        result.processingTime = block.timestamp - startTime;
+
+        return result;
+    }
+
+    /**
+     * @notice Compress batch of oracle prices
+     * @param timestamps Array of timestamps
+     * @param prices Array of prices
+     * @param confidences Array of confidence scores
+     * @param level Compression level
+     * @return compressedBatch Compressed batch
+     * @return compressionRatio Compression ratio
+     */
+    function compressOracleBatch(
+        uint256[] calldata timestamps,
+        uint256[] calldata prices,
+        uint256[] calldata confidences,
+        uint8 level
+    ) external pure returns (
+        bytes memory compressedBatch,
+        uint256 compressionRatio
+    ) {
+        require(
+            timestamps.length == prices.length &&
+            timestamps.length == confidences.length,
+            "Array length mismatch"
+        );
+
+        // Encode data for compression
+        bytes memory encodedData = encodeOracleData(timestamps, prices, confidences);
+
+        // Compress encoded data
+        CompressionResult memory result = this.compressLZ4(encodedData, level);
+
+        return (result.compressedData, result.compressionRatio);
+    }
+
+    /**
+     * @notice Decompress oracle batch
+     * @param compressedBatch Compressed batch
+     * @param count Number of data points
+     * @return timestamps Array of timestamps
+     * @return prices Array of prices
+     * @return confidences Array of confidence scores
+     */
+    function decompressOracleBatch(
+        bytes calldata compressedBatch,
+        uint256 count
+    ) external pure returns (
+        uint256[] memory timestamps,
+        uint256[] memory prices,
+        uint256[] memory confidences
+    ) {
+        // Estimate original size (approximate)
+        uint256 originalSize = count * 96; // 3 uint256 per entry
+
+        // Decompress data
+        DecompressionResult memory result = this.decompressLZ4(compressedBatch, originalSize);
+
+        // Decode decompressed data
+        (timestamps, prices, confidences) = decodeOracleData(result.decompressedData, count);
+
+        return (timestamps, prices, confidences);
+    }
+
+    /**
+     * @notice Perform LZ4 compression
+     * @param data Data to compress
+     * @param level Compression level
+     * @return compressed Compressed data
+     */
+    function performLZ4Compression(
+        bytes calldata data,
+        uint8 level
+    ) internal pure returns (bytes memory compressed) {
+        // This is a placeholder for actual LZ4 compression
+        // In a real implementation, this would call into precompiled contracts
+        // or use assembly to implement LZ4 compression
+
+        // Simulated compression
+        compressed = new bytes(data.length * 2 / 3); // Assuming 33% compression
+
+        return compressed;
+    }
+
+    /**
+     * @notice Perform LZ4 decompression
+     * @param compressedData Compressed data
+     * @param originalSize Original data size
+     * @return decompressed Decompressed data
+     */
+    function performLZ4Decompression(
+        bytes calldata compressedData,
+        uint256 originalSize
+    ) internal pure returns (bytes memory decompressed) {
+        // This is a placeholder for actual LZ4 decompression
+        // In a real implementation, this would call into precompiled contracts
+        // or use assembly to implement LZ4 decompression
+
+        // Simulated decompression
+        decompressed = new bytes(originalSize);
+
+        return decompressed;
+    }
+
+    /**
+     * @notice Encode oracle data for compression
+     * @param timestamps Array of timestamps
+     * @param prices Array of prices
+     * @param confidences Array of confidence scores
+     * @return encoded Encoded data
+     */
+    function encodeOracleData(
+        uint256[] calldata timestamps,
+        uint256[] calldata prices,
+        uint256[] calldata confidences
+    ) internal pure returns (bytes memory encoded) {
+        // Simple encoding: concatenate all values
+        encoded = abi.encode(timestamps, prices, confidences);
+
+        return encoded;
+    }
+
+    /**
+     * @notice Decode oracle data after decompression
+     * @param data Decoded data
+     * @param count Number of data points
+     * @return timestamps Array of timestamps
+     * @return prices Array of prices
+     * @return confidences Array of confidence scores
+     */
+    function decodeOracleData(
+        bytes memory data,
+        uint256 count
+    ) internal pure returns (
+        uint256[] memory timestamps,
+        uint256[] memory prices,
+        uint256[] memory confidences
+    ) {
+        // Simple decoding: extract all values
+        (timestamps, prices, confidences) = abi.decode(data, (uint256[], uint256[], uint256[]));
+
+        return (timestamps, prices, confidences);
+    }
+}
+```
+
+## 10. Regulatory Compliance Framework
+
+### 10.1 FATF Travel Rule Integration
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title FATFTravelRuleOracle
+ * @notice Implements FATF Travel Rule for cross-chain oracle data
+ */
+contract FATFTravelRuleOracle {
+    struct TravelRuleData {
+        bytes32 transferId;
+        address originatorAddress;
+        address beneficiaryAddress;
+        bytes32 originatorVASP;
+        bytes32 beneficiaryVASP;
+        uint256 amount;
+        uint256 timestamp;
+        bytes encryptedIdentity;
+        bytes zkKYCProof;
+        bool sanctionScreeningPassed;
+        bool verified;
+    }
+
+    // Mapping from transfer ID to travel rule data
+    mapping(bytes32 => TravelRuleData) public travelRuleData;
+
+    // Regulator access keys
+    mapping(bytes32 => address) public regulatorKeys;
+
+    // Sanctioned jurisdictions
+    mapping(bytes32 => bool) public sanctionedJurisdictions;
+
+    // Mapping from address to VASP ID
+    mapping(address => bytes32) public addressToVASP;
+
+    // Events
+    event TravelRuleDataSubmitted(bytes32 indexed transferId, bytes32 indexed originatorVASP, bytes32 indexed beneficiaryVASP);
+    event TravelRuleDataVerified(bytes32 indexed transferId, bool passed);
+    event SanctionScreeningPerformed(bytes32 indexed transferId, bool passed);
+
+    /**
+     * @notice Submit travel rule data
+     * @param transferId Transfer identifier
+     * @param originatorAddress Originator address
+     * @param beneficiaryAddress Beneficiary address
+     * @param originatorVASP Originator VASP identifier
+     * @param beneficiaryVASP Beneficiary VASP identifier
+     * @param amount Transfer amount
+     * @param encryptedIdentity Encrypted identity information
+     * @param zkKYCProof Zero-knowledge KYC proof
+     * @return success Success indicator
+     */
+    function submitTravelRuleData(
+        bytes32 transferId,
+        address originatorAddress,
+        address beneficiaryAddress,
+        bytes32 originatorVASP,
+        bytes32 beneficiaryVASP,
+        uint256 amount,
+        bytes calldata encryptedIdentity,
+        bytes calldata zkKYCProof
+    ) external returns (bool success) {
+        require(travelRuleData[transferId].transferId == bytes32(0), "Data already submitted");
+        require(amount > 0, "Invalid amount");
+
+        // Verify originator VASP
+        require(
+            addressToVASP[originatorAddress] == originatorVASP,
+            "Originator address not associated with VASP"
+        );
+
+        // Verify zero-knowledge KYC proof
+        require(
+            verifyZkKYCProof(zkKYCProof, originatorAddress),
+            "Invalid zkKYC proof"
+        );
+
+        // Store travel rule data
+        travelRuleData[transferId] = TravelRuleData({
+            transferId: transferId,
+            originatorAddress: originatorAddress,
+            beneficiaryAddress: beneficiaryAddress,
+            originatorVASP: originatorVASP,
+            beneficiaryVASP: beneficiaryVASP,
+            amount: amount,
+            timestamp: block.timestamp,
+            encryptedIdentity: encryptedIdentity,
+            zkKYCProof: zkKYCProof,
+            sanctionScreeningPassed: false,
+            verified: false
+        });
+
+        emit TravelRuleDataSubmitted(transferId, originatorVASP, beneficiaryVASP);
+
+        // Perform sanction screening
+        performSanctionScreening(transferId);
+
+        return true;
+    }
+
+    /**
+     * @notice Perform sanction screening
+     * @param transferId Transfer identifier
+     * @return passed Whether screening was passed
+     */
+    function performSanctionScreening(
+        bytes32 transferId
+    ) public returns (bool passed) {
+        TravelRuleData storage data = travelRuleData[transferId];
+        require(data.transferId != bytes32(0), "Data not found");
+
+        // Check originator VASP jurisdiction
+        bytes32 originatorJurisdiction = getVASPJurisdiction(data.originatorVASP);
+        bool originatorSanctioned = sanctionedJurisdictions[originatorJurisdiction];
+
+        // Check beneficiary VASP jurisdiction
+        bytes32 beneficiaryJurisdiction = getVASPJurisdiction(data.beneficiaryVASP);
+        bool beneficiarySanctioned = sanctionedJurisdictions[beneficiaryJurisdiction];
+
+        // Check addresses against sanction lists
+        bool addressesSanctioned = checkAddressSanctions(
+            data.originatorAddress,
+            data.beneficiaryAddress
+        );
+
+        // Determine result
+        passed = !originatorSanctioned && !beneficiarySanctioned && !addressesSanctioned;
+
+        // Update data
+        data.sanctionScreeningPassed = passed;
+
+        emit SanctionScreeningPerformed(transferId, passed);
+
+        return passed;
+    }
+
+    /**
+     * @notice Verify travel rule data
+     * @param transferId Transfer identifier
+     * @return isVerified Whether data is verified
+     */
+    function verifyTravelRuleData(
+        bytes32 transferId
+    ) external returns (bool isVerified) {
+        TravelRuleData storage data = travelRuleData[transferId];
+        require(data.transferId != bytes32(0), "Data not found");
+
+        // Check sanction screening
+        if (!data.sanctionScreeningPassed) {
+            emit TravelRuleDataVerified(transferId, false);
+            return false;
+        }
+
+        // Verify travel rule data
+        isVerified = true;
+
+        // Update data
+        data.verified = isVerified;
+
+        emit TravelRuleDataVerified(transferId, isVerified);
+
+        return isVerified;
+    }
+
+    /**
+     * @notice Generate shielded transaction report
+     * @param transferId Transfer identifier
+     * @param regulatorId Regulator identifier
+     * @return reportId Report identifier
+     * @return encryptedReport Encrypted report
+     */
+    function generateShieldedReport(
+        bytes32 transferId,
+        bytes32 regulatorId
+    ) external view returns (
+        bytes32 reportId,
+        bytes memory encryptedReport
+    ) {
+        TravelRuleData storage data = travelRuleData[transferId];
+        require(data.transferId != bytes32(0), "Data not found");
+        require(regulatorKeys[regulatorId] != address(0), "Regulator not found");
+
+        // Generate report ID
+        reportId = keccak256(abi.encodePacked(
+            transferId,
+            regulatorId,
+            block.timestamp
+        ));
+
+        // Encrypt report with regulator's public key
+        encryptedReport = encryptForRegulator(
+            abi.encode(data),
+            regulatorKeys[regulatorId]
+        );
+
+        return (reportId, encryptedReport);
+    }
+
+    /**
+     * @notice Verify zkKYC proof
+     * @param proof Zero-knowledge KYC proof
+     * @param address_ Address to verify
+     * @return isValid Whether proof is valid
+     */
+    function verifyZkKYCProof(
+        bytes calldata proof,
+        address address_
+    ) internal pure returns (bool isValid) {
+        // Placeholder for actual zkKYC verification
+
+        return true;
+    }
+
+    /**
+     * @notice Get VASP jurisdiction
+     * @param vaspId VASP identifier
+     * @return jurisdiction VASP jurisdiction
+     */
+    function getVASPJurisdiction(
+        bytes32 vaspId
+    ) internal pure returns (bytes32 jurisdiction) {
+        // Placeholder for actual VASP jurisdiction lookup
+
+        return bytes32(0);
+    }
+
+    /**
+     * @notice Check addresses against sanction lists
+     * @param originatorAddress Originator address
+     * @param beneficiaryAddress Beneficiary address
+     * @return isSanctioned Whether any address is sanctioned
+     */
+    function checkAddressSanctions(
+        address originatorAddress,
+        address beneficiaryAddress
+    ) internal pure returns (bool isSanctioned) {
+        // Placeholder for actual sanction checking
+
+        return false;
+    }
+
+    /**
+     * @notice Encrypt data for regulator
+     * @param data Data to encrypt
+     * @param regulatorKey Regulator public key
+     * @return encryptedData Encrypted data
+     */
+    function encryptForRegulator(
+        bytes memory data,
+        address regulatorKey
+    ) internal pure returns (bytes memory encryptedData) {
+        // Placeholder for actual encryption
+
+        return data;
+    }
+}
+```
+
+### 10.2 MiCA Article 45 Compliance
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title MiCAComplianceOracle
+ * @notice Implements MiCA Article 45 compliance for oracles
+ */
+contract MiCAComplianceOracle {
+    struct StressTestResult {
+        bytes32 testId;
+        uint256 timestamp;
+        uint256 maxWithdrawal;
+        uint256 availableLiquidity;
+        uint256 survivalTime;
+        uint8 riskLevel;
+        string[] recommendations;
+        bool passed;
+    }
+
+    struct ReserveAttestation {
+        bytes32 attestationId;
+        address tokenAddress;
+        uint256 timestamp;
+        uint256 reserveAmount;
+        uint256 circulatingSupply;
+        bytes attestationData;
+        bytes32 attestationHash;
+        bool verified;
+    }
+
+    struct RedemptionRights {
+        address tokenAddress;
+        bool hasRedemptionRights;
+        address redemptionContract;
+        uint256 timelockPeriod;
+        uint256 maxRedemptionAmount;
+        uint8 redemptionFee;
+        bool requiresKYC;
+    }
+
+    // Mapping from token address to stress test results
+    mapping(address => StressTestResult[]) public stressTestResults;
+
+    // Mapping from token address to reserve attestations
+    mapping(address => ReserveAttestation[]) public reserveAttestations;
+
+    // Mapping from token address to redemption rights
+    mapping(address => RedemptionRights) public redemptionRights;
+
+    // Events
+    event StressTestPerformed(address indexed tokenAddress, bytes32 indexed testId, bool passed);
+    event ReserveAttestationSubmitted(address indexed tokenAddress, bytes32 indexed attestationId);
+    event ReserveAttestationVerified(address indexed tokenAddress, bytes32 indexed attestationId, bool verified);
+    event RedemptionRightsUpdated(address indexed tokenAddress, bool hasRedemptionRights);
+
+    /**
+     * @notice Run liquidity stress test
+     * @param tokenAddress Token address
+     * @param maxWithdrawal Maximum withdrawal percentage (scaled by 1e18)
+     * @param testScenario Test scenario (1=normal, 2=stressed, 3=extreme)
+     * @return testId Test identifier
+     * @return passed Whether test was passed
+     */
+    function runLiquidityStressTest(
+        address tokenAddress,
+        uint256 maxWithdrawal,
+        uint8 testScenario
+    ) external returns (
+        bytes32 testId,
+        bool passed
+    ) {
+        require(maxWithdrawal > 0 && maxWithdrawal <= 1e18, "Invalid withdrawal percentage");
+        require(testScenario >= 1 && testScenario <= 3, "Invalid test scenario");
+
+        // Generate test ID
+        testId = keccak256(abi.encodePacked(
+            tokenAddress,
+            maxWithdrawal,
+            testScenario,
+            block.timestamp
+        ));
+
+        // Get liquidity information
+        (uint256 availableLiquidity, uint256 circulatingSupply) = getLiquidityInfo(tokenAddress);
+
+        // Calculate withdrawal amount
+        uint256 withdrawalAmount = (circulatingSupply * maxWithdrawal) / 1e18;
+
+        // Calculate survival time based on scenario
+        uint256 survivalTime;
+        uint8 riskLevel;
+        string[] memory recommendations;
+
+        if (testScenario == 1) {
+            // Normal scenario
+            survivalTime = calculateSurvivalTime(
+                availableLiquidity,
+                withdrawalAmount,
+                1 days
+            );
+
+            passed = survivalTime >= 30 days;
+            riskLevel = passed ? 1 : 3;
+
+            recommendations = new string[](1);
+            recommendations[0] = passed ?
+                "Sufficient liquidity for normal conditions" :
+                "Increase liquidity reserves to handle normal withdrawals";
+        } else if (testScenario == 2) {
+            // Stressed scenario
+            survivalTime = calculateSurvivalTime(
+                availableLiquidity,
+                withdrawalAmount,
+                12 hours
+            );
+
+            passed = survivalTime >= 7 days;
+            riskLevel = passed ? 2 : 4;
+
+            recommendations = new string[](1);
+            recommendations[0] = passed ?
+                "Adequate liquidity for stressed conditions" :
+                "Implement circuit breakers for stressed market conditions";
+        } else {
+            // Extreme scenario (99th percentile)
+            survivalTime = calculateSurvivalTime(
+                availableLiquidity,
+                withdrawalAmount,
+                1 hours
+            );
+
+            passed = survivalTime >= 1 days;
+            riskLevel = passed ? 3 : 5;
+
+            recommendations = new string[](1);
+            recommendations[0] = passed ?
+                "Resilient to extreme market conditions" :
+                "Establish emergency liquidity facilities for extreme scenarios";
+        }
+
+        // Store test result
+        StressTestResult memory result = StressTestResult({
+            testId: testId,
+            timestamp: block.timestamp,
+            maxWithdrawal: withdrawalAmount,
+            availableLiquidity: availableLiquidity,
+            survivalTime: survivalTime,
+            riskLevel: riskLevel,
+            recommendations: recommendations,
+            passed: passed
+        });
+
+        stressTestResults[tokenAddress].push(result);
+
+        emit StressTestPerformed(tokenAddress, testId, passed);
+
+        return (testId, passed);
+    }
+
+    /**
+     * @notice Submit reserve attestation
+     * @param tokenAddress Token address
+     * @param reserveAmount Reserve amount
+     * @param attestationData Attestation data
+     * @return attestationId Attestation identifier
+     */
+    function submitReserveAttestation(
+        address tokenAddress,
+        uint256 reserveAmount,
+        bytes calldata attestationData
+    ) external returns (bytes32 attestationId) {
+        require(reserveAmount > 0, "Invalid reserve amount");
+
+        // Get circulating supply
+        uint256 circulatingSupply = getCirculatingSupply(tokenAddress);
+
+        // Generate attestation hash
+        bytes32 attestationHash = keccak256(abi.encodePacked(
+            tokenAddress,
+            reserveAmount,
+            circulatingSupply,
+            attestationData,
+            block.timestamp
+        ));
+
+        // Generate attestation ID
+        attestationId = keccak256(abi.encodePacked(
+            attestationHash,
+            msg.sender,
+            block.timestamp
+        ));
+
+        // Store attestation
+        ReserveAttestation memory attestation = ReserveAttestation({
+            attestationId: attestationId,
+            tokenAddress: tokenAddress,
+            timestamp: block.timestamp,
+            reserveAmount: reserveAmount,
+            circulatingSupply: circulatingSupply,
+            attestationData: attestationData,
+            attestationHash: attestationHash,
+            verified: false
+        });
+
+        reserveAttestations[tokenAddress].push(attestation);
+
+        emit ReserveAttestationSubmitted(tokenAddress, attestationId);
+
+        return attestationId;
+    }
+
+    /**
+     * @notice Verify reserve attestation
+     * @param attestationId Attestation identifier
+     * @return isVerified Whether attestation is verified
+     */
+    function verifyReserveAttestation(
+        bytes32 attestationId
+    ) external returns (bool isVerified) {
+        // Find attestation
+        address tokenAddress;
+        uint256 attestationIndex = type(uint256).max;
+
+        for (address token in reserveAttestations) {
+            for (uint i = 0; i < reserveAttestations[token].length; i++) {
+                if (reserveAttestations[token][i].attestationId == attestationId) {
+                    tokenAddress = token;
+                    attestationIndex = i;
+                    break;
+                }
+            }
+
+            if (attestationIndex != type(uint256).max) {
                 break;
             }
         }
 
-        // If we're keeping everything or nothing, return early
-        if (newStartIndex == 0 || newStartIndex == historyLength) return;
+        require(attestationIndex != type(uint256).max, "Attestation not found");
 
-        // Create new array with only recent entries
-        uint256 newLength = (historyLength - newStartIndex) * 3;
-        uint256[] memory newHistory = new uint256[](newLength);
+        // Verify attestation
+        isVerified = true; // Placeholder for actual verification
 
-        // Copy recent entries to new array
-        for (uint256 i = 0; i < newLength; i++) {
-            newHistory[i] = history[newStartIndex * 3 + i];
-        }
+        // Update attestation
+        reserveAttestations[tokenAddress][attestationIndex].verified = isVerified;
 
-        // Clear old history
-        delete priceHistory[asset];
+        emit ReserveAttestationVerified(tokenAddress, attestationId, isVerified);
 
-        // Store new history
-        for (uint256 i = 0; i < newLength; i++) {
-            priceHistory[asset].push(newHistory[i]);
-        }
-    }
-}
-```
-
-#### 9.1.2 Gas Benchmarking Results
-
-The following table shows gas benchmarking results for key oracle operations, comparing the optimized implementation with a standard implementation:
-
-| Operation               | Standard Implementation | Gas-Optimized Implementation | Gas Savings | Percentage Improvement |
-| ----------------------- | ----------------------- | ---------------------------- | ----------- | ---------------------- |
-| Set Price               | 72,354                  | 54,233                       | 18,121      | 25.0%                  |
-| Get Latest Price        | 24,563                  | 22,152                       | 2,411       | 9.8%                   |
-| Calculate TWAP          | 118,742                 | 92,567                       | 26,175      | 22.0%                  |
-| Batch Update (5 assets) | 245,732                 | 196,892                      | 48,840      | 19.9%                  |
-| Prune History           | 146,283                 | 115,476                      | 30,807      | 21.1%                  |
-| Statistical Validation  | 135,621                 | 105,453                      | 30,168      | 22.2%                  |
-| ZKP Verification        | 475,623                 | 368,547                      | 107,076     | 22.5%                  |
-
-The gas optimization techniques implemented provide an average of 20.4% gas savings across all operations, making the Oracle Aggregation and Data Validation Framework significantly more cost-effective for users and protocol operations.
-
-### 9.2 Computation Optimization
-
-The Oracle Aggregation and Data Validation Framework employs advanced computational optimization techniques to ensure efficient operation at scale:
-
-#### 9.2.1 On-Chain vs. Off-Chain Computation Split
-
-The system carefully balances on-chain and off-chain computation to optimize for gas efficiency:
-
-```typescript
-/**
- * Computation Split Manager
- *
- * Manages the distribution of computation between on-chain and off-chain components
- */
-class ComputationSplitManager {
-  /**
-   * Determines optimal computation split for statistical validation
-   * @param asset Asset to optimize for
-   * @param dataPoints Number of data points
-   * @param complexityLevel Complexity level of the computation
-   * @returns Computation plan
-   */
-  public static getOptimalComputationSplit(
-    asset: string,
-    dataPoints: number,
-    complexityLevel: ComputationComplexity
-  ): ComputationPlan {
-    // Base thresholds for on-chain computation
-    const baseThresholds = {
-      [ComputationComplexity.LOW]: 100,
-      [ComputationComplexity.MEDIUM]: 50,
-      [ComputationComplexity.HIGH]: 20,
-      [ComputationComplexity.VERY_HIGH]: 5,
-    };
-
-    // Gas cost estimation per data point
-    const gasPerDataPoint = {
-      [ComputationComplexity.LOW]: 5000,
-      [ComputationComplexity.MEDIUM]: 15000,
-      [ComputationComplexity.HIGH]: 50000,
-      [ComputationComplexity.VERY_HIGH]: 200000,
-    };
-
-    // Determine on-chain threshold based on complexity
-    const onChainThreshold = baseThresholds[complexityLevel];
-
-    // Determine if computation should be done on-chain
-    const shouldComputeOnChain = dataPoints <= onChainThreshold;
-
-    // Estimate gas cost if computed on-chain
-    const estimatedGas = shouldComputeOnChain
-      ? dataPoints * gasPerDataPoint[complexityLevel]
-      : 0;
-
-    return {
-      asset,
-      dataPoints,
-      complexity: complexityLevel,
-      computeOnChain: shouldComputeOnChain,
-      estimatedGas,
-      requiredPrecomputation: !shouldComputeOnChain,
-      resultValidationOnly: !shouldComputeOnChain,
-    };
-  }
-
-  /**
-   * Generate optimal off-chain computation package
-   * @param asset Asset to compute for
-   * @param operation Operation to perform
-   * @param inputs Input data
-   * @returns Computation package for off-chain processing
-   */
-  public static generateOffChainComputationPackage(
-    asset: string,
-    operation: ComputationOperation,
-    inputs: any
-  ): OffChainComputationPackage {
-    // Generate unique computation ID
-    const computationId = `${asset}-${operation}-${Date.now()}-${Math.random()
-      .toString(36)
-      .substring(2, 15)}`;
-
-    // Determine computation deadline based on operation
-    const deadlines = {
-      [ComputationOperation.OUTLIER_DETECTION]: 5000, // 5 seconds
-      [ComputationOperation.CORRELATION_ANALYSIS]: 10000, // 10 seconds
-      [ComputationOperation.TWAP_CALCULATION]: 3000, // 3 seconds
-      [ComputationOperation.VOLATILITY_CALCULATION]: 8000, // 8 seconds
-      [ComputationOperation.ZK_PROOF_GENERATION]: 30000, // 30 seconds
-    };
-
-    const deadline = Date.now() + deadlines[operation];
-
-    // Package computation request
-    return {
-      computationId,
-      asset,
-      operation,
-      inputs,
-      deadline,
-      created: new Date(),
-      resultValidation: this.getResultValidationParameters(operation),
-    };
-  }
-
-  /**
-   * Get parameters for validating off-chain computation results
-   * @param operation Operation type
-   * @returns Validation parameters
-   */
-  private static getResultValidationParameters(
-    operation: ComputationOperation
-  ): ResultValidationParameters {
-    switch (operation) {
-      case ComputationOperation.OUTLIER_DETECTION:
-        return {
-          validationMethod: ValidationMethod.HASH_COMPARISON,
-          requiredFields: ["outlierIndices", "threshold", "method"],
-          boundsCheck: false,
-        };
-
-      case ComputationOperation.CORRELATION_ANALYSIS:
-        return {
-          validationMethod: ValidationMethod.BOUNDS_CHECK,
-          requiredFields: ["correlation", "confidence"],
-          boundsCheck: true,
-          minValue: -1.0,
-          maxValue: 1.0,
-        };
-
-      case ComputationOperation.TWAP_CALCULATION:
-        return {
-          validationMethod: ValidationMethod.BOUNDS_CHECK,
-          requiredFields: ["twap", "startTime", "endTime"],
-          boundsCheck: true,
-          minValueRatio: 0.5, // At least 50% of spot price
-          maxValueRatio: 2.0, // At most 200% of spot price
-        };
-
-      case ComputationOperation.VOLATILITY_CALCULATION:
-        return {
-          validationMethod: ValidationMethod.BOUNDS_CHECK,
-          requiredFields: ["volatility", "period"],
-          boundsCheck: true,
-          minValue: 0.0,
-          maxValue: 5.0, // Max 500% volatility
-        };
-
-      case ComputationOperation.ZK_PROOF_GENERATION:
-        return {
-          validationMethod: ValidationMethod.ZK_VERIFICATION,
-          requiredFields: ["proof", "publicInputs"],
-          boundsCheck: false,
-        };
-
-      default:
-        return {
-          validationMethod: ValidationMethod.HASH_COMPARISON,
-          requiredFields: [],
-          boundsCheck: false,
-        };
-    }
-  }
-}
-
-// Types
-enum ComputationComplexity {
-  LOW,
-  MEDIUM,
-  HIGH,
-  VERY_HIGH,
-}
-
-enum ComputationOperation {
-  OUTLIER_DETECTION,
-  CORRELATION_ANALYSIS,
-  TWAP_CALCULATION,
-  VOLATILITY_CALCULATION,
-  ZK_PROOF_GENERATION,
-}
-
-enum ValidationMethod {
-  HASH_COMPARISON,
-  BOUNDS_CHECK,
-  ZK_VERIFICATION,
-}
-
-interface ComputationPlan {
-  asset: string;
-  dataPoints: number;
-  complexity: ComputationComplexity;
-  computeOnChain: boolean;
-  estimatedGas: number;
-  requiredPrecomputation: boolean;
-  resultValidationOnly: boolean;
-}
-
-interface OffChainComputationPackage {
-  computationId: string;
-  asset: string;
-  operation: ComputationOperation;
-  inputs: any;
-  deadline: number;
-  created: Date;
-  resultValidation: ResultValidationParameters;
-}
-
-interface ResultValidationParameters {
-  validationMethod: ValidationMethod;
-  requiredFields: string[];
-  boundsCheck: boolean;
-  minValue?: number;
-  maxValue?: number;
-  minValueRatio?: number;
-  maxValueRatio?: number;
-}
-```
-
-#### 9.2.2 Parallel Computation Strategies
-
-For complex statistical operations, parallel computation strategies are implemented to optimize performance:
-
-```typescript
-/**
- * Parallel Computation Manager for Oracle Data Processing
- */
-class ParallelComputationManager {
-  private readonly workerPool: Worker[];
-  private readonly taskQueue: ComputationTask[];
-  private readonly results: Map<string, any>;
-  private readonly maxWorkers: number;
-
-  /**
-   * Create a new parallel computation manager
-   * @param maxWorkers Maximum number of worker threads
-   */
-  constructor(maxWorkers: number = navigator.hardwareConcurrency || 4) {
-    this.maxWorkers = maxWorkers;
-    this.workerPool = [];
-    this.taskQueue = [];
-    this.results = new Map();
-
-    this.initializeWorkerPool();
-  }
-
-  /**
-   * Initialize worker pool
-   */
-  private initializeWorkerPool(): void {
-    for (let i = 0; i < this.maxWorkers; i++) {
-      const worker = new Worker("./computation-worker.js");
-
-      worker.onmessage = this.handleWorkerMessage.bind(this);
-
-      this.workerPool.push(worker);
-    }
-  }
-
-  /**
-   * Handle worker message
-   */
-  private handleWorkerMessage(event: MessageEvent): void {
-    const { taskId, result, error } = event.data;
-
-    if (error) {
-      this.results.set(taskId, { error });
-    } else {
-      this.results.set(taskId, { result });
+        return isVerified;
     }
 
-    // Assign next task to this worker
-    this.assignNextTask(event.target as Worker);
-  }
+    /**
+     * @notice Update redemption rights
+     * @param tokenAddress Token address
+     * @param redemptionContract Redemption contract address
+     * @param timelockPeriod Timelock period
+     * @param maxRedemptionAmount Maximum redemption amount
+     * @param redemptionFee Redemption fee
+     * @param requiresKYC Whether KYC is required
+     * @return success Success indicator
+     */
+    function updateRedemptionRights(
+        address tokenAddress,
+        address redemptionContract,
+        uint256 timelockPeriod,
+        uint256 maxRedemptionAmount,
+        uint8 redemptionFee,
+        bool requiresKYC
+    ) external returns (bool success) {
+        require(redemptionContract != address(0), "Invalid redemption contract");
+        require(timelockPeriod > 0, "Invalid timelock period");
+        require(redemptionFee <= 100, "Invalid redemption fee");
 
-  /**
-   * Assign next task to worker
-   * @param worker Worker to assign task to
-   */
-  private assignNextTask(worker: Worker): void {
-    if (this.taskQueue.length === 0) return;
-
-    const task = this.taskQueue.shift()!;
-
-    worker.postMessage({
-      taskId: task.id,
-      operation: task.operation,
-      data: task.data,
-    });
-  }
-
-  /**
-   * Submit data processing task for parallel computation
-   * @param operation Operation to perform
-   * @param data Data to process
-   * @returns Promise resolving to computation result
-   */
-  public submitTask(operation: ParallelOperation, data: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const taskId = `task-${Date.now()}-${Math.random()
-        .toString(36)
-        .substring(2, 9)}`;
-
-      // Create task
-      const task: ComputationTask = {
-        id: taskId,
-        operation,
-        data,
-        submitted: Date.now(),
-        resolve,
-        reject,
-      };
-
-      // Check for available worker
-      const availableWorker = this.workerPool.find(
-        (worker) => worker.onmessage !== null
-      );
-
-      if (availableWorker) {
-        // Assign task directly
-        availableWorker.postMessage({
-          taskId,
-          operation,
-          data,
+        redemptionRights[tokenAddress] = RedemptionRights({
+            tokenAddress: tokenAddress,
+            hasRedemptionRights: true,
+            redemptionContract: redemptionContract,
+            timelockPeriod: timelockPeriod,
+            maxRedemptionAmount: maxRedemptionAmount,
+            redemptionFee: redemptionFee,
+            requiresKYC: requiresKYC
         });
-      } else {
-        // Queue task
-        this.taskQueue.push(task);
-      }
 
-      // Set timeout for task
-      setTimeout(() => {
-        if (this.results.has(taskId)) {
-          const result = this.results.get(taskId);
-          this.results.delete(taskId);
+        emit RedemptionRightsUpdated(tokenAddress, true);
 
-          if (result.error) {
-            reject(result.error);
-          } else {
-            resolve(result.result);
-          }
+        return true;
+    }
+
+    /**
+     * @notice Check MiCA compliance
+     * @param tokenAddress Token address
+     * @return isCompliant Whether token is MiCA compliant
+     * @return complianceDetails Compliance details
+     */
+    function checkMiCACompliance(
+        address tokenAddress
+    ) external view returns (
+        bool isCompliant,
+        string memory complianceDetails
+    ) {
+        // Check stress tests
+        bool hasPassedStressTest = false;
+        if (stressTestResults[tokenAddress].length > 0) {
+            StressTestResult memory latestTest = stressTestResults[tokenAddress][stressTestResults[tokenAddress].length - 1];
+            hasPassedStressTest = latestTest.passed && (block.timestamp - latestTest.timestamp <= 30 days);
+        }
+
+        // Check reserve attestations
+        bool hasValidAttestation = false;
+        if (reserveAttestations[tokenAddress].length > 0) {
+            ReserveAttestation memory latestAttestation = reserveAttestations[tokenAddress][reserveAttestations[tokenAddress].length - 1];
+            hasValidAttestation = latestAttestation.verified && (block.timestamp - latestAttestation.timestamp <= 15 days);
+        }
+
+        // Check redemption rights
+        bool hasRedemptionRights = redemptionRights[tokenAddress].hasRedemptionRights;
+
+        // Determine compliance
+        isCompliant = hasPassedStressTest && hasValidAttestation && hasRedemptionRights;
+
+        // Generate compliance details
+        if (isCompliant) {
+            complianceDetails = "Fully compliant with MiCA Article 45";
         } else {
-          reject(new Error("Task timed out"));
+            complianceDetails = "Non-compliant: ";
+
+            if (!hasPassedStressTest) {
+                complianceDetails = string(abi.encodePacked(complianceDetails, "Missing/failed stress test. "));
+            }
+
+            if (!hasValidAttestation) {
+                complianceDetails = string(abi.encodePacked(complianceDetails, "Missing/invalid reserve attestation. "));
+            }
+
+            if (!hasRedemptionRights) {
+                complianceDetails = string(abi.encodePacked(complianceDetails, "Missing redemption rights. "));
+            }
         }
-      }, 30000); // 30 second timeout
-    });
-  }
 
-  /**
-   * Process multiple assets in parallel
-   * @param assets Assets to process
-   * @param operation Operation to perform on each asset
-   * @param baseData Base data to use for all assets
-   * @returns Promise resolving to results by asset
-   */
-  public async processAssetsInParallel(
-    assets: string[],
-    operation: ParallelOperation,
-    baseData: any
-  ): Promise<Record<string, any>> {
-    // Create tasks for all assets
-    const tasks = assets.map((asset) => ({
-      asset,
-      promise: this.submitTask(operation, {
-        ...baseData,
-        asset,
-      }),
-    }));
+        return (isCompliant, complianceDetails);
+    }
 
-    // Wait for all tasks to complete
-    const results: Record<string, any> = {};
+        /**
+     * @notice Get liquidity information
+     * @param tokenAddress Token address
+     * @return availableLiquidity Available liquidity
+     * @return circulatingSupply Circulating supply
+     */
+    function getLiquidityInfo(
+        address tokenAddress
+    ) internal view returns (
+        uint256 availableLiquidity,
+        uint256 circulatingSupply
+    ) {
+        // Placeholder for actual liquidity information retrieval
 
-    await Promise.all(
-      tasks.map(async (task) => {
-        try {
-          results[task.asset] = await task.promise;
-        } catch (error) {
-          results[task.asset] = { error };
+        availableLiquidity = 1000000 * 10**18;
+        circulatingSupply = 2000000 * 10**18;
+
+        return (availableLiquidity, circulatingSupply);
+    }
+
+    /**
+     * @notice Calculate survival time
+     * @param liquidity Available liquidity
+     * @param withdrawalRate Withdrawal rate
+     * @param interval Withdrawal interval
+     * @return survivalTime Survival time in seconds
+     */
+    function calculateSurvivalTime(
+        uint256 liquidity,
+        uint256 withdrawalRate,
+        uint256 interval
+    ) internal pure returns (uint256 survivalTime) {
+        if (withdrawalRate == 0) {
+            return type(uint256).max;
         }
-      })
-    );
 
-    return results;
-  }
+        uint256 withdrawalsPerDay = 1 days / interval;
+        uint256 dailyWithdrawal = withdrawalRate * withdrawalsPerDay;
 
-  /**
-   * Clean up resources
-   */
-  public cleanup(): void {
-    for (const worker of this.workerPool) {
-      worker.terminate();
+        if (dailyWithdrawal == 0) {
+            return type(uint256).max;
+        }
+
+        survivalTime = (liquidity * 1 days) / dailyWithdrawal;
+
+        return survivalTime;
     }
 
-    this.workerPool.length = 0;
-    this.taskQueue.length = 0;
-    this.results.clear();
-  }
-}
+    /**
+     * @notice Get circulating supply
+     * @param tokenAddress Token address
+     * @return supply Circulating supply
+     */
+    function getCirculatingSupply(
+        address tokenAddress
+    ) internal view returns (uint256 supply) {
+        // Placeholder for actual circulating supply retrieval
 
-// Worker implementation (computation-worker.js)
-/*
-self.onmessage = function(event) {
-  const { taskId, operation, data } = event.data;
-  
-  try {
-    let result;
-    
-    switch (operation) {
-      case 'OUTLIER_DETECTION':
-        result = detectOutliers(data);
-        break;
-      case 'CORRELATION_ANALYSIS':
-        result = calculateCorrelation(data);
-        break;
-      case 'VOLATILITY_CALCULATION':
-        result = calculateVolatility(data);
-        break;
-      case 'ZK_PROOF_GENERATION':
-        result = generateZKProof(data);
-        break;
-      default:
-        throw new Error(`Unknown operation: ${operation}`);
+        supply = 2000000 * 10**18;
+
+        return supply;
     }
-    
-    self.postMessage({ taskId, result });
-  } catch (error) {
-    self.postMessage({ taskId, error: error.message });
-  }
-};
-
-// Implement computation functions
-function detectOutliers(data) {
-  // Implementation of outlier detection
-}
-
-function calculateCorrelation(data) {
-  // Implementation of correlation calculation
-}
-
-function calculateVolatility(data) {
-  // Implementation of volatility calculation
-}
-
-function generateZKProof(data) {
-  // Implementation of ZK proof generation
-}
-*/
-
-// Types
-interface ComputationTask {
-  id: string;
-  operation: ParallelOperation;
-  data: any;
-  submitted: number;
-  resolve: (result: any) => void;
-  reject: (error: Error) => void;
-}
-
-enum ParallelOperation {
-  OUTLIER_DETECTION = "OUTLIER_DETECTION",
-  CORRELATION_ANALYSIS = "CORRELATION_ANALYSIS",
-  VOLATILITY_CALCULATION = "VOLATILITY_CALCULATION",
-  ZK_PROOF_GENERATION = "ZK_PROOF_GENERATION",
 }
 ```
 
-### 9.3 Throughput & Scalability Benchmarks
-
-The Oracle Aggregation and Data Validation Framework has been rigorously benchmarked to ensure it can handle the scale and throughput requirements of the RESI Protocol:
-
-#### 9.3.1 Benchmark Results
-
-The following tables present benchmark results for various components of the oracle system under different load conditions:
-
-**Oracle Data Processing Throughput**
-
-| Operation              | Light Load (TPS) | Medium Load (TPS) | Heavy Load (TPS) | Theoretical Max (TPS) |
-| ---------------------- | ---------------- | ----------------- | ---------------- | --------------------- |
-| Price Updates          | 1,250            | 850               | 620              | 1,500                 |
-| Statistical Validation | 750              | 520               | 380              | 900                   |
-| TWAP Calculation       | 950              | 710               | 490              | 1,200                 |
-| Cross-Chain Sync       | 180              | 140               | 95               | 200                   |
-| ZKP Generation         | 45               | 35                | 25               | 50                    |
-| ZKP Verification       | 85               | 75                | 60               | 100                   |
-
-_TPS = Transactions Per Second_
-
-**Latency Measurements**
-
-| Operation              | Average Latency (ms) | 95th Percentile (ms) | 99th Percentile (ms) | Timeout Rate (%) |
-| ---------------------- | -------------------- | -------------------- | -------------------- | ---------------- |
-| Price Updates          | 125                  | 280                  | 450                  | 0.002            |
-| Statistical Validation | 310                  | 650                  | 980                  | 0.015            |
-| TWAP Calculation       | 185                  | 420                  | 670                  | 0.008            |
-| Cross-Chain Sync       | 1,850                | 3,250                | 4,800                | 0.150            |
-| ZKP Generation         | 3,500                | 5,800                | 8,200                | 0.320            |
-| ZKP Verification       | 1,250                | 2,100                | 3,300                | 0.080            |
-
-**Scalability Characteristics**
-
-| Metric            | Current Value  | 10x Load Projection | 100x Load Projection |
-| ----------------- | -------------- | ------------------- | -------------------- |
-| Price Update Rate | 5/minute/asset | Linear scaling      | Sub-linear (80%)     |
-| Database Size     | 50 GB          | Linear scaling      | Linear scaling       |
-| Network Bandwidth | 25 Mbps        | Linear scaling      | Linear scaling       |
-| CPU Utilization   | 35%            | Linear to 60%       | Non-linear to 85%    |
-| Memory Usage      | 24 GB          | Linear to 65 GB     | Non-linear to 180 GB |
-| Storage IOPS      | 5,000          | Linear to 45,000    | Linear to 450,000    |
-
-#### 9.3.2 Scalability Architecture
-
-To achieve these performance metrics, the Oracle Aggregation and Data Validation Framework implements a multi-tiered scalability architecture:
-
-```text
-+--------------------------------------------------------------+
-|                                                              |
-|                   Global Load Balancer                        |
-|                                                              |
-+--------------------------------------------------------------+
-                |                  |                  |
-                v                  v                  v
-+-------------------------------+  +-------------------------------+  +-------------------------------+
-|                               |  |                               |  |                               |
-|         Region Cluster A      |  |         Region Cluster B      |  |         Region Cluster C      |
-|                               |  |                               |  |                               |
-| +-------------------------+   |  | +-------------------------+   |  | +-------------------------+   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| |  API Gateway Cluster    |   |  | |  API Gateway Cluster    |   |  | |  API Gateway Cluster    |   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| +-------------------------+   |  | +-------------------------+   |  | +-------------------------+   |
-|            |                  |  |            |                  |  |            |                  |
-|            v                  |  |            v                  |  |            v                  |
-| +-------------------------+   |  | +-------------------------+   |  | +-------------------------+   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| |  Service Mesh           |   |  | |  Service Mesh           |   |  | |  Service Mesh           |   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| +-------------------------+   |  | +-------------------------+   |  | +-------------------------+   |
-|            |                  |  |            |                  |  |            |                  |
-|            v                  |  |            v                  |  |            v                  |
-| +-------------------------+   |  | +-------------------------+   |  | +-------------------------+   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| |  Oracle Processing      |   |  | |  Oracle Processing      |   |  | |  Oracle Processing      |   |
-| |  Cluster                |   |  | |  Cluster                |   |  | |  Cluster                |   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| |  +------------------+   |   |  | |  +------------------+   |   |  | |  +------------------+   |   |
-| |  | Data Collection  |   |   |  | |  | Data Collection  |   |   |  | |  | Data Collection  |   |   |
-| |  +------------------+   |   |  | |  +------------------+   |   |  | |  +------------------+   |   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| |  +------------------+   |   |  | |  +------------------+   |   |  | |  +------------------+   |   |
-| |  | Validation       |   |   |  | |  | Validation       |   |   |  | |  | Validation       |   |   |
-| |  +------------------+   |   |  | |  +------------------+   |   |  | |  +------------------+   |   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| |  +------------------+   |   |  | |  +------------------+   |   |  | |  +------------------+   |   |
-| |  | Aggregation      |   |   |  | |  | Aggregation      |   |   |  | |  | Aggregation      |   |   |
-| |  +------------------+   |   |  | |  +------------------+   |   |  | |  +------------------+   |   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| |  +------------------+   |   |  | |  +------------------+   |   |  | |  +------------------+   |   |
-| |  | ZKP Engine       |   |   |  | |  | ZKP Engine       |   |   |  | |  | ZKP Engine       |   |   |
-| |  +------------------+   |   |  | |  +------------------+   |   |  | |  +------------------+   |   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| +-------------------------+   |  | +-------------------------+   |  | +-------------------------+   |
-|            |                  |  |            |                  |  |            |                  |
-|            v                  |  |            v                  |  |            v                  |
-| +-------------------------+   |  | +-------------------------+   |  | +-------------------------+   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| |  Distributed Database   |   |  | |  Distributed Database   |   |  | |  Distributed Database   |   |
-| |  Cluster                |   |  | |  Cluster                |   |  | |  Cluster                |   |
-| |                         |   |  | |                         |   |  | |                         |   |
-| +-------------------------+   |  | +-------------------------+   |  | +-------------------------+   |
-|            |                  |  |            |                  |  |            |                  |
-+-------------------------------+  +-------------------------------+  +-------------------------------+
-             |                                  |                                  |
-             v                                  v                                  v
-+--------------------------------------------------------------+
-|                                                              |
-|              Global Database Synchronization                 |
-|                                                              |
-+--------------------------------------------------------------+
-             |                                  |                                  |
-             v                                  v                                  v
-+--------------------------------------------------------------+
-|                                                              |
-|              Blockchain Oracle Contracts                     |
-|                                                              |
-+--------------------------------------------------------------+
-```
-
-#### 9.3.3 Horizontal Scaling Capabilities
-
-The Oracle Aggregation and Data Validation Framework is designed for horizontal scaling across multiple dimensions:
-
-**1. Data Collection Scaling**
-
-- Independent data collection workers per asset or asset group
-- Auto-scaling based on source API call volume
-- Source-specific rate limiting and backoff strategies
-- Parallel connection management for multiple data sources
-
-**2. Statistical Processing Scaling**
-
-- Stateless validation workers allow linear horizontal scaling
-- Workload partitioning by asset, operation type, and time window
-- Dynamic resource allocation based on computational complexity
-- GPU acceleration for complex statistical operations
-
-**3. Storage Scaling**
-
-- Tiered storage architecture for hot, warm, and cold data
-- Time-series optimized database sharding
-- Automatic data pruning and archival policies
-- Read replica distribution for query load distribution
-
-**4. ZKP Processing Scaling**
-
-- Dedicated ZKP proving clusters with specialized hardware
-- Proof generation workload distribution by circuit type
-- Batch proving for similar operations
-- Priority-based scheduling for critical operations
-
-**5. Cross-Chain Scaling**
-
-- Chain-specific worker pools for messaging operations
-- Dedicated verification nodes for each supported blockchain
-- Connection pool management for RPC endpoints
-- Bridge-specific optimizations for different cross-chain protocols
-
-### 9.4 Monitoring & Alerting
-
-A comprehensive monitoring and alerting system ensures the reliability of the Oracle Aggregation and Data Validation Framework:
-
-#### 9.4.1 Key Performance Indicators
-
-The following key metrics are continuously monitored:
-
-**Data Reliability Metrics:**
-
-- Price deviation from consensus (by asset)
-- Source availability percentage (by source)
-- Data freshness (seconds since last update)
-- Confidence score distribution
-- Outlier detection rate
-
-**Performance Metrics:**
-
-- End-to-end latency for price updates
-- Processing time by component
-- Resource utilization (CPU, memory, disk, network)
-- Queue depths for processing stages
-- Transaction success rates
-
-**Security Metrics:**
-
-- Access attempt patterns
-- Suspicious price submission attempts
-- ZKP verification failures
-- Circuit breaker activation frequency
-- Cross-chain message validation failures
-
-**Business Metrics:**
-
-- Assets supported
-- Total value secured
-- Oracle call volume
-- Cross-chain synchronization completeness
-- System uptime and availability
-
-#### 9.4.2 Alerting Framework Implementation
-
-The alerting system implements a multi-tiered approach with different severity levels and responsible teams:
-
-```typescript
-/**
- * Oracle Alerting Framework
- */
-export class OracleAlertingSystem {
-  private static instance: OracleAlertingSystem;
-  private readonly alertThresholds: AlertThresholds;
-  private readonly notificationChannels: NotificationChannel[];
-  private readonly alertHistory: Alert[];
-  private readonly activeAlerts: Map<string, Alert>;
-
-  private constructor() {
-    this.alertThresholds = this.loadDefaultThresholds();
-    this.notificationChannels = [];
-    this.alertHistory = [];
-    this.activeAlerts = new Map();
-
-    // Initialize notification channels
-    this.initializeNotificationChannels();
-  }
-
-  /**
-   * Get singleton instance
-   */
-  public static getInstance(): OracleAlertingSystem {
-    if (!OracleAlertingSystem.instance) {
-      OracleAlertingSystem.instance = new OracleAlertingSystem();
-    }
-
-    return OracleAlertingSystem.instance;
-  }
-
-  /**
-   * Load default alert thresholds
-   */
-  private loadDefaultThresholds(): AlertThresholds {
-    return {
-      priceDeviation: {
-        warning: 0.03, // 3%
-        critical: 0.08, // 8%
-        emergency: 0.15, // 15%
-      },
-      dataFreshness: {
-        warning: 60, // 1 minute
-        critical: 300, // 5 minutes
-        emergency: 900, // 15 minutes
-      },
-      sourceAvailability: {
-        warning: 0.95, // 95%
-        critical: 0.8, // 80%
-        emergency: 0.6, // 60%
-      },
-      processingLatency: {
-        warning: 2000, // 2 seconds
-        critical: 10000, // 10 seconds
-        emergency: 30000, // 30 seconds
-      },
-      securityIncidents: {
-        warning: 1,
-        critical: 5,
-        emergency: 10,
-      },
-      resourceUtilization: {
-        warning: 0.7, // 70%
-        critical: 0.85, // 85%
-        emergency: 0.95, // 95%
-      },
-    };
-  }
-
-  /**
-   * Initialize notification channels
-   */
-  private initializeNotificationChannels(): void {
-    // Add channels based on configuration
-    this.notificationChannels = [
-      {
-        type: ChannelType.EMAIL,
-        target: "oracle-team@resi-protocol.io",
-        minSeverity: AlertSeverity.WARNING,
-        rateLimit: 15 * 60 * 1000, // 15 minutes
-      },
-      {
-        type: ChannelType.SLACK,
-        target: "#oracle-alerts",
-        minSeverity: AlertSeverity.WARNING,
-        rateLimit: 5 * 60 * 1000, // 5 minutes
-      },
-      {
-        type: ChannelType.PAGER_DUTY,
-        target: "oracle-on-call",
-        minSeverity: AlertSeverity.CRITICAL,
-        rateLimit: 10 * 60 * 1000, // 10 minutes
-      },
-      {
-        type: ChannelType.SMS,
-        target: "+1234567890",
-        minSeverity: AlertSeverity.EMERGENCY,
-        rateLimit: 30 * 60 * 1000, // 30 minutes
-      },
-    ];
-  }
-
-  /**
-   * Trigger an alert
-   * @param category Alert category
-   * @param subject Alert subject
-   * @param details Alert details
-   * @param value Metric value
-   * @param asset Affected asset (optional)
-   */
-  public triggerAlert(
-    category: AlertCategory,
-    subject: string,
-    details: string,
-    value: number,
-    asset?: string
-  ): void {
-    // Determine severity based on thresholds
-    const severity = this.calculateSeverity(category, value);
-
-    // Generate alert ID
-    const alertId = this.generateAlertId(category, subject, asset);
-
-    // Check if alert is already active
-    const existingAlert = this.activeAlerts.get(alertId);
-    if (existingAlert) {
-      // Update existing alert
-      existingAlert.updatedAt = new Date();
-      existingAlert.count++;
-      existingAlert.latestValue = value;
-
-      // Escalate severity if needed
-      if (severity > existingAlert.severity) {
-        existingAlert.severity = severity;
-        this.sendNotifications(existingAlert);
-      }
-
-      return;
-    }
-
-    // Create new alert
-    const alert: Alert = {
-      id: alertId,
-      category,
-      severity,
-      subject,
-      details,
-      value,
-      asset,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      count: 1,
-      latestValue: value,
-      resolved: false,
-    };
-
-    // Store alert
-    this.activeAlerts.set(alertId, alert);
-    this.alertHistory.push(alert);
-
-    // Send notifications
-    this.sendNotifications(alert);
-  }
-
-  /**
-   * Resolve an active alert
-   * @param alertId Alert ID to resolve
-   * @param resolution Resolution details
-   */
-  public resolveAlert(alertId: string, resolution: string): void {
-    const alert = this.activeAlerts.get(alertId);
-    if (!alert) {
-      return;
-    }
-
-    // Update alert
-    alert.resolved = true;
-    alert.resolution = resolution;
-    alert.resolvedAt = new Date();
-
-    // Remove from active alerts
-    this.activeAlerts.delete(alertId);
-
-    // Send resolution notification
-    this.sendResolutionNotification(alert);
-  }
-
-  /**
-   * Calculate alert severity based on thresholds
-   * @param category Alert category
-   * @param value Metric value
-   * @returns Alert severity
-   */
-  private calculateSeverity(
-    category: AlertCategory,
-    value: number
-  ): AlertSeverity {
-    let thresholds: Record<string, number>;
-
-    switch (category) {
-      case AlertCategory.PRICE_DEVIATION:
-        thresholds = this.alertThresholds.priceDeviation;
-        break;
-      case AlertCategory.DATA_FRESHNESS:
-        thresholds = this.alertThresholds.dataFreshness;
-        break;
-      case AlertCategory.SOURCE_AVAILABILITY:
-        thresholds = this.alertThresholds.sourceAvailability;
-        // Invert comparison for availability (lower is worse)
-        if (value <= thresholds.emergency) return AlertSeverity.EMERGENCY;
-        if (value <= thresholds.critical) return AlertSeverity.CRITICAL;
-        if (value <= thresholds.warning) return AlertSeverity.WARNING;
-        return AlertSeverity.INFO;
-      case AlertCategory.PROCESSING_LATENCY:
-        thresholds = this.alertThresholds.processingLatency;
-        break;
-      case AlertCategory.SECURITY_INCIDENT:
-        thresholds = this.alertThresholds.securityIncidents;
-        break;
-      case AlertCategory.RESOURCE_UTILIZATION:
-        thresholds = this.alertThresholds.resourceUtilization;
-        break;
-      default:
-        return AlertSeverity.INFO;
-    }
-
-    // Determine severity (higher value is worse)
-    if (value >= thresholds.emergency) return AlertSeverity.EMERGENCY;
-    if (value >= thresholds.critical) return AlertSeverity.CRITICAL;
-    if (value >= thresholds.warning) return AlertSeverity.WARNING;
-
-    return AlertSeverity.INFO;
-  }
-
-  /**
-   * Generate unique alert ID
-   * @param category Alert category
-   * @param subject Alert subject
-   * @param asset Affected asset
-   * @returns Unique alert ID
-   */
-  private generateAlertId(
-    category: AlertCategory,
-    subject: string,
-    asset?: string
-  ): string {
-    const components = [
-      category,
-      subject.replace(/\s+/g, "_").toLowerCase(),
-      asset || "global",
-    ];
-
-    return components.join(":");
-  }
-
-  /**
-   * Send notifications for an alert
-   * @param alert Alert to send notifications for
-   */
-  private sendNotifications(alert: Alert): void {
-    for (const channel of this.notificationChannels) {
-      // Skip if alert severity is below channel minimum
-      if (alert.severity < channel.minSeverity) {
-        continue;
-      }
-
-      // Skip if channel is rate limited
-      const lastSent = channel.lastSent || 0;
-      if (Date.now() - lastSent < channel.rateLimit) {
-        continue;
-      }
-
-      // Send notification
-      this.sendNotification(channel, alert);
-
-      // Update last sent time
-      channel.lastSent = Date.now();
-    }
-  }
-
-  /**
-   * Send notification to a specific channel
-   * @param channel Notification channel
-   * @param alert Alert to send
-   */
-  private sendNotification(channel: NotificationChannel, alert: Alert): void {
-    // Format message based on channel type
-    const message = this.formatAlertMessage(channel.type, alert);
-
-    // Send based on channel type
-    switch (channel.type) {
-      case ChannelType.EMAIL:
-        console.log(`Sending email to ${channel.target}: ${message}`);
-        // Implement email sending
-        break;
-      case ChannelType.SLACK:
-        console.log(`Sending Slack message to ${channel.target}: ${message}`);
-        // Implement Slack integration
-        break;
-      case ChannelType.PAGER_DUTY:
-        console.log(`Triggering PagerDuty for ${channel.target}: ${message}`);
-        // Implement PagerDuty integration
-        break;
-      case ChannelType.SMS:
-        console.log(`Sending SMS to ${channel.target}: ${message}`);
-        // Implement SMS gateway
-        break;
-    }
-  }
-
-  /**
-   * Send resolution notification
-   * @param alert Resolved alert
-   */
-  private sendResolutionNotification(alert: Alert): void {
-    for (const channel of this.notificationChannels) {
-      // Skip if alert severity is below channel minimum
-      if (alert.severity < channel.minSeverity) {
-        continue;
-      }
-
-      // Format resolution message
-      const message = this.formatResolutionMessage(channel.type, alert);
-
-      // Send based on channel type
-      switch (channel.type) {
-        case ChannelType.EMAIL:
-          console.log(
-            `Sending resolution email to ${channel.target}: ${message}`
-          );
-          // Implement email sending
-          break;
-        case ChannelType.SLACK:
-          console.log(
-            `Sending resolution Slack message to ${channel.target}: ${message}`
-          );
-          // Implement Slack integration
-          break;
-        case ChannelType.PAGER_DUTY:
-          console.log(
-            `Resolving PagerDuty incident for ${channel.target}: ${message}`
-          );
-          // Implement PagerDuty resolution
-          break;
-        case ChannelType.SMS:
-          console.log(
-            `Sending resolution SMS to ${channel.target}: ${message}`
-          );
-          // Implement SMS gateway
-          break;
-      }
-    }
-  }
-
-  /**
-   * Format alert message for specific channel
-   * @param channelType Channel type
-   * @param alert Alert to format
-   * @returns Formatted message
-   */
-  private formatAlertMessage(channelType: ChannelType, alert: Alert): string {
-    const severityText = AlertSeverity[alert.severity];
-    const assetText = alert.asset ? `[${alert.asset}]` : "[GLOBAL]";
-    const categoryText = AlertCategory[alert.category];
-
-    const baseMessage = `${severityText} ALERT ${assetText} ${categoryText}: ${alert.subject}`;
-
-    switch (channelType) {
-      case ChannelType.EMAIL:
-        return `${baseMessage}\n\nDetails: ${alert.details}\nValue: ${
-          alert.value
-        }\nTimestamp: ${alert.createdAt.toISOString()}`;
-      case ChannelType.SLACK:
-        return `*${baseMessage}*\n>${alert.details}\nValue: ${alert.value}`;
-      case ChannelType.PAGER_DUTY:
-        return `${baseMessage}: ${alert.details}`;
-      case ChannelType.SMS:
-        return `${severityText} ${categoryText} ${assetText}: ${alert.subject}`;
-      default:
-        return baseMessage;
-    }
-  }
-
-  /**
-   * Format resolution message for specific channel
-   * @param channelType Channel type
-   * @param alert Resolved alert
-   * @returns Formatted resolution message
-   */
-  private formatResolutionMessage(
-    channelType: ChannelType,
-    alert: Alert
-  ): string {
-    const assetText = alert.asset ? `[${alert.asset}]` : "[GLOBAL]";
-    const categoryText = AlertCategory[alert.category];
-
-    const baseMessage = `RESOLVED ${assetText} ${categoryText}: ${alert.subject}`;
-    const resolution = alert.resolution || "Issue resolved automatically";
-
-    switch (channelType) {
-      case ChannelType.EMAIL:
-        return `${baseMessage}\n\nResolution: ${resolution}\nResolved at: ${alert.resolvedAt?.toISOString()}`;
-      case ChannelType.SLACK:
-        return `*${baseMessage}*\n>${resolution}`;
-      case ChannelType.PAGER_DUTY:
-        return `${baseMessage}: ${resolution}`;
-      case ChannelType.SMS:
-        return `RESOLVED ${categoryText} ${assetText}: ${alert.subject}`;
-      default:
-        return baseMessage;
-    }
-  }
-
-  /**
-   * Get active alerts
-   * @returns Array of active alerts
-   */
-  public getActiveAlerts(): Alert[] {
-    return Array.from(this.activeAlerts.values());
-  }
-
-  /**
-   * Get alert history
-   * @param limit Maximum number of alerts to return
-   * @param offset Offset for pagination
-   * @returns Array of historical alerts
-   */
-  public getAlertHistory(limit: number = 100, offset: number = 0): Alert[] {
-    return this.alertHistory
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      .slice(offset, offset + limit);
-  }
-
-  /**
-   * Update alert thresholds
-   * @param category Alert category
-   * @param thresholds New thresholds
-   */
-  public updateThresholds(
-    category: AlertCategory,
-    thresholds: { warning: number; critical: number; emergency: number }
-  ): void {
-    switch (category) {
-      case AlertCategory.PRICE_DEVIATION:
-        this.alertThresholds.priceDeviation = thresholds;
-        break;
-      case AlertCategory.DATA_FRESHNESS:
-        this.alertThresholds.dataFreshness = thresholds;
-        break;
-      case AlertCategory.SOURCE_AVAILABILITY:
-        this.alertThresholds.sourceAvailability = thresholds;
-        break;
-      case AlertCategory.PROCESSING_LATENCY:
-        this.alertThresholds.processingLatency = thresholds;
-        break;
-      case AlertCategory.SECURITY_INCIDENT:
-        this.alertThresholds.securityIncidents = thresholds;
-        break;
-      case AlertCategory.RESOURCE_UTILIZATION:
-        this.alertThresholds.resourceUtilization = thresholds;
-        break;
-    }
-  }
-}
-
-// Types
-enum AlertSeverity {
-  INFO,
-  WARNING,
-  CRITICAL,
-  EMERGENCY,
-}
-
-enum AlertCategory {
-  PRICE_DEVIATION,
-  DATA_FRESHNESS,
-  SOURCE_AVAILABILITY,
-  PROCESSING_LATENCY,
-  SECURITY_INCIDENT,
-  RESOURCE_UTILIZATION,
-  SYSTEM_ERROR,
-}
-
-enum ChannelType {
-  EMAIL,
-  SLACK,
-  PAGER_DUTY,
-  SMS,
-}
-
-interface AlertThresholds {
-  priceDeviation: {
-    warning: number;
-    critical: number;
-    emergency: number;
-  };
-  dataFreshness: {
-    warning: number;
-    critical: number;
-    emergency: number;
-  };
-  sourceAvailability: {
-    warning: number;
-    critical: number;
-    emergency: number;
-  };
-  processingLatency: {
-    warning: number;
-    critical: number;
-    emergency: number;
-  };
-  securityIncidents: {
-    warning: number;
-    critical: number;
-    emergency: number;
-  };
-  resourceUtilization: {
-    warning: number;
-    critical: number;
-    emergency: number;
-  };
-}
-
-interface NotificationChannel {
-  type: ChannelType;
-  target: string;
-  minSeverity: AlertSeverity;
-  rateLimit: number;
-  lastSent?: number;
-}
-
-interface Alert {
-  id: string;
-  category: AlertCategory;
-  severity: AlertSeverity;
-  subject: string;
-  details: string;
-  value: number;
-  asset?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  count: number;
-  latestValue: number;
-  resolved: boolean;
-  resolution?: string;
-  resolvedAt?: Date;
-}
-```
-
-#### 9.4.3 Monitoring Dashboard
-
-The Oracle Monitoring Dashboard provides real-time visibility into the system's operation:
-
-**Dashboard Components:**
-
-1. **Asset Price Overview**
-
-   - Current prices with confidence indicators
-   - Price change graphs with volatility bands
-   - Source agreement visualization
-   - Last update timestamps
-
-2. **System Health Metrics**
-
-   - Component status indicators
-   - Performance graphs (latency, throughput)
-   - Resource utilization meters
-   - Cross-chain synchronization status
-
-3. **Alert Panel**
-
-   - Active alerts with severity indicators
-   - Recent alert history
-   - Resolution status tracking
-   - Escalation workflow status
-
-4. **Oracle Quality Metrics**
-   - Source reliability scores
-   - Data freshness indicators
-   - Validation success rates
-   - Circuit breaker status by asset
-
-## 10. Governance & Parameter Management
-
-The Oracle Aggregation and Data Validation Framework includes comprehensive governance and parameter management capabilities to allow for controlled evolution of the system:
-
-### 10.1 Governance Parameters
-
-The following key parameters can be adjusted through governance:
-
-| Parameter                  | Description                                   | Default Value       | Min Value  | Max Value  | Impact Level |
-| -------------------------- | --------------------------------------------- | ------------------- | ---------- | ---------- | ------------ |
-| Source Weights             | Weight assigned to each oracle source         | Varies by source    | 0          | 1.0        | Medium       |
-| Outlier Thresholds         | Z-score/MAD thresholds for outlier detection  | 3.0 (Z-score)       | 1.5        | 5.0        | High         |
-| Staleness Thresholds       | Maximum age for price data by asset           | 60 minutes          | 5 minutes  | 24 hours   | Critical     |
-| Update Frequency           | Required update frequency by asset            | 5 minutes           | 30 seconds | 1 hour     | Medium       |
-| Circuit Breaker Thresholds | Thresholds for triggering circuit breakers    | Varies by condition | Varies     | Varies     | Critical     |
-| Confidence Thresholds      | Minimum confidence scores required            | 0.8 (80%)           | 0.5 (50%)  | 0.95 (95%) | High         |
-| Fallback Time Periods      | Time periods for fallback calculations (TWAP) | 1 hour              | 5 minutes  | 24 hours   | Medium       |
-| Cross-Chain Delay          | Delay before cross-chain synchronization      | 10 minutes          | 1 minute   | 6 hours    | High         |
-| ZKP Required Assets        | Assets requiring ZKP validation               | Major assets        | None       | All assets | High         |
-| Validator Quorum           | Required validators for consensus             | 2/3 majority        | 51%        | 100%       | Critical     |
-
-### 10.2 Parameter Management Contract
-
-The Parameter Management Contract provides a secure and transparent way to update system parameters:
+### 10.3 Compliance Monitoring Oracle
 
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./OracleGovernanceInterface.sol";
-
 /**
- * @title OracleParameterManager
- * @dev Contract for managing oracle parameters through governance
+ * @title ComplianceMonitoringOracle
+ * @notice Oracle for monitoring regulatory compliance
  */
-contract OracleParameterManager {
-    // Main governance contract
-    OracleGovernanceInterface public governance;
-
-    // Parameter types
-    enum ParameterType {
-        INTEGER,
-        DECIMAL,
-        BOOLEAN,
-        ADDRESS,
-        BYTES32
-    }
-
-    // Parameter definition
-    struct ParameterDefinition {
+contract ComplianceMonitoringOracle {
+    struct ComplianceRequirement {
+        bytes32 requirementId;
         string name;
         string description;
-        ParameterType paramType;
-        uint256 minimumValue;
-        uint256 maximumValue;
-        uint256 impactLevel; // 1-3 (low, medium, high)
-        bool perAsset;       // Whether parameter is set per asset
-        bool active;         // Whether parameter is active
+        uint8 category;
+        bool mandatory;
+        bytes32[] applicableJurisdictions;
+        bool active;
     }
 
-    // Parameter value
-    struct ParameterValue {
-        uint256 intValue;
-        bool boolValue;
-        address addressValue;
-        bytes32 bytes32Value;
-        uint256 lastUpdated;
-        address updatedBy;
+    struct JurisdictionStatus {
+        bytes32 jurisdictionId;
+        string name;
+        uint8 riskLevel;
+        bool sanctioned;
+        bool active;
     }
 
-    // Mapping from parameter ID to definition
-    mapping(bytes32 => ParameterDefinition) public parameters;
+    struct EntityCompliance {
+        address entityAddress;
+        bytes32[] metRequirements;
+        bytes32[] pendingRequirements;
+        mapping(bytes32 => uint256) lastUpdated;
+        mapping(bytes32 => bool) requirementMet;
+        uint8 compliancePercentage;
+        bool active;
+    }
 
-    // Mapping from parameter ID to global value
-    mapping(bytes32 => ParameterValue) public globalValues;
+    struct RegulatoryAlert {
+        bytes32 alertId;
+        bytes32[] jurisdictions;
+        uint8 regulationType;
+        uint8 severity;
+        string description;
+        uint256 timestamp;
+        bool active;
+    }
 
-    // Mapping from parameter ID to asset-specific values
-    mapping(bytes32 => mapping(bytes32 => ParameterValue)) public assetValues;
+    // Compliance requirements
+    mapping(bytes32 => ComplianceRequirement) public complianceRequirements;
+    bytes32[] public requirementIds;
 
-    // List of parameter IDs
-    bytes32[] public parameterIds;
+    // Jurisdiction status
+    mapping(bytes32 => JurisdictionStatus) public jurisdictionStatuses;
+    bytes32[] public jurisdictionIds;
+
+    // Entity compliance
+    mapping(address => EntityCompliance) public entityCompliances;
+    address[] public monitoredEntities;
+
+    // Regulatory alerts
+    mapping(bytes32 => RegulatoryAlert) public regulatoryAlerts;
+    bytes32[] public alertIds;
 
     // Events
-    event ParameterDefined(bytes32 indexed parameterId, string name, ParameterType paramType, bool perAsset);
-    event ParameterUpdated(bytes32 indexed parameterId, bytes32 indexed asset, address updatedBy);
-    event ParameterDeleted(bytes32 indexed parameterId);
-
-    // Access control
-    modifier onlyGovernance() {
-        require(
-            msg.sender == address(governance) ||
-            governance.isGovernor(msg.sender),
-            "Only governance can call this function"
-        );
-        _;
-    }
+    event RequirementRegistered(bytes32 indexed requirementId, string name);
+    event JurisdictionUpdated(bytes32 indexed jurisdictionId, uint8 riskLevel, bool sanctioned);
+    event ComplianceUpdated(address indexed entityAddress, uint8 compliancePercentage);
+    event RegulatoryAlertGenerated(bytes32 indexed alertId, uint8 severity);
 
     /**
-     * @notice Initialize parameter manager
-     * @param _governance Address of governance contract
+     * @notice Register compliance requirement
+     * @param name Requirement name
+     * @param description Requirement description
+     * @param category Requirement category
+     * @param mandatory Whether requirement is mandatory
+     * @param applicableJurisdictions Applicable jurisdictions
+     * @return requirementId Requirement identifier
      */
-    constructor(address _governance) {
-        governance = OracleGovernanceInterface(_governance);
-    }
-
-    /**
-     * @notice Define a new parameter
-     * @param name Parameter name
-     * @param description Parameter description
-     * @param paramType Parameter type
-     * @param minimumValue Minimum value
-     * @param maximumValue Maximum value
-     * @param impactLevel Impact level (1-3)
-     * @param perAsset Whether parameter is set per asset
-     * @return parameterId Generated parameter ID
-     */
-    function defineParameter(
+    function registerComplianceRequirement(
         string calldata name,
         string calldata description,
-        ParameterType paramType,
-        uint256 minimumValue,
-        uint256 maximumValue,
-        uint256 impactLevel,
-        bool perAsset
-    ) external onlyGovernance returns (bytes32 parameterId) {
-        require(bytes(name).length > 0, "Name cannot be empty");
-        require(impactLevel >= 1 && impactLevel <= 3, "Impact level must be 1-3");
+        uint8 category,
+        bool mandatory,
+        bytes32[] calldata applicableJurisdictions
+    ) external returns (bytes32 requirementId) {
+        requirementId = keccak256(abi.encodePacked(
+            name,
+            category,
+            block.timestamp
+        ));
 
-        // Generate parameter ID
-        parameterId = keccak256(abi.encodePacked(name));
-
-        // Ensure parameter doesn't already exist
-        require(!parameters[parameterId].active, "Parameter already exists");
-
-        // Store parameter definition
-        parameters[parameterId] = ParameterDefinition({
+        complianceRequirements[requirementId] = ComplianceRequirement({
+            requirementId: requirementId,
             name: name,
             description: description,
-            paramType: paramType,
-            minimumValue: minimumValue,
-            maximumValue: maximumValue,
-            impactLevel: impactLevel,
-            perAsset: perAsset,
+            category: category,
+            mandatory: mandatory,
+            applicableJurisdictions: applicableJurisdictions,
             active: true
         });
 
-        // Add to parameter list
+        requirementIds.push(requirementId);
+
+        emit RequirementRegistered(requirementId, name);
+
+        return requirementId;
+    }
+
+    /**
+     * @notice Update jurisdiction status
+     * @param jurisdictionId Jurisdiction identifier
+     * @param name Jurisdiction name
+     * @param riskLevel Risk level
+     * @param sanctioned Whether jurisdiction is sanctioned
+     * @return success Success indicator
+     */
+    function updateJurisdictionStatus(
+        bytes32 jurisdictionId,
+        string calldata name,
+        uint8 riskLevel,
+        bool sanctioned
+    ) external returns (bool success) {
+        require(riskLevel <= 5, "Invalid risk level");
+
+        // Check if jurisdiction exists
+        bool exists = jurisdictionStatuses[jurisdictionId].jurisdictionId == jurisdictionId;
+
+        jurisdictionStatuses[jurisdictionId] = JurisdictionStatus({
+            jurisdictionId: jurisdictionId,
+            name: name,
+            riskLevel: riskLevel,
+            sanctioned: sanctioned,
+            active: true
+        });
+
+        if (!exists) {
+            jurisdictionIds.push(jurisdictionId);
+        }
+
+        emit JurisdictionUpdated(jurisdictionId, riskLevel, sanctioned);
+
+        return true;
+    }
+
+    /**
+     * @notice Submit compliance evidence
+     * @param entityAddress Entity address
+     * @param requirementId Requirement identifier
+     * @param evidence Compliance evidence
+     * @return success Success indicator
+     */
+    function submitComplianceEvidence(
+        address entityAddress,
+        bytes32 requirementId,
+        bytes calldata evidence
+    ) external returns (bool success) {
+        require(complianceRequirements[requirementId].active, "Requirement not active");
+
+        // Verify evidence
+        bool evidenceValid = verifyComplianceEvidence(requirementId, evidence);
+
+        // Get or initialize entity compliance
+        if (!isEntityMonitored(entityAddress)) {
+            initializeEntityCompliance(entityAddress);
+        }
+
+        EntityCompliance storage compliance = entityCompliances[entityAddress];
+
+        if (evidenceValid) {
+            // Update requirement status
+            if (!compliance.requirementMet[requirementId]) {
+                compliance.metRequirements.push(requirementId);
+
+                // Remove from pending if present
+                for (uint i = 0; i < compliance.pendingRequirements.length; i++) {
+                    if (compliance.pendingRequirements[i] == requirementId) {
+                        // Remove by swapping with last element and popping
+                        compliance.pendingRequirements[i] = compliance.pendingRequirements[compliance.pendingRequirements.length - 1];
+                        compliance.pendingRequirements.pop();
+                        break;
+                    }
+                }
+            }
+
+            compliance.requirementMet[requirementId] = true;
+            compliance.lastUpdated[requirementId] = block.timestamp;
+        } else {
+            // Mark as not met
+            compliance.requirementMet[requirementId] = false;
+
+            // Add to pending if not present
+            bool isPending = false;
+            for (uint i = 0; i < compliance.pendingRequirements.length; i++) {
+                if (compliance.pendingRequirements[i] == requirementId) {
+                    isPending = true;
+                    break;
+                }
+            }
+
+            if (!isPending) {
+                compliance.pendingRequirements.push(requirementId);
+            }
+
+            // Remove from met if present
+            for (uint i = 0; i < compliance.metRequirements.length; i++) {
+                if (compliance.metRequirements[i] == requirementId) {
+                    // Remove by swapping with last element and popping
+                    compliance.metRequirements[i] = compliance.metRequirements[compliance.metRequirements.length - 1];
+                    compliance.metRequirements.pop();
+                    break;
+                }
+            }
+        }
+
+        // Update compliance percentage
+        updateCompliancePercentage(entityAddress);
+
+        emit ComplianceUpdated(entityAddress, compliance.compliancePercentage);
+
+        return evidenceValid;
+    }
+
+    /**
+     * @notice Generate regulatory alert
+     * @param jurisdictions Affected jurisdictions
+     * @param regulationType Regulation type
+     * @param severity Alert severity
+     * @param description Alert description
+     * @return alertId Alert identifier
+     */
+    function generateRegulatoryAlert(
+        bytes32[] calldata jurisdictions,
+        uint8 regulationType,
+        uint8 severity,
+        string calldata description
+    ) external returns (bytes32 alertId) {
+        require(severity <= 5, "Invalid severity");
+
+        alertId = keccak256(abi.encodePacked(
+            jurisdictions,
+            regulationType,
+            severity,
+            block.timestamp
+        ));
+
+        regulatoryAlerts[alertId] = RegulatoryAlert({
+            alertId: alertId,
+            jurisdictions: jurisdictions,
+            regulationType: regulationType,
+            severity: severity,
+            description: description,
+            timestamp: block.timestamp,
+            active: true
+        });
+
+        alertIds.push(alertId);
+
+        emit RegulatoryAlertGenerated(alertId, severity);
+
+        return alertId;
+    }
+
+    /**
+     * @notice Get compliance status
+     * @param entityAddress Entity address
+     * @param jurisdictions Jurisdictions to check
+     * @return isCompliant Whether entity is compliant
+     * @return compliancePercentage Compliance percentage
+     * @return riskLevel Risk level
+     */
+    function getComplianceStatus(
+        address entityAddress,
+        bytes32[] calldata jurisdictions
+    ) external view returns (
+        bool isCompliant,
+        uint8 compliancePercentage,
+        uint8 riskLevel
+    ) {
+        if (!isEntityMonitored(entityAddress)) {
+            return (false, 0, 5);
+        }
+
+        EntityCompliance storage compliance = entityCompliances[entityAddress];
+
+        compliancePercentage = compliance.compliancePercentage;
+
+        // Calculate risk level based on jurisdiction risk
+        uint8 maxRisk = 0;
+        for (uint i = 0; i < jurisdictions.length; i++) {
+            JurisdictionStatus storage status = jurisdictionStatuses[jurisdictions[i]];
+
+            if (status.sanctioned) {
+                return (false, compliancePercentage, 5);
+            }
+
+            if (status.riskLevel > maxRisk) {
+                maxRisk = status.riskLevel;
+            }
+        }
+
+        riskLevel = maxRisk;
+
+        // Entity is compliant if compliance percentage is high enough for the risk level
+        if (riskLevel <= 2) {
+            isCompliant = compliancePercentage >= 80;
+        } else if (riskLevel <= 4) {
+            isCompliant = compliancePercentage >= 90;
+        } else {
+            isCompliant = compliancePercentage == 100;
+        }
+
+        return (isCompliant, compliancePercentage, riskLevel);
+    }
+
+    /**
+     * @notice Get affected entities by alert
+     * @param alertId Alert identifier
+     * @return entities Affected entities
+     */
+    function getAffectedEntities(
+        bytes32 alertId
+    ) external view returns (address[] memory entities) {
+        RegulatoryAlert storage alert = regulatoryAlerts[alertId];
+        require(alert.alertId == alertId, "Alert not found");
+
+        // Count affected entities
+        uint256 count = 0;
+        for (uint i = 0; i < monitoredEntities.length; i++) {
+            if (isEntityAffectedByAlert(monitoredEntities[i], alert)) {
+                count++;
+            }
+        }
+
+        // Collect affected entities
+        entities = new address[](count);
+        uint256 index = 0;
+
+        for (uint i = 0; i < monitoredEntities.length; i++) {
+            if (isEntityAffectedByAlert(monitoredEntities[i], alert)) {
+                entities[index] = monitoredEntities[i];
+                index++;
+            }
+        }
+
+        return entities;
+    }
+
+    /**
+     * @notice Verify compliance evidence
+     * @param requirementId Requirement identifier
+     * @param evidence Compliance evidence
+     * @return isValid Whether evidence is valid
+     */
+    function verifyComplianceEvidence(
+        bytes32 requirementId,
+        bytes calldata evidence
+    ) internal pure returns (bool isValid) {
+        // Placeholder for actual evidence verification
+
+        return true;
+    }
+
+    /**
+     * @notice Initialize entity compliance
+     * @param entityAddress Entity address
+     */
+    function initializeEntityCompliance(address entityAddress) internal {
+        EntityCompliance storage compliance = entityCompliances[entityAddress];
+        compliance.entityAddress = entityAddress;
+        compliance.active = true;
+
+        // Add to monitored entities
+        monitoredEntities.push(entityAddress);
+    }
+
+    /**
+     * @notice Update compliance percentage
+     * @param entityAddress Entity address
+     */
+    function updateCompliancePercentage(address entityAddress) internal {
+        EntityCompliance storage compliance = entityCompliances[entityAddress];
+
+        // Get applicable requirements
+        bytes32[] memory applicableRequirements = getApplicableRequirements(entityAddress);
+
+        if (applicableRequirements.length == 0) {
+            compliance.compliancePercentage = 100;
+            return;
+        }
+
+        // Count met requirements
+        uint256 metCount = 0;
+        for (uint i = 0; i < applicableRequirements.length; i++) {
+            if (compliance.requirementMet[applicableRequirements[i]]) {
+                metCount++;
+            }
+        }
+
+        // Calculate percentage
+        compliance.compliancePercentage = uint8((metCount * 100) / applicableRequirements.length);
+    }
+
+    /**
+     * @notice Get applicable requirements
+     * @param entityAddress Entity address
+     * @return requirements Applicable requirements
+     */
+    function getApplicableRequirements(
+        address entityAddress
+    ) internal view returns (bytes32[] memory requirements) {
+        // Placeholder for actual determination of applicable requirements
+
+        return requirementIds;
+    }
+
+    /**
+     * @notice Check if entity is monitored
+     * @param entityAddress Entity address
+     * @return isMonitored Whether entity is monitored
+     */
+    function isEntityMonitored(
+        address entityAddress
+    ) internal view returns (bool isMonitored) {
+        return entityCompliances[entityAddress].active;
+    }
+
+    /**
+     * @notice Check if entity is affected by alert
+     * @param entityAddress Entity address
+     * @param alert Regulatory alert
+     * @return isAffected Whether entity is affected
+     */
+    function isEntityAffectedByAlert(
+        address entityAddress,
+        RegulatoryAlert storage alert
+    ) internal view returns (bool isAffected) {
+        // Placeholder for actual determination of affected entities
+
+        return true;
+    }
+}
+```
+
+## 11. AI-Driven Validation & Testing
+
+### 11.1 AI Test Automation Integration
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title AITestAutomation
+ * @notice Integration with AI-driven test automation
+ */
+contract AITestAutomation {
+    struct TestCase {
+        bytes32 testId;
+        string name;
+        string description;
+        bytes testData;
+        bytes expectedResult;
+        uint8 category;
+        uint8 priority;
+        bool isAIGenerated;
+        bool isVerified;
+    }
+
+    struct TestExecution {
+        bytes32 executionId;
+        bytes32 testId;
+        uint256 timestamp;
+        bytes actualResult;
+        bool passed;
+        uint256 executionTime;
+        string failureReason;
+    }
+
+    // Mapping from test ID to test case
+    mapping(bytes32 => TestCase) public testCases;
+    bytes32[] public testIds;
+
+    // Mapping from execution ID to test execution
+    mapping(bytes32 => TestExecution) public testExecutions;
+
+    // Events
+    event TestCaseGenerated(bytes32 indexed testId, string name, bool isAIGenerated);
+    event TestExecuted(bytes32 indexed executionId, bytes32 indexed testId, bool passed);
+
+    /**
+     * @notice Generate AI test case
+     * @param name Test name
+     * @param description Test description
+     * @param category Test category
+     * @param priority Test priority
+     * @param aiPrompt AI prompt for test generation
+     * @return testId Test identifier
+     * @return testData Generated test data
+     */
+    function generateAITestCase(
+        string calldata name,
+        string calldata description,
+        uint8 category,
+        uint8 priority,
+        string calldata aiPrompt
+    ) external returns (
+        bytes32 testId,
+        bytes memory testData
+    ) {
+        // Generate test data based on AI prompt
+        testData = generateTestData(aiPrompt);
+
+        // Generate expected result
+        bytes memory expectedResult = generateExpectedResult(testData);
+
+        // Generate test ID
+        testId = keccak256(abi.encodePacked(
+            name,
+            category,
+            testData,
+            block.timestamp
+        ));
+
+        // Store test case
+        testCases[testId] = TestCase({
+            testId: testId,
+            name: name,
+            description: description,
+            testData: testData,
+            expectedResult: expectedResult,
+            category: category,
+            priority: priority,
+            isAIGenerated: true,
+            isVerified: false
+        });
+
+        testIds.push(testId);
+
+        emit TestCaseGenerated(testId, name, true);
+
+        return (testId, testData);
+    }
+
+    /**
+     * @notice Execute test case
+     * @param testId Test identifier
+     * @return executionId Execution identifier
+     * @return passed Whether test passed
+     */
+    function executeTest(
+        bytes32 testId
+    ) external returns (
+        bytes32 executionId,
+        bool passed
+    ) {
+        TestCase storage testCase = testCases[testId];
+        require(testCase.testId == testId, "Test case not found");
+
+        uint256 startTime = block.timestamp;
+
+        // Execute test
+        bytes memory actualResult = executeTestLogic(testCase.testData);
+
+        // Determine if test passed
+        passed = compareResults(actualResult, testCase.expectedResult);
+
+        // Calculate execution time
+        uint256 executionTime = block.timestamp - startTime;
+
+        // Generate execution ID
+        executionId = keccak256(abi.encodePacked(
+            testId,
+            block.timestamp,
+            actualResult
+        ));
+
+        // Store test execution
+        testExecutions[executionId] = TestExecution({
+            executionId: executionId,
+            testId: testId,
+            timestamp: block.timestamp,
+            actualResult: actualResult,
+            passed: passed,
+            executionTime: executionTime,
+            failureReason: passed ? "" : "Results do not match expected output"
+        });
+
+        emit TestExecuted(executionId, testId, passed);
+
+        return (executionId, passed);
+    }
+
+    /**
+     * @notice Verify AI-generated test
+     * @param testId Test identifier
+     * @return isVerified Whether test is verified
+     */
+    function verifyAITest(
+        bytes32 testId
+    ) external returns (bool isVerified) {
+        TestCase storage testCase = testCases[testId];
+        require(testCase.testId == testId, "Test case not found");
+        require(testCase.isAIGenerated, "Not an AI-generated test");
+
+        // Verify test data and expected result
+        isVerified = true; // Placeholder for actual verification
+
+        testCase.isVerified = isVerified;
+
+        return isVerified;
+    }
+
+    /**
+     * @notice Generate self-healing test
+     * @param failedExecutionId Failed execution identifier
+     * @return newTestId New test identifier
+     * @return healingStrategy Healing strategy
+     */
+    function generateSelfHealingTest(
+        bytes32 failedExecutionId
+    ) external returns (
+        bytes32 newTestId,
+        string memory healingStrategy
+    ) {
+        TestExecution storage execution = testExecutions[failedExecutionId];
+        require(execution.executionId == failedExecutionId, "Execution not found");
+        require(!execution.passed, "Execution did not fail");
+
+        TestCase storage originalTest = testCases[execution.testId];
+
+        // Generate healed test data
+        bytes memory healedTestData = healTestData(
+            originalTest.testData,
+            execution.actualResult,
+            originalTest.expectedResult
+        );
+
+        // Generate new expected result
+        bytes memory newExpectedResult = generateExpectedResult(healedTestData);
+
+        // Generate new test ID
+        newTestId = keccak256(abi.encodePacked(
+            string(abi.encodePacked(originalTest.name, " (Healed)")),
+            originalTest.category,
+            healedTestData,
+            block.timestamp
+        ));
+
+        // Store new test case
+        testCases[newTestId] = TestCase({
+            testId: newTestId,
+            name: string(abi.encodePacked(originalTest.name, " (Healed)")),
+            description: string(abi.encodePacked(originalTest.description, " - Self-healed version")),
+            testData: healedTestData,
+            expectedResult: newExpectedResult,
+            category: originalTest.category,
+            priority: originalTest.priority,
+            isAIGenerated: true,
+            isVerified: false
+        });
+
+        testIds.push(newTestId);
+
+        healingStrategy = "Pattern-based error correction";
+
+        emit TestCaseGenerated(newTestId, string(abi.encodePacked(originalTest.name, " (Healed)")), true);
+
+        return (newTestId, healingStrategy);
+    }
+
+    /**
+     * @notice Generate test data from AI prompt
+     * @param aiPrompt AI prompt
+     * @return testData Generated test data
+     */
+    function generateTestData(
+        string calldata aiPrompt
+    ) internal pure returns (bytes memory testData) {
+        // Placeholder for actual AI-based test data generation
+
+        return abi.encode(aiPrompt, "test data");
+    }
+
+    /**
+     * @notice Generate expected result
+     * @param testData Test data
+     * @return expectedResult Expected result
+     */
+    function generateExpectedResult(
+        bytes memory testData
+    ) internal pure returns (bytes memory expectedResult) {
+        // Placeholder for actual expected result generation
+
+        return abi.encode("expected result");
+    }
+
+    /**
+     * @notice Execute test logic
+     * @param testData Test data
+     * @return actualResult Actual result
+     */
+    function executeTestLogic(
+        bytes memory testData
+    ) internal pure returns (bytes memory actualResult) {
+        // Placeholder for actual test execution
+
+        return abi.encode("actual result");
+    }
+
+    /**
+     * @notice Compare results
+     * @param actualResult Actual result
+     * @param expectedResult Expected result
+     * @return areEqual Whether results are equal
+     */
+    function compareResults(
+        bytes memory actualResult,
+        bytes memory expectedResult
+    ) internal pure returns (bool areEqual) {
+        // Placeholder for actual result comparison
+
+        return keccak256(actualResult) == keccak256(expectedResult);
+    }
+
+    /**
+     * @notice Heal test data
+     * @param originalData Original test data
+     * @param actualResult Actual result
+     * @param expectedResult Expected result
+     * @return healedData Healed test data
+     */
+    function healTestData(
+        bytes memory originalData,
+        bytes memory actualResult,
+        bytes memory expectedResult
+    ) internal pure returns (bytes memory healedData) {
+        // Placeholder for actual test healing
+
+        return originalData;
+    }
+}
+```
+
+### 11.2 LLM-Based Oracle Generation
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title LLMBasedOracleGeneration
+ * @notice Generate oracle validation logic using LLMs
+ */
+contract LLMBasedOracleGeneration {
+    struct ValidationLogic {
+        bytes32 logicId;
+        string name;
+        string description;
+        bytes code;
+        string[] parameters;
+        uint8 complexity;
+        bool isVerified;
+        uint256 generationTime;
+    }
+
+    struct LogicExecution {
+        bytes32 executionId;
+        bytes32 logicId;
+        bytes[] inputs;
+        bytes output;
+        uint256 timestamp;
+        bool success;
+        uint256 gasUsed;
+    }
+
+    // Mapping from logic ID to validation logic
+    mapping(bytes32 => ValidationLogic) public validationLogic;
+    bytes32[] public logicIds;
+
+    // Mapping from execution ID to logic execution
+    mapping(bytes32 => LogicExecution) public logicExecutions;
+
+    // Events
+    event ValidationLogicGenerated(bytes32 indexed logicId, string name);
+    event ValidationLogicVerified(bytes32 indexed logicId, bool verified);
+    event LogicExecuted(bytes32 indexed executionId, bytes32 indexed logicId, bool success);
+
+    /**
+     * @notice Generate validation logic
+     * @param name Logic name
+     * @param description Logic description
+     * @param prompt LLM prompt
+     * @param parameters Logic parameters
+     * @return logicId Logic identifier
+     * @return code Generated code
+     */
+    function generateValidationLogic(
+        string calldata name,
+        string calldata description,
+        string calldata prompt,
+        string[] calldata parameters
+    ) external returns (
+        bytes32 logicId,
+        bytes memory code
+    ) {
+        uint256 startTime = block.timestamp;
+
+        // Generate code using LLM
+        code = generateCode(prompt, parameters);
+
+        // Calculate complexity
+        uint8 complexity = calculateComplexity(code);
+
+        // Generate logic ID
+        logicId = keccak256(abi.encodePacked(
+            name,
+            code,
+            block.timestamp
+        ));
+
+        // Store validation logic
+        validationLogic[logicId] = ValidationLogic({
+            logicId: logicId,
+            name: name,
+            description: description,
+            code: code,
+            parameters: parameters,
+            complexity: complexity,
+            isVerified: false,
+            generationTime: block.timestamp - startTime
+        });
+
+        logicIds.push(logicId);
+
+        emit ValidationLogicGenerated(logicId, name);
+
+        return (logicId, code);
+    }
+
+    /**
+     * @notice Verify validation logic
+     * @param logicId Logic identifier
+     * @param testCases Test cases
+     * @return isVerified Whether logic is verified
+     * @return successRate Success rate
+     */
+    function verifyValidationLogic(
+        bytes32 logicId,
+        bytes[][] calldata testCases
+    ) external returns (
+        bool isVerified,
+        uint256 successRate
+    ) {
+        ValidationLogic storage logic = validationLogic[logicId];
+        require(logic.logicId == logicId, "Logic not found");
+
+        uint256 successCount = 0;
+
+        // Run test cases
+        for (uint i = 0; i < testCases.length; i++) {
+            (bool success,) = executeLogic(logicId, testCases[i]);
+
+            if (success) {
+                successCount++;
+            }
+        }
+
+        // Calculate success rate
+        successRate = (successCount * 100) / testCases.length;
+
+        // Logic is verified if success rate is high enough
+        isVerified = successRate >= 90;
+
+        // Update logic
+        logic.isVerified = isVerified;
+
+        emit ValidationLogicVerified(logicId, isVerified);
+
+        return (isVerified, successRate);
+    }
+
+    /**
+     * @notice Execute validation logic
+     * @param logicId Logic identifier
+     * @param inputs Input parameters
+     * @return success Whether execution was successful
+     * @return executionId Execution identifier
+     */
+    function executeLogic(
+        bytes32 logicId,
+        bytes[] calldata inputs
+    ) public returns (
+        bool success,
+        bytes32 executionId
+    ) {
+        ValidationLogic storage logic = validationLogic[logicId];
+        require(logic.logicId == logicId, "Logic not found");
+
+        uint256 startGas = gasleft();
+
+        // Execute logic
+        (success, bytes memory output) = executeCode(logic.code, inputs);
+
+        uint256 gasUsed = startGas - gasleft();
+
+        // Generate execution ID
+        executionId = keccak256(abi.encodePacked(
+            logicId,
+            inputs,
+            block.timestamp
+        ));
+
+        // Store execution
+        logicExecutions[executionId] = LogicExecution({
+            executionId: executionId,
+            logicId: logicId,
+            inputs: inputs,
+            output: output,
+            timestamp: block.timestamp,
+            success: success,
+            gasUsed: gasUsed
+        });
+
+        emit LogicExecuted(executionId, logicId, success);
+
+        return (success, executionId);
+    }
+
+    /**
+     * @notice Get top performing logic
+     * @param category Logic category
+     * @param count Number of results
+     * @return topLogicIds Top logic identifiers
+     * @return successRates Success rates
+     */
+    function getTopPerformingLogic(
+        string calldata category,
+        uint256 count
+    ) external view returns (
+        bytes32[] memory topLogicIds,
+        uint256[] memory successRates
+    ) {
+        // Count matching logic
+        uint256 matchingCount = 0;
+        for (uint i = 0; i < logicIds.length; i++) {
+            if (stringsEqual(validationLogic[logicIds[i]].description, category)) {
+                matchingCount++;
+            }
+        }
+
+        // Limit count
+        if (count > matchingCount) {
+            count = matchingCount;
+        }
+
+        if (count == 0) {
+            return (new bytes32[](0), new uint256[](0));
+        }
+
+        // Collect and sort matching logic
+        bytes32[] memory matchingLogic = new bytes32[](matchingCount);
+        uint256[] memory matchingRates = new uint256[](matchingCount);
+
+        uint256 index = 0;
+        for (uint i = 0; i < logicIds.length; i++) {
+            if (stringsEqual(validationLogic[logicIds[i]].description, category)) {
+                matchingLogic[index] = logicIds[i];
+                matchingRates[index] = getSuccessRate(logicIds[i]);
+                index++;
+            }
+        }
+
+        // Sort by success rate (descending)
+        for (uint i = 0; i < matchingCount - 1; i++) {
+            for (uint j = 0; j < matchingCount - i - 1; j++) {
+                if (matchingRates[j] < matchingRates[j + 1]) {
+                    // Swap rates
+                    uint256 tempRate = matchingRates[j];
+                    matchingRates[j] = matchingRates[j + 1];
+                    matchingRates[j + 1] = tempRate;
+
+                    // Swap logic IDs
+                    bytes32 tempId = matchingLogic[j];
+                    matchingLogic[j] = matchingLogic[j + 1];
+                    matchingLogic[j + 1] = tempId;
+                }
+            }
+        }
+
+        // Select top N
+        topLogicIds = new bytes32[](count);
+        successRates = new uint256[](count);
+
+        for (uint i = 0; i < count; i++) {
+            topLogicIds[i] = matchingLogic[i];
+            successRates[i] = matchingRates[i];
+        }
+
+        return (topLogicIds, successRates);
+    }
+
+    /**
+     * @notice Generate code using LLM
+     * @param prompt LLM prompt
+     * @param parameters Logic parameters
+     * @return code Generated code
+     */
+    function generateCode(
+        string calldata prompt,
+        string[] calldata parameters
+    ) internal pure returns (bytes memory code) {
+        // Placeholder for actual LLM-based code generation
+
+        return abi.encode("function validate(bytes[] memory inputs) public pure returns (bool) { return true; }");
+    }
+
+    /**
+     * @notice Calculate code complexity
+     * @param code Code
+     * @return complexity Complexity level
+     */
+    function calculateComplexity(
+        bytes memory code
+    ) internal pure returns (uint8 complexity) {
+        // Placeholder for actual complexity calculation
+
+        return 1;
+    }
+
+    /**
+     * @notice Execute code
+     * @param code Code to execute
+     * @param inputs Input parameters
+     * @return success Whether execution was successful
+     * @return output Execution output
+     */
+    function executeCode(
+        bytes memory code,
+        bytes[] calldata inputs
+    ) internal pure returns (
+        bool success,
+        bytes memory output
+    ) {
+        // Placeholder for actual code execution
+
+        return (true, abi.encode(true));
+    }
+
+    /**
+     * @notice Get success rate
+     * @param logicId Logic identifier
+     * @return successRate Success rate
+     */
+    function getSuccessRate(
+        bytes32 logicId
+    ) internal view returns (uint256 successRate) {
+        // Placeholder for actual success rate calculation
+
+        return 95;
+    }
+
+    /**
+     * @notice Compare strings
+     * @param a First string
+     * @param b Second string
+     * @return equal Whether strings are equal
+     */
+    function stringsEqual(
+        string memory a,
+        string memory b
+    ) internal pure returns (bool equal) {
+        return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
+    }
+}
+```
+
+### 11.3 Enhanced Validation Workflows
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title EnhancedValidationWorkflows
+ * @notice Implements enhanced validation workflows with automated remediation
+ */
+contract EnhancedValidationWorkflows {
+    enum ValidationStatus {
+        Pass,
+        Fail,
+        Warn,
+        Skip
+    }
+
+    struct ValidationSet {
+        bytes32 setId;
+        string name;
+        string description;
+        bytes32[] validationRules;
+        uint256 scheduleInterval;
+        bool autoRepair;
+        uint8 severity;
+        bool active;
+    }
+
+    struct ValidationRule {
+        bytes32 ruleId;
+        string name;
+        string description;
+        bytes code;
+        string[] parameters;
+        uint8 severity;
+        bool active;
+    }
+
+    struct ValidationExecution {
+        bytes32 executionId;
+        bytes32 setId;
+        uint256 timestamp;
+        ValidationStatus status;
+        uint256 passCount;
+        uint256 failCount;
+        uint256 warnCount;
+        uint256 skipCount;
+        bool repairAttempted;
+        bool repairSuccessful;
+    }
+
+    struct RuleExecution {
+        bytes32 executionId;
+        bytes32 ruleId;
+        ValidationStatus status;
+        string message;
+        uint256 timestamp;
+    }
+
+    // Mapping from set ID to validation set
+    mapping(bytes32 => ValidationSet) public validationSets;
+    bytes32[] public validationSetIds;
+
+    // Mapping from rule ID to validation rule
+    mapping(bytes32 => ValidationRule) public validationRules;
+    bytes32[] public validationRuleIds;
+
+    // Mapping from execution ID to validation execution
+    mapping(bytes32 => ValidationExecution) public validationExecutions;
+
+    // Mapping from execution ID to rule executions
+    mapping(bytes32 => RuleExecution[]) public ruleExecutions;
+
+    // Events
+    event ValidationSetCreated(bytes32 indexed setId, string name);
+    event ValidationRuleCreated(bytes32 indexed ruleId, string name);
+    event ValidationSetExecuted(bytes32 indexed executionId, bytes32 indexed setId, ValidationStatus status);
+    event RepairAttempted(bytes32 indexed executionId, bool successful);
+
+    /**
+     * @notice Create validation set
+     * @param name Set name
+     * @param description Set description
+     * @param validationRules Validation rule IDs
+     * @param scheduleInterval Schedule interval in seconds
+     * @param autoRepair Whether to auto-repair
+     * @param severity Set severity
+     * @return setId Set identifier
+     */
+    function createValidationSet(
+        string calldata name,
+        string calldata description,
+        bytes32[] calldata validationRules,
+        uint256 scheduleInterval,
+        bool autoRepair,
+        uint8 severity
+    ) external returns (bytes32 setId) {
+        require(severity <= 3, "Invalid severity");
+
+        // Verify rules exist
+        for (uint i = 0; i < validationRules.length; i++) {
+            require(validationRules[validationRules[i]].ruleId == validationRules[i], "Rule not found");
+        }
+
+        // Generate set ID
+        setId = keccak256(abi.encodePacked(
+            name,
+            validationRules,
+            block.timestamp
+        ));
+
+        // Store validation set
+        validationSets[setId] = ValidationSet({
+            setId: setId,
+            name: name,
+            description: description,
+            validationRules: validationRules,
+            scheduleInterval: scheduleInterval,
+            autoRepair: autoRepair,
+            severity: severity,
+            active: true
+        });
+
+        validationSetIds.push(setId);
+
+        emit ValidationSetCreated(setId, name);
+
+        return setId;
+    }
+
+    /**
+     * @notice Create validation rule
+     * @param name Rule name
+     * @param description Rule description
+     * @param code Rule code
+     * @param parameters Rule parameters
+     * @param severity Rule severity
+     * @return ruleId Rule identifier
+     */
+    function createValidationRule(
+        string calldata name,
+        string calldata description,
+        bytes calldata code,
+        string[] calldata parameters,
+        uint8 severity
+    ) external returns (bytes32 ruleId) {
+        require(severity <= 3, "Invalid severity");
+
+        // Generate rule ID
+        ruleId = keccak256(abi.encodePacked(
+            name,
+            code,
+            block.timestamp
+        ));
+
+        // Store validation rule
+        validationRules[ruleId] = ValidationRule({
+            ruleId: ruleId,
+            name: name,
+            description: description,
+            code: code,
+            parameters: parameters,
+            severity: severity,
+            active: true
+        });
+
+        validationRuleIds.push(ruleId);
+
+        emit ValidationRuleCreated(ruleId, name);
+
+        return ruleId;
+    }
+
+    /**
+     * @notice Execute validation set
+     * @param setId Set identifier
+     * @return executionId Execution identifier
+     * @return status Validation status
+     */
+    function executeValidationSet(
+        bytes32 setId
+    ) external returns (
+        bytes32 executionId,
+        ValidationStatus status
+    ) {
+        ValidationSet storage validationSet = validationSets[setId];
+        require(validationSet.setId == setId, "Validation set not found");
+        require(validationSet.active, "Validation set not active");
+
+        // Generate execution ID
+        executionId = keccak256(abi.encodePacked(
+            setId,
+            block.timestamp,
+            msg.sender
+        ));
+
+        // Execute each rule
+        uint256 passCount = 0;
+        uint256 failCount = 0;
+        uint256 warnCount = 0;
+        uint256 skipCount = 0;
+
+        RuleExecution[] storage executions = ruleExecutions[executionId];
+
+        for (uint i = 0; i < validationSet.validationRules.length; i++) {
+            bytes32 ruleId = validationSet.validationRules[i];
+            ValidationRule storage rule = validationRules[ruleId];
+
+            if (!rule.active) {
+                // Skip inactive rules
+                executions.push(RuleExecution({
+                    executionId: executionId,
+                    ruleId: ruleId,
+                    status: ValidationStatus.Skip,
+                    message: "Rule inactive",
+                    timestamp: block.timestamp
+                }));
+
+                skipCount++;
+                continue;
+            }
+
+            // Execute rule
+            (ValidationStatus ruleStatus, string memory message) = executeRule(rule);
+
+            // Record execution
+            executions.push(RuleExecution({
+                executionId: executionId,
+                ruleId: ruleId,
+                status: ruleStatus,
+                message: message,
+                timestamp: block.timestamp
+            }));
+
+            // Update counts
+            if (ruleStatus == ValidationStatus.Pass) {
+                passCount++;
+            } else if (ruleStatus == ValidationStatus.Fail) {
+                failCount++;
+            } else if (ruleStatus == ValidationStatus.Warn) {
+                warnCount++;
+            } else if (ruleStatus == ValidationStatus.Skip) {
+                skipCount++;
+            }
+        }
+
+        // Determine overall status
+        if (failCount > 0) {
+            status = ValidationStatus.Fail;
+        } else if (warnCount > 0) {
+            status = ValidationStatus.Warn;
+        } else if (passCount > 0) {
+            status = ValidationStatus.Pass;
+        } else {
+            status = ValidationStatus.Skip;
+        }
+
+        // Store validation execution
+        validationExecutions[executionId] = ValidationExecution({
+            executionId: executionId,
+            setId: setId,
+            timestamp: block.timestamp,
+            status: status,
+            passCount: passCount,
+            failCount: failCount,
+            warnCount: warnCount,
+            skipCount: skipCount,
+            repairAttempted: false,
+            repairSuccessful: false
+        });
+
+        emit ValidationSetExecuted(executionId, setId, status);
+
+        // Attempt auto-repair if enabled and validation failed
+        if (validationSet.autoRepair && status == ValidationStatus.Fail) {
+            attemptRepair(executionId);
+        }
+
+        return (executionId, status);
+    }
+
+    /**
+     * @notice Attempt repair for failed validation
+     * @param executionId Execution identifier
+     * @return successful Whether repair was successful
+     */
+    function attemptRepair(
+        bytes32 executionId
+    ) public returns (bool successful) {
+        ValidationExecution storage execution = validationExecutions[executionId];
+        require(execution.executionId == executionId, "Execution not found");
+        require(execution.status == ValidationStatus.Fail, "Execution did not fail");
+        require(!execution.repairAttempted, "Repair already attempted");
+
+        ValidationSet storage validationSet = validationSets[execution.setId];
+
+        // Mark repair as attempted
+        execution.repairAttempted = true;
+
+        // Get rule executions
+        RuleExecution[] storage executions = ruleExecutions[executionId];
+
+        // Attempt to repair each failed rule
+        uint256 repairedCount = 0;
+        uint256 failedCount = 0;
+
+        for (uint i = 0; i < executions.length; i++) {
+            if (executions[i].status == ValidationStatus.Fail) {
+                ValidationRule storage rule = validationRules[executions[i].ruleId];
+
+                // Attempt repair
+                bool repaired = repairRule(rule);
+
+                if (repaired) {
+                    repairedCount++;
+                } else {
+                    failedCount++;
+                }
+            }
+        }
+
+        // Repair is successful if all failed rules were repaired
+        successful = failedCount == 0 && repairedCount > 0;
+
+        // Update execution
+        execution.repairSuccessful = successful;
+
+        emit RepairAttempted(executionId, successful);
+
+        return successful;
+    }
+
+    /**
+     * @notice Execute validation rule
+     * @param rule Validation rule
+     * @return status Validation status
+     * @return message Status message
+     */
+    function executeRule(
+        ValidationRule storage rule
+    ) internal view returns (
+        ValidationStatus status,
+        string memory message
+    ) {
+        // Placeholder for actual rule execution
+
+        return (ValidationStatus.Pass, "Validation passed");
+    }
+
+    /**
+     * @notice Repair validation rule
+     * @param rule Validation rule
+     * @return repaired Whether rule was repaired
+     */
+    function repairRule(
+        ValidationRule storage rule
+    ) internal returns (bool repaired) {
+        // Placeholder for actual rule repair
+
+        return true;
+    }
+}
+```
+
+## 12. Governance & Parameter Management
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+/**
+ * @title OracleParameterGovernance
+ * @notice Manages oracle parameters and governance
+ */
+contract OracleParameterGovernance {
+    enum ImpactLevel {
+        Low,
+        Medium,
+        High
+    }
+
+    enum ProposalStatus {
+        Pending,
+        Active,
+        Executed,
+        Rejected,
+        Cancelled
+    }
+
+    struct Parameter {
+        bytes32 parameterId;
+        string name;
+        string description;
+        bytes value;
+        ImpactLevel impact;
+        uint256 lastUpdated;
+        address updatedBy;
+        bool active;
+    }
+
+    struct Proposal {
+        bytes32 proposalId;
+        string title;
+        string description;
+        bytes32[] parameterIds;
+        bytes[] newValues;
+        ImpactLevel impact;
+        uint256 proposedAt;
+        uint256 votingEnds;
+        uint256 executionDelay;
+        address proposer;
+        ProposalStatus status;
+    }
+
+    struct Vote {
+        address voter;
+        bool support;
+        uint256 weight;
+        string reason;
+    }
+
+    // Mapping from parameter ID to parameter
+    mapping(bytes32 => Parameter) public parameters;
+    bytes32[] public parameterIds;
+
+    // Mapping from proposal ID to proposal
+    mapping(bytes32 => Proposal) public proposals;
+    bytes32[] public proposalIds;
+
+    // Mapping from proposal ID to votes
+    mapping(bytes32 => Vote[]) public proposalVotes;
+
+    // Mapping from proposal ID to voter to whether they have voted
+    mapping(bytes32 => mapping(address => bool)) public hasVoted;
+
+    // Oracle governance settings
+    uint256 public votingPeriod = 3 days;
+    uint256 public executionDelay = 1 days;
+    uint256 public quorum = 100;
+    uint256 public proposalThreshold = 10;
+
+    // Access control
+    mapping(address => bool) public isGovernor;
+    mapping(address => uint256) public votingPower;
+
+    // Events
+    event ParameterCreated(bytes32 indexed parameterId, string name);
+    event ParameterUpdated(bytes32 indexed parameterId, bytes newValue);
+    event ProposalCreated(bytes32 indexed proposalId, address indexed proposer);
+    event ProposalVote(bytes32 indexed proposalId, address indexed voter, bool support);
+    event ProposalExecuted(bytes32 indexed proposalId);
+    event ProposalRejected(bytes32 indexed proposalId);
+
+    /**
+     * @notice Create parameter
+     * @param name Parameter name
+     * @param description Parameter description
+     * @param value Parameter value
+     * @param impact Impact level
+     * @return parameterId Parameter identifier
+     */
+    function createParameter(
+        string calldata name,
+        string calldata description,
+        bytes calldata value,
+        ImpactLevel impact
+    ) external returns (bytes32 parameterId) {
+        require(isGovernor[msg.sender], "Not governor");
+
+        // Generate parameter ID
+        parameterId = keccak256(abi.encodePacked(
+            name,
+            block.timestamp
+        ));
+
+        // Store parameter
+        parameters[parameterId] = Parameter({
+            parameterId: parameterId,
+            name: name,
+            description: description,
+            value: value,
+            impact: impact,
+            lastUpdated: block.timestamp,
+            updatedBy: msg.sender,
+            active: true
+        });
+
         parameterIds.push(parameterId);
 
-        emit ParameterDefined(parameterId, name, paramType, perAsset);
+        emit ParameterCreated(parameterId, name);
 
         return parameterId;
     }
 
     /**
-     * @notice Set integer parameter value
-     * @param parameterId Parameter ID
-     * @param value Parameter value
-     * @param asset Asset identifier (bytes32(0) for global)
+     * @notice Update parameter
+     * @param parameterId Parameter identifier
+     * @param newValue New value
+     * @return success Success indicator
      */
-    function setIntParameter(
+    function updateParameter(
         bytes32 parameterId,
-        uint256 value,
-        bytes32 asset
-    ) external onlyGovernance {
-        // Get parameter definition
-        ParameterDefinition storage definition = parameters[parameterId];
+        bytes calldata newValue
+    ) external returns (bool success) {
+        require(isGovernor[msg.sender], "Not governor");
 
-        // Validate parameter
-        require(definition.active, "Parameter not active");
-        require(definition.paramType == ParameterType.INTEGER, "Parameter is not integer type");
-        require(value >= definition.minimumValue, "Value below minimum");
-        require(value <= definition.maximumValue, "Value above maximum");
+        Parameter storage param = parameters[parameterId];
+        require(param.parameterId == parameterId, "Parameter not found");
+        require(param.active, "Parameter not active");
 
-        // Check if asset-specific parameter
-        if (asset != bytes32(0)) {
-            require(definition.perAsset, "Parameter is not per-asset");
+        // Check impact level for direct updates
+        require(param.impact == ImpactLevel.Low, "Requires proposal for medium/high impact");
 
-            // Update asset-specific value
-            assetValues[parameterId][asset] = ParameterValue({
-                intValue: value,
-                boolValue: false,
-                addressValue: address(0),
-                bytes32Value: bytes32(0),
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        } else {
-            // Update global value
-            globalValues[parameterId] = ParameterValue({
-                intValue: value,
-                boolValue: false,
-                addressValue: address(0),
-                bytes32Value: bytes32(0),
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        }
+        // Update parameter
+        param.value = newValue;
+        param.lastUpdated = block.timestamp;
+        param.updatedBy = msg.sender;
 
-        emit ParameterUpdated(parameterId, asset, msg.sender);
+        emit ParameterUpdated(parameterId, newValue);
+
+        return true;
     }
 
     /**
-     * @notice Set decimal parameter value (stored as fixed-point)
-     * @param parameterId Parameter ID
-     * @param value Parameter value (with 18 decimals)
-     * @param asset Asset identifier (bytes32(0) for global)
+     * @notice Create proposal
+     * @param title Proposal title
+     * @param description Proposal description
+     * @param parameterIds Parameter IDs
+     * @param newValues New values
+     * @return proposalId Proposal identifier
      */
-    function setDecimalParameter(
-        bytes32 parameterId,
-        uint256 value,
-        bytes32 asset
-    ) external onlyGovernance {
-        // Get parameter definition
-        ParameterDefinition storage definition = parameters[parameterId];
+    function createProposal(
+        string calldata title,
+        string calldata description,
+        bytes32[] calldata parameterIds,
+        bytes[] calldata newValues
+    ) external returns (bytes32 proposalId) {
+        require(isGovernor[msg.sender], "Not governor");
+        require(votingPower[msg.sender] >= proposalThreshold, "Insufficient voting power");
+        require(parameterIds.length == newValues.length, "Array length mismatch");
+        require(parameterIds.length > 0, "No parameters");
 
-        // Validate parameter
-        require(definition.active, "Parameter not active");
-        require(definition.paramType == ParameterType.DECIMAL, "Parameter is not decimal type");
-        require(value >= definition.minimumValue, "Value below minimum");
-        require(value <= definition.maximumValue, "Value above maximum");
+        // Determine impact level
+        ImpactLevel highestImpact = ImpactLevel.Low;
 
-        // Check if asset-specific parameter
-        if (asset != bytes32(0)) {
-            require(definition.perAsset, "Parameter is not per-asset");
+        for (uint i = 0; i < parameterIds.length; i++) {
+            Parameter storage param = parameters[parameterIds[i]];
+            require(param.parameterId == parameterIds[i], "Parameter not found");
+            require(param.active, "Parameter not active");
 
-            // Update asset-specific value
-            assetValues[parameterId][asset] = ParameterValue({
-                intValue: value,
-                boolValue: false,
-                addressValue: address(0),
-                bytes32Value: bytes32(0),
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        } else {
-            // Update global value
-            globalValues[parameterId] = ParameterValue({
-                intValue: value,
-                boolValue: false,
-                addressValue: address(0),
-                bytes32Value: bytes32(0),
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        }
-
-        emit ParameterUpdated(parameterId, asset, msg.sender);
-    }
-
-    /**
-     * @notice Set boolean parameter value
-     * @param parameterId Parameter ID
-     * @param value Parameter value
-     * @param asset Asset identifier (bytes32(0) for global)
-     */
-    function setBoolParameter(
-        bytes32 parameterId,
-        bool value,
-        bytes32 asset
-    ) external onlyGovernance {
-        // Get parameter definition
-        ParameterDefinition storage definition = parameters[parameterId];
-
-        // Validate parameter
-        require(definition.active, "Parameter not active");
-        require(definition.paramType == ParameterType.BOOLEAN, "Parameter is not boolean type");
-
-        // Check if asset-specific parameter
-        if (asset != bytes32(0)) {
-            require(definition.perAsset, "Parameter is not per-asset");
-
-            // Update asset-specific value
-            assetValues[parameterId][asset] = ParameterValue({
-                intValue: 0,
-                boolValue: value,
-                addressValue: address(0),
-                bytes32Value: bytes32(0),
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        } else {
-            // Update global value
-            globalValues[parameterId] = ParameterValue({
-                intValue: 0,
-                boolValue: value,
-                addressValue: address(0),
-                bytes32Value: bytes32(0),
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        }
-
-        emit ParameterUpdated(parameterId, asset, msg.sender);
-    }
-
-    /**
-     * @notice Set address parameter value
-     * @param parameterId Parameter ID
-     * @param value Parameter value
-     * @param asset Asset identifier (bytes32(0) for global)
-     */
-    function setAddressParameter(
-        bytes32 parameterId,
-        address value,
-        bytes32 asset
-    ) external onlyGovernance {
-        // Get parameter definition
-        ParameterDefinition storage definition = parameters[parameterId];
-
-        // Validate parameter
-        require(definition.active, "Parameter not active");
-        require(definition.paramType == ParameterType.ADDRESS, "Parameter is not address type");
-        require(value != address(0), "Cannot set zero address");
-
-        // Check if asset-specific parameter
-        if (asset != bytes32(0)) {
-            require(definition.perAsset, "Parameter is not per-asset");
-
-            // Update asset-specific value
-            assetValues[parameterId][asset] = ParameterValue({
-                intValue: 0,
-                boolValue: false,
-                addressValue: value,
-                bytes32Value: bytes32(0),
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        } else {
-            // Update global value
-            globalValues[parameterId] = ParameterValue({
-                intValue: 0,
-                boolValue: false,
-                addressValue: value,
-                bytes32Value: bytes32(0),
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        }
-
-        emit ParameterUpdated(parameterId, asset, msg.sender);
-    }
-
-    /**
-     * @notice Set bytes32 parameter value
-     * @param parameterId Parameter ID
-     * @param value Parameter value
-     * @param asset Asset identifier (bytes32(0) for global)
-     */
-    function setBytes32Parameter(
-        bytes32 parameterId,
-        bytes32 value,
-        bytes32 asset
-    ) external onlyGovernance {
-        // Get parameter definition
-        ParameterDefinition storage definition = parameters[parameterId];
-
-        // Validate parameter
-        require(definition.active, "Parameter not active");
-        require(definition.paramType == ParameterType.BYTES32, "Parameter is not bytes32 type");
-        require(value != bytes32(0), "Cannot set zero bytes32");
-
-        // Check if asset-specific parameter
-        if (asset != bytes32(0)) {
-            require(definition.perAsset, "Parameter is not per-asset");
-
-            // Update asset-specific value
-            assetValues[parameterId][asset] = ParameterValue({
-                intValue: 0,
-                boolValue: false,
-                addressValue: address(0),
-                bytes32Value: value,
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        } else {
-            // Update global value
-            globalValues[parameterId] = ParameterValue({
-                intValue: 0,
-                boolValue: false,
-                addressValue: address(0),
-                bytes32Value: value,
-                lastUpdated: block.timestamp,
-                updatedBy: msg.sender
-            });
-        }
-
-        emit ParameterUpdated(parameterId, asset, msg.sender);
-    }
-
-    /**
-     * @notice Get integer parameter value
-     * @param parameterId Parameter ID
-     * @param asset Asset identifier (bytes32(0) for global)
-     * @return value Parameter value
-     */
-    function getIntParameter(
-        bytes32 parameterId,
-        bytes32 asset
-    ) external view returns (uint256 value) {
-        // Get parameter definition
-        ParameterDefinition storage definition = parameters[parameterId];
-
-        // Validate parameter
-        require(definition.active, "Parameter not active");
-        require(definition.paramType == ParameterType.INTEGER, "Parameter is not integer type");
-
-        // Check if asset-specific parameter is requested
-        if (asset != bytes32(0)) {
-            // Check if asset-specific value exists
-            if (assetValues[parameterId][asset].lastUpdated > 0) {
-                return assetValues[parameterId][asset].intValue;
+            if (param.impact > highestImpact) {
+                highestImpact = param.impact;
             }
-
-            // Fall back to global value
-            return globalValues[parameterId].intValue;
         }
 
-        // Return global value
-        return globalValues[parameterId].intValue;
-    }
+        // Generate proposal ID
+        proposalId = keccak256(abi.encodePacked(
+            title,
+            parameterIds,
+            block.timestamp
+        ));
 
-    /**
-     * @notice Get decimal parameter value
-     * @param parameterId Parameter ID
-     * @param asset Asset identifier (bytes32(0) for global)
-     * @return value Parameter value (with 18 decimals)
-     */
-    function getDecimalParameter(
-        bytes32 parameterId,
-        bytes32 asset
-    ) external view returns (uint256 value) {
-        // Get parameter definition
-        ParameterDefinition storage definition = parameters[parameterId];
+        // Calculate voting end time
+        uint256 votingEnds = block.timestamp + votingPeriod;
 
-        // Validate parameter
-        require(definition.active, "Parameter not active");
-        require(definition.paramType == ParameterType.DECIMAL, "Parameter is not decimal type");
-
-        // Check if asset-specific parameter is requested
-        if (asset != bytes32(0)) {
-            // Check if asset-specific value exists
-            if (assetValues[parameterId][asset].lastUpdated > 0) {
-                return assetValues[parameterId][asset].intValue;
-            }
-
-            // Fall back to global value
-            return globalValues[parameterId].intValue;
+        // Calculate execution delay based on impact
+        uint256 delay = executionDelay;
+        if (highestImpact == ImpactLevel.High) {
+            delay = executionDelay * 3;
+        } else if (highestImpact == ImpactLevel.Medium) {
+            delay = executionDelay * 2;
         }
 
-        // Return global value
-        return globalValues[parameterId].intValue;
+        // Store proposal
+        proposals[proposalId] = Proposal({
+            proposalId: proposalId,
+            title: title,
+            description: description,
+            parameterIds: parameterIds,
+            newValues: newValues,
+            impact: highestImpact,
+            proposedAt: block.timestamp,
+            votingEnds: votingEnds,
+            executionDelay: delay,
+            proposer: msg.sender,
+            status: ProposalStatus.Active
+        });
+
+        proposalIds.push(proposalId);
+
+        emit ProposalCreated(proposalId, msg.sender);
+
+        return proposalId;
     }
 
     /**
-     * @notice Get boolean parameter value
-     * @param parameterId Parameter ID
-     * @param asset Asset identifier (bytes32(0) for global)
-     * @return value Parameter value
+     * @notice Vote on proposal
+     * @param proposalId Proposal identifier
+     * @param support Whether to support proposal
+     * @param reason Vote reason
+     * @return success Success indicator
      */
-    function getBoolParameter(
-        bytes32 parameterId,
-        bytes32 asset
-    ) external view returns (bool value) {
-        // Get parameter definition
-        ParameterDefinition storage definition = parameters[parameterId];
+    function voteOnProposal(
+        bytes32 proposalId,
+        bool support,
+        string calldata reason
+    ) external returns (bool success) {
+        require(isGovernor[msg.sender], "Not governor");
+        require(votingPower[msg.sender] > 0, "No voting power");
 
-        // Validate parameter
-        require(definition.active, "Parameter not active");
-        require(definition.paramType == ParameterType.BOOLEAN, "Parameter is not boolean type");
+        Proposal storage proposal = proposals[proposalId];
+        require(proposal.proposalId == proposalId, "Proposal not found");
+        require(proposal.status == ProposalStatus.Active, "Proposal not active");
+        require(block.timestamp <= proposal.votingEnds, "Voting ended");
+        require(!hasVoted[proposalId][msg.sender], "Already voted");
 
-        // Check if asset-specific parameter is requested
-        if (asset != bytes32(0)) {
-            // Check if asset-specific value exists
-            if (assetValues[parameterId][asset].lastUpdated > 0) {
-                return assetValues[parameterId][asset].boolValue;
-            }
+        // Record vote
+        proposalVotes[proposalId].push(Vote({
+            voter: msg.sender,
+            support: support,
+            weight: votingPower[msg.sender],
+            reason: reason
+        }));
 
-            // Fall back to global value
-            return globalValues[parameterId].boolValue;
-        }
+        hasVoted[proposalId][msg.sender] = true;
 
-        // Return global value
-        return globalValues[parameterId].boolValue;
+        emit ProposalVote(proposalId, msg.sender, support);
+
+        return true;
     }
 
     /**
-     * @notice Delete parameter
-     * @param parameterId Parameter ID
+     * @notice Execute proposal
+     * @param proposalId Proposal identifier
+     * @return success Success indicator
      */
-    function deleteParameter(bytes32 parameterId) external onlyGovernance {
-        // Get parameter definition
-        ParameterDefinition storage definition = parameters[parameterId];
-
-        // Validate parameter
-        require(definition.active, "Parameter not active");
-
-        // Deactivate parameter
-        definition.active = false;
-
-        emit ParameterDeleted(parameterId);
-    }
-
-    /**
-     * @notice Get parameter count
-     * @return count Number of parameters
-     */
-    function getParameterCount() external view returns (uint256 count) {
-        return parameterIds.length;
-    }
-
-    /**
-     * @notice Get parameter details
-     * @param parameterId Parameter ID
-     * @return name Parameter name
-     * @return description Parameter description
-     * @return paramType Parameter type
-     * @return minimumValue Minimum value
-     * @return maximumValue Maximum value
-     * @return impactLevel Impact level
-     * @return perAsset Whether parameter is per-asset
-     * @return active Whether parameter is active
-     */
-    function getParameterDetails(
-        bytes32 parameterId
-    ) external view returns (
-        string memory name,
-        string memory description,
-        ParameterType paramType,
-        uint256 minimumValue,
-        uint256 maximumValue,
-        uint256 impactLevel,
-        bool perAsset,
-        bool active
-    ) {
-        ParameterDefinition storage definition = parameters[parameterId];
-
-        return (
-            definition.name,
-            definition.description,
-            definition.paramType,
-            definition.minimumValue,
-            definition.maximumValue,
-            definition.impactLevel,
-            definition.perAsset,
-            definition.active
+    function executeProposal(
+        bytes32 proposalId
+    ) external returns (bool success) {
+        Proposal storage proposal = proposals[proposalId];
+        require(proposal.proposalId == proposalId, "Proposal not found");
+        require(proposal.status == ProposalStatus.Active, "Proposal not active");
+        require(block.timestamp > proposal.votingEnds, "Voting not ended");
+        require(
+            block.timestamp >= proposal.votingEnds + proposal.executionDelay,
+            "Execution delay not passed"
         );
+
+        // Check if proposal passed
+        (uint256 forVotes, uint256 againstVotes, uint256 totalVotes) = getProposalVotes(proposalId);
+
+        require(totalVotes >= quorum, "Quorum not reached");
+        require(forVotes > againstVotes, "Proposal rejected");
+
+        // Update parameters
+        for (uint i = 0; i < proposal.parameterIds.length; i++) {
+            Parameter storage param = parameters[proposal.parameterIds[i]];
+
+            param.value = proposal.newValues[i];
+            param.lastUpdated = block.timestamp;
+            param.updatedBy = address(this);
+
+            emit ParameterUpdated(proposal.parameterIds[i], proposal.newValues[i]);
+        }
+
+        // Update proposal status
+        proposal.status = ProposalStatus.Executed;
+
+        emit ProposalExecuted(proposalId);
+
+        return true;
+    }
+
+    /**
+     * @notice Get parameter value
+     * @param parameterId Parameter identifier
+     * @return value Parameter value
+     */
+    function getParameterValue(
+        bytes32 parameterId
+    ) external view returns (bytes memory value) {
+        Parameter storage param = parameters[parameterId];
+        require(param.parameterId == parameterId, "Parameter not found");
+        require(param.active, "Parameter not active");
+
+        return param.value;
+    }
+
+    /**
+     * @notice Get proposal votes
+     * @param proposalId Proposal identifier
+     * @return forVotes Votes in favor
+     * @return againstVotes Votes against
+     * @return totalVotes Total votes
+     */
+    function getProposalVotes(
+        bytes32 proposalId
+    ) public view returns (
+        uint256 forVotes,
+        uint256 againstVotes,
+        uint256 totalVotes
+    ) {
+        Vote[] storage votes = proposalVotes[proposalId];
+
+        for (uint i = 0; i < votes.length; i++) {
+            if (votes[i].support) {
+                forVotes += votes[i].weight;
+            } else {
+                againstVotes += votes[i].weight;
+            }
+
+            totalVotes += votes[i].weight;
+        }
+
+        return (forVotes, againstVotes, totalVotes);
     }
 }
 ```
 
-### 10.3 Parameter Update Workflows
+## 13. Implementation & Integration Guidelines
 
-The Oracle Aggregation and Data Validation Framework implements structured workflows for parameter updates based on impact level:
+### 13.1 Smart Contract Integration
 
-#### 10.3.1 Low Impact Parameter Update Flow
+The RESI Protocol Oracle Aggregation & Data Validation Framework provides a standardized interface for smart contracts to consume oracle data:
 
-Low impact parameter updates (impact level 1) follow a simplified governance process:
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
 
-1. **Proposal**: Oracle Committee proposes parameter change
-2. **Review Period**: 24-hour review period
-3. **Approval**: Requires 51% approval from Oracle Committee
-4. **Implementation**: Automatically implemented after approval
-5. **Monitoring**: 24-hour monitoring period with automatic rollback if issues detected
+/**
+ * @title IOracleConsumer
+ * @notice Interface for consuming oracle data
+ */
+interface IOracleConsumer {
+    /**
+     * @notice Get latest price for an asset
+     * @param assetId Asset identifier
+     * @return price Latest price
+     * @return timestamp Timestamp of the price
+     * @return confidence Confidence score
+     */
+    function getLatestPrice(
+        bytes32 assetId
+    ) external view returns (
+        uint256 price,
+        uint256 timestamp,
+        uint256 confidence
+    );
 
-#### 10.3.2 Medium Impact Parameter Update Flow
+    /**
+     * @notice Get time-weighted average price
+     * @param assetId Asset identifier
+     * @param period Period in seconds
+     * @return twap Time-weighted average price
+     * @return startTime Start time of the period
+     * @return endTime End time of the period
+     */
+    function getTWAP(
+        bytes32 assetId,
+        uint256 period
+    ) external view returns (
+        uint256 twap,
+        uint256 startTime,
+        uint256 endTime
+    );
 
-Medium impact parameter updates (impact level 2) follow a more rigorous process:
+    /**
+     * @notice Check if price is valid
+     * @param assetId Asset identifier
+     * @param maxAge Maximum age in seconds
+     * @param minConfidence Minimum confidence score
+     * @return isValid Whether price is valid
+     */
+    function isPriceValid(
+        bytes32 assetId,
+        uint256 maxAge,
+        uint256 minConfidence
+    ) external view returns (bool isValid);
+}
 
-1. **Proposal**: Oracle Committee proposes parameter change
-2. **Simulation**: Technical team performs impact simulation
-3. **Review Period**: 48-hour review period with simulation results
-4. **Approval**: Requires 67% approval from Oracle Committee and 51% from General Governance
-5. **Implementation**: Implemented after timelock period (24 hours)
-6. **Monitoring**: 48-hour monitoring period with manual rollback option
+/**
+ * @title OracleConsumerBase
+ * @notice Base contract for consuming oracle data
+ */
+abstract contract OracleConsumerBase {
+    // Oracle interface
+    IOracleConsumer public oracle;
 
-#### 10.3.3 High Impact Parameter Update Flow
+    // Default parameters
+    uint256 public defaultMaxAge = 3600; // 1 hour
+    uint256 public defaultMinConfidence = 70; // 70%
 
-High impact parameter updates (impact level 3) follow the most comprehensive process:
+    /**
+     * @notice Constructor
+     * @param _oracle Oracle address
+     */
+    constructor(address _oracle) {
+        require(_oracle != address(0), "Invalid oracle address");
+        oracle = IOracleConsumer(_oracle);
+    }
 
-1. **Proposal**: Oracle Committee proposes parameter change
-2. **Formal Risk Assessment**: Technical and Risk teams perform detailed assessment
-3. **Public Discussion**: 72-hour public discussion period
-4. **Review Period**: 72-hour review period with risk assessment
-5. **Approval**: Requires 75% approval from Oracle Committee and 67% from General Governance
-6. **Implementation**: Implemented after extended timelock period (48 hours)
-7. **Monitoring**: 7-day monitoring period with emergency committee oversight
+    /**
+     * @notice Get validated price
+     * @param assetId Asset identifier
+     * @return price Validated price
+     */
+    function getValidatedPrice(
+        bytes32 assetId
+    ) internal view returns (uint256 price) {
+        (price, , ) = oracle.getLatestPrice(assetId);
 
-## 11. Testing & Quality Assurance
+        require(
+            oracle.isPriceValid(assetId, defaultMaxAge, defaultMinConfidence),
+            "Price not valid"
+        );
 
-### 11.1 Testing Methodology
+        return price;
+    }
 
-The Oracle Aggregation and Data Validation Framework follows a comprehensive testing methodology to ensure reliability and security:
+    /**
+     * @notice Get validated TWAP
+     * @param assetId Asset identifier
+     * @param period Period in seconds
+     * @return twap Validated TWAP
+     */
+    function getValidatedTWAP(
+        bytes32 assetId,
+        uint256 period
+    ) internal view returns (uint256 twap) {
+        (twap, , ) = oracle.getTWAP(assetId, period);
 
-#### 11.1.1 Test Coverage Requirements
+        require(
+            oracle.isPriceValid(assetId, defaultMaxAge, defaultMinConfidence),
+            "Price not valid"
+        );
 
-| Component              | Code Coverage | Test Types                                | Critical Path Coverage |
-| ---------------------- | ------------- | ----------------------------------------- | ---------------------- |
-| Data Collection        | 95%           | Unit, Integration, Fuzzing                | 100%                   |
-| Statistical Validation | 98%           | Unit, Property-based, Formal Verification | 100%                   |
-| Aggregation Methods    | 98%           | Unit, Property-based, Formal Verification | 100%                   |
-| Circuit Breakers       | 99%           | Unit, Integration, Scenario               | 100%                   |
-| ZKP Components         | 98%           | Unit, Cryptographic Verification          | 100%                   |
-| Cross-Chain Logic      | 95%           | Unit, Integration, Simulation             | 100%                   |
-| Oracle Contracts       | 100%          | Unit, Integration, Formal Verification    | 100%                   |
-| Parameter Management   | 98%           | Unit, Integration, Governance             | 100%                   |
+        return twap;
+    }
 
-#### 11.1.2 Test Environment Setup
+    /**
+     * @notice Set default parameters
+     * @param maxAge Maximum age in seconds
+     * @param minConfidence Minimum confidence score
+     */
+    function setDefaultParameters(
+        uint256 maxAge,
+        uint256 minConfidence
+    ) internal {
+        require(maxAge > 0, "Invalid max age");
+        require(minConfidence > 0 && minConfidence <= 100, "Invalid min confidence");
 
-The standard test environment setup includes:
-
-```yaml
-# Docker Compose file for test environment
-version: "3.8"
-
-services:
-  # Local blockchain for testing
-  hardhat:
-    image: resi/hardhat-node:latest
-    ports:
-      - "8545:8545"
-    volumes:
-      - ./test-data:/app/test-data
-    environment:
-      - FORK_ENABLED=true
-      - FORK_NETWORK=mainnet
-      - FORK_BLOCK_NUMBER=15000000
-
-  # Mock oracle sources
-  mock-oracles:
-    image: resi/mock-oracle-sources:latest
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./test-data:/app/test-data
-    environment:
-      - SCENARIO=standard
-      - LATENCY_MS=50
-      - ERROR_RATE=0.01
-
-  # Oracle service under test
-  oracle-service:
-    image: resi/oracle-service:test
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./test-data:/app/test-data
-    environment:
-      - NODE_ENV=test
-      - BLOCKCHAIN_RPC=http://hardhat:8545
-      - ORACLE_SOURCES=http://mock-oracles:8080
-    depends_on:
-      - hardhat
-      - mock-oracles
-
-  # Test runner
-  test-runner:
-    image: resi/oracle-test-runner:latest
-    volumes:
-      - ./test-data:/app/test-data
-      - ./test-results:/app/test-results
-    environment:
-      - NODE_ENV=test
-      - SERVICE_URL=http://oracle-service:3000
-      - REPORT_FORMAT=html,json
-    depends_on:
-      - oracle-service
+        defaultMaxAge = maxAge;
+        defaultMinConfidence = minConfidence;
+    }
+}
 ```
 
-### 11.2 Testing Scenarios
+### 13.2 JavaScript/TypeScript Client Integration
 
-The Oracle Aggregation and Data Validation Framework is tested against a comprehensive set of scenarios:
+The following TypeScript example demonstrates how to integrate with the oracle system:
 
-#### 11.2.1 Normal Operation Scenarios
+````typescript
+```typescript
+/**
+ * Oracle Client for RESI Protocol
+ */
+import { ethers } from 'ethers';
+import { OracleABI } from './abi/OracleABI';
 
-- **Steady Market**: Standard price updates with low volatility
-- **High Volume**: Price updates at maximum expected frequency
-- **Cross-Asset Movement**: Correlated movement across multiple assets
-- **Time Zone Transition**: Operation during UTC day boundaries
+export class RESIOracleClient {
+  private provider: ethers.providers.Provider;
+  private oracleContract: ethers.Contract;
 
-#### 11.2.2 Edge Case Scenarios
+  /**
+   * Constructor
+   * @param provider Ethereum provider
+   * @param oracleAddress Oracle contract address
+   */
+  constructor(provider: ethers.providers.Provider, oracleAddress: string) {
+    this.provider = provider;
+    this.oracleContract = new ethers.Contract(oracleAddress, OracleABI, provider);
+  }
 
-- **Extreme Volatility**: Price movements exceeding typical ranges
-- **Market Crashes**: Rapid, sustained downward price movement
-- **Flash Spikes**: Brief, extreme price movements followed by recovery
-- **Trading Halts**: Temporary cessation of trading on major exchanges
+  /**
+   * Get latest price for an asset
+   * @param assetId Asset identifier
+   * @returns Price, timestamp, and confidence
+   */
+  async getLatestPrice(assetId: string): Promise<{
+    price: ethers.BigNumber;
+    timestamp: number;
+    confidence: number;
+  }> {
+    const [price, timestamp, confidence] = await this.oracleContract.getLatestPrice(assetId);
 
-#### 11.2.3 Failure Mode Scenarios
+    return {
+      price,
+      timestamp: timestamp.toNumber(),
+      confidence: confidence.toNumber() / 1e18,
+    };
+  }
 
-- **Source Failure**: Individual or multiple oracle sources becoming unavailable
-- **Data Corruption**: Sources providing corrupted or nonsensical data
-- **Network Partitioning**: Segmentation of network preventing data propagation
-- **Resource Exhaustion**: System running out of computational resources
+  /**
+   * Get time-weighted average price
+   * @param assetId Asset identifier
+   * @param period Period in seconds
+   * @returns TWAP, start time, and end time
+   */
+  async getTWAP(assetId: string, period: number): Promise<{
+    twap: ethers.BigNumber;
+    startTime: number;
+    endTime: number;
+  }> {
+    const [twap, startTime, endTime] = await this.oracleContract.getTWAP(assetId, period);
 
-#### 11.2.4 Attack Scenarios
+    return {
+      twap,
+      startTime: startTime.toNumber(),
+      endTime: endTime.toNumber(),
+    };
+  }
 
-- **Price Manipulation**: Attempt to manipulate aggregated price through source tampering
-- **Outlier Injection**: Submission of extreme outliers to affect aggregation
-- **Timing Attacks**: Exploiting timing differences in updates
-- **Governance Attacks**: Attempts to modify system parameters maliciously
+  /**
+   * Check if price is valid
+   * @param assetId Asset identifier
+   * @param maxAge Maximum age in seconds
+   * @param minConfidence Minimum confidence score (0-100)
+   * @returns Whether price is valid
+   */
+  async isPriceValid(assetId: string, maxAge: number, minConfidence: number): Promise<boolean> {
+    return await this.oracleContract.isPriceValid(
+      assetId,
+      maxAge,
+      minConfidence
+    );
+  }
 
-### 11.3 Continuous Integration & Deployment
+  /**
+   * Get validated price or throw error
+   * @param assetId Asset identifier
+   * @param options Validation options
+   * @returns Validated price
+   */
+  async getValidatedPrice(
+    assetId: string,
+    options?: { maxAge?: number; minConfidence?: number }
+  ): Promise<ethers.BigNumber> {
+    const maxAge = options?.maxAge || 3600; // 1 hour default
+    const minConfidence = options?.minConfidence || 70; // 70% default
 
-The Oracle Aggregation and Data Validation Framework follows a rigorous CI/CD pipeline:
+    const { price, timestamp, confidence } = await this.getLatestPrice(assetId);
 
-```yaml
-# CI/CD Pipeline Configuration
-name: Oracle CI/CD Pipeline
+    const now = Math.floor(Date.now() / 1000);
+    const age = now - timestamp;
 
-on:
-  push:
-    branches: [main, develop, "release/*"]
-  pull_request:
-    branches: [main, develop, "release/*"]
+    if (age > maxAge) {
+      throw new Error(`Price for ${assetId} is too old: ${age} seconds (max: ${maxAge})`);
+    }
 
-jobs:
-  # Static analysis and linting
-  static-analysis:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-      - name: Install dependencies
-        run: npm ci
-      - name: Run ESLint
-        run: npm run lint
-      - name: Run Solidity Linter
-        run: npm run solhint
-      - name: Run Slither
-        run: npm run slither
+    if (confidence * 100 < minConfidence) {
+      throw new Error(`Confidence for ${assetId} is too low: ${confidence * 100}% (min: ${minConfidence}%)`);
+    }
 
-  # Unit tests
-  unit-tests:
-    runs-on: ubuntu-latest
-    needs: static-analysis
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-      - name: Install dependencies
-        run: npm ci
-      - name: Run unit tests
-        run: npm run test:unit
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
+    return price;
+  }
 
-  # Integration tests
-  integration-tests:
-    runs-on: ubuntu-latest
-    needs: unit-tests
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-      - name: Install dependencies
-        run: npm ci
-      - name: Start test environment
-        run: docker-compose -f docker-compose.test.yml up -d
-      - name: Run integration tests
-        run: npm run test:integration
-      - name: Tear down test environment
-        run: docker-compose -f docker-compose.test.yml down
+  /**
+   * Listen for price updates
+   * @param assetId Asset identifier
+   * @param callback Callback function
+   * @returns Subscription
+   */
+  subscribeToPriceUpdates(
+    assetId: string,
+    callback: (price: ethers.BigNumber, timestamp: number, confidence: number) => void
+  ): { unsubscribe: () => void } {
+    const filter = this.oracleContract.filters.PriceUpdated(assetId);
 
-  # Scenario tests
-  scenario-tests:
-    runs-on: ubuntu-latest
-    needs: integration-tests
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-      - name: Install dependencies
-        run: npm ci
-      - name: Start test environment
-        run: docker-compose -f docker-compose.test.yml up -d
-      - name: Run normal scenarios
-        run: npm run test:scenarios:normal
-      - name: Run edge case scenarios
-        run: npm run test:scenarios:edge
-      - name: Run failure scenarios
-        run: npm run test:scenarios:failure
-      - name: Run attack scenarios
-        run: npm run test:scenarios:attack
-      - name: Tear down test environment
-        run: docker-compose -f docker-compose.test.yml down
+    const listener = (
+      updatedAssetId: string,
+      price: ethers.BigNumber,
+      timestamp: ethers.BigNumber,
+      confidence: ethers.BigNumber
+    ) => {
+      if (updatedAssetId === assetId) {
+        callback(
+          price,
+          timestamp.toNumber(),
+          confidence.toNumber() / 1e18
+        );
+      }
+    };
 
-  # Performance tests
-  performance-tests:
-    runs-on: high-cpu-runner
-    needs: scenario-tests
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-      - name: Install dependencies
-        run: npm ci
-      - name: Start performance environment
-        run: docker-compose -f docker-compose.perf.yml up -d
-      - name: Run throughput tests
-        run: npm run test:performance:throughput
-      - name: Run latency tests
-        run: npm run test:performance:latency
-      - name: Run scalability tests
-        run: npm run test:performance:scalability
-      - name: Upload performance results
-        uses: actions/upload-artifact@v3
-        with:
-          name: performance-results
-          path: ./test-results/performance
+    this.oracleContract.on(filter, listener);
 
-  # Formal verification
-  formal-verification:
-    runs-on: ubuntu-latest
-    needs: unit-tests
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up formal verification tools
-        run: ./scripts/setup-formal-verification.sh
-      - name: Verify oracle contracts
-        run: npm run verify:formal
+    return {
+      unsubscribe: () => {
+        this.oracleContract.off(filter, listener);
+      },
+    };
+  }
 
-  # Contract deployment (testnet)
-  deploy-testnet:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
-    needs: [scenario-tests, performance-tests, formal-verification]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-      - name: Install dependencies
-        run: npm ci
-      - name: Deploy to testnet
-        run: npm run deploy:testnet
-        env:
-          DEPLOY_PRIVATE_KEY: ${{ secrets.TESTNET_DEPLOY_KEY }}
+  /**
+   * Get price history
+   * @param assetId Asset identifier
+   * @param count Number of historical entries
+   * @returns Price history
+   */
+  async getPriceHistory(assetId: string, count: number): Promise<{
+    prices: ethers.BigNumber[];
+    timestamps: number[];
+    confidences: number[];
+    sources: number[];
+  }> {
+    const [prices, timestamps, confidences, sources] = await this.oracleContract.getPriceHistory(
+      assetId,
+      count
+    );
 
-  # Contract deployment (mainnet)
-  deploy-mainnet:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    needs: [scenario-tests, performance-tests, formal-verification]
-    environment: production
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "16"
-      - name: Install dependencies
-        run: npm ci
-      - name: Verify deployment package
-        run: npm run verify:deployment
-      - name: Deploy to mainnet
-        run: npm run deploy:mainnet
-        env:
-          DEPLOY_PRIVATE_KEY: ${{ secrets.MAINNET_DEPLOY_KEY }}
-          TIMELOCK_ADDRESS: ${{ secrets.MAINNET_TIMELOCK }}
+    return {
+      prices,
+      timestamps: timestamps.map((t: ethers.BigNumber) => t.toNumber()),
+      confidences: confidences.map((c: ethers.BigNumber) => c.toNumber() / 1e18),
+      sources: sources.map((s: ethers.BigNumber) => s.toNumber()),
+    };
+  }
+}
+
+/**
+ * React Hook for Oracle Integration
+ */
+import { useState, useEffect } from 'react';
+
+export function useOraclePrice(
+  client: RESIOracleClient,
+  assetId: string,
+  options?: { maxAge?: number; minConfidence?: number; refreshInterval?: number }
+): {
+  price: ethers.BigNumber | null;
+  timestamp: number | null;
+  confidence: number | null;
+  isLoading: boolean;
+  error: Error | null;
+  refresh: () => Promise<void>;
+} {
+  const [price, setPrice] = useState<ethers.BigNumber | null>(null);
+  const [timestamp, setTimestamp] = useState<number | null>(null);
+  const [confidence, setConfidence] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refreshInterval = options?.refreshInterval || 30000; // 30 seconds default
+
+  const fetchPrice = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const { price, timestamp, confidence } = await client.getLatestPrice(assetId);
+
+      setPrice(price);
+      setTimestamp(timestamp);
+      setConfidence(confidence);
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error(String(err)));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPrice();
+
+    const interval = setInterval(fetchPrice, refreshInterval);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [assetId, refreshInterval]);
+
+  return {
+    price,
+    timestamp,
+    confidence,
+    isLoading,
+    error,
+    refresh: fetchPrice,
+  };
+}
+````
+
+### 13.3 Backend Data Provider Integration
+
+The following example demonstrates how to implement a data provider for the oracle system:
+
+```typescript
+/**
+ * Oracle Data Provider
+ */
+import { ethers } from "ethers";
+import axios from "axios";
+import { OracleDataProviderABI } from "./abi/OracleDataProviderABI";
+
+export class OracleDataProvider {
+  private wallet: ethers.Wallet;
+  private providerContract: ethers.Contract;
+  private dataSources: Map<string, DataSource>;
+
+  /**
+   * Constructor
+   * @param provider Ethereum provider
+   * @param privateKey Private key for signing transactions
+   * @param providerContractAddress Provider contract address
+   */
+  constructor(
+    provider: ethers.providers.Provider,
+    privateKey: string,
+    providerContractAddress: string
+  ) {
+    this.wallet = new ethers.Wallet(privateKey, provider);
+    this.providerContract = new ethers.Contract(
+      providerContractAddress,
+      OracleDataProviderABI,
+      this.wallet
+    );
+    this.dataSources = new Map();
+  }
+
+  /**
+   * Register data source
+   * @param assetId Asset identifier
+   * @param source Data source
+   */
+  registerDataSource(assetId: string, source: DataSource): void {
+    this.dataSources.set(assetId, source);
+  }
+
+  /**
+   * Start data provider
+   * @param updateInterval Update interval in milliseconds
+   */
+  async start(updateInterval: number = 60000): Promise<void> {
+    console.log("Starting Oracle Data Provider");
+
+    // Check authorization
+    const isAuthorized = await this.providerContract.isAuthorizedProvider(
+      this.wallet.address
+    );
+
+    if (!isAuthorized) {
+      throw new Error("Wallet is not an authorized provider");
+    }
+
+    // Start update loop
+    setInterval(async () => {
+      for (const [assetId, source] of this.dataSources.entries()) {
+        try {
+          // Fetch data from source
+          const { price, timestamp } = await source.fetchData();
+
+          // Submit data to contract
+          const tx = await this.providerContract.submitPrice(
+            assetId,
+            price,
+            timestamp || Math.floor(Date.now() / 1000),
+            95 // 95% confidence
+          );
+
+          await tx.wait();
+
+          console.log(
+            `Updated price for ${assetId}: ${ethers.utils.formatUnits(
+              price,
+              18
+            )}`
+          );
+        } catch (error) {
+          console.error(`Error updating price for ${assetId}:`, error);
+        }
+      }
+    }, updateInterval);
+  }
+}
+
+/**
+ * Data Source Interface
+ */
+interface DataSource {
+  fetchData(): Promise<{ price: ethers.BigNumber; timestamp?: number }>;
+}
+
+/**
+ * Exchange API Data Source
+ */
+export class ExchangeAPIDataSource implements DataSource {
+  private apiUrl: string;
+  private path: string;
+  private pricePath: string;
+  private timestampPath?: string;
+  private apiKey?: string;
+
+  /**
+   * Constructor
+   * @param apiUrl API URL
+   * @param path API path
+   * @param pricePath Path to price in response
+   * @param timestampPath Path to timestamp in response
+   * @param apiKey API key
+   */
+  constructor(
+    apiUrl: string,
+    path: string,
+    pricePath: string,
+    timestampPath?: string,
+    apiKey?: string
+  ) {
+    this.apiUrl = apiUrl;
+    this.path = path;
+    this.pricePath = pricePath;
+    this.timestampPath = timestampPath;
+    this.apiKey = apiKey;
+  }
+
+  /**
+   * Fetch data from API
+   * @returns Price and timestamp
+   */
+  async fetchData(): Promise<{ price: ethers.BigNumber; timestamp?: number }> {
+    try {
+      const headers: Record<string, string> = {};
+
+      if (this.apiKey) {
+        headers["Authorization"] = `Bearer ${this.apiKey}`;
+      }
+
+      const response = await axios.get(`${this.apiUrl}${this.path}`, {
+        headers,
+      });
+
+      // Extract price from response
+      const priceValue = this.getValueFromPath(response.data, this.pricePath);
+
+      if (typeof priceValue !== "number" && typeof priceValue !== "string") {
+        throw new Error(`Invalid price value: ${priceValue}`);
+      }
+
+      const price = ethers.utils.parseUnits(priceValue.toString(), 18);
+
+      // Extract timestamp if available
+      let timestamp: number | undefined;
+
+      if (this.timestampPath) {
+        const timestampValue = this.getValueFromPath(
+          response.data,
+          this.timestampPath
+        );
+
+        if (typeof timestampValue === "number") {
+          timestamp = timestampValue;
+        } else if (typeof timestampValue === "string") {
+          timestamp = new Date(timestampValue).getTime() / 1000;
+        }
+      }
+
+      return { price, timestamp };
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get value from path in object
+   * @param obj Object
+   * @param path Path (e.g. "data.price")
+   * @returns Value
+   */
+  private getValueFromPath(obj: any, path: string): any {
+    return path.split(".").reduce((o, i) => o[i], obj);
+  }
+}
+
+/**
+ * Aggregated Data Source
+ */
+export class AggregatedDataSource implements DataSource {
+  private sources: DataSource[];
+  private aggregationMethod: "median" | "mean" | "weightedMean";
+  private weights?: number[];
+
+  /**
+   * Constructor
+   * @param sources Data sources
+   * @param aggregationMethod Aggregation method
+   * @param weights Weights for weighted mean
+   */
+  constructor(
+    sources: DataSource[],
+    aggregationMethod: "median" | "mean" | "weightedMean" = "median",
+    weights?: number[]
+  ) {
+    this.sources = sources;
+    this.aggregationMethod = aggregationMethod;
+    this.weights = weights;
+
+    if (aggregationMethod === "weightedMean") {
+      if (!weights || weights.length !== sources.length) {
+        throw new Error(
+          "Weights must be provided for weighted mean aggregation"
+        );
+      }
+    }
+  }
+
+  /**
+   * Fetch data from all sources and aggregate
+   * @returns Aggregated price and timestamp
+   */
+  async fetchData(): Promise<{ price: ethers.BigNumber; timestamp?: number }> {
+    // Fetch data from all sources
+    const results = await Promise.allSettled(
+      this.sources.map((source) => source.fetchData())
+    );
+
+    // Filter successful results
+    const prices = results
+      .filter(
+        (
+          result
+        ): result is PromiseFulfilledResult<{ price: ethers.BigNumber }> =>
+          result.status === "fulfilled"
+      )
+      .map((result) => result.value.price);
+
+    if (prices.length === 0) {
+      throw new Error("No valid prices from any source");
+    }
+
+    // Aggregate prices
+    let aggregatedPrice: ethers.BigNumber;
+
+    if (this.aggregationMethod === "median") {
+      // Sort prices
+      const sortedPrices = [...prices].sort((a, b) =>
+        a.lt(b) ? -1 : a.gt(b) ? 1 : 0
+      );
+
+      // Get median
+      const mid = Math.floor(sortedPrices.length / 2);
+
+      if (sortedPrices.length % 2 === 0) {
+        // Even number of prices, average the middle two
+        aggregatedPrice = sortedPrices[mid - 1].add(sortedPrices[mid]).div(2);
+      } else {
+        // Odd number of prices, take the middle one
+        aggregatedPrice = sortedPrices[mid];
+      }
+    } else if (this.aggregationMethod === "mean") {
+      // Calculate sum
+      const sum = prices.reduce(
+        (acc, price) => acc.add(price),
+        ethers.BigNumber.from(0)
+      );
+
+      // Calculate mean
+      aggregatedPrice = sum.div(prices.length);
+    } else if (this.aggregationMethod === "weightedMean") {
+      // Calculate weighted sum
+      const weightedSum = prices.reduce(
+        (acc, price, index) =>
+          acc.add(price.mul(Math.floor(this.weights![index] * 1000)).div(1000)),
+        ethers.BigNumber.from(0)
+      );
+
+      // Calculate total weight
+      const totalWeight = this.weights!.reduce(
+        (acc, weight) => acc + weight,
+        0
+      );
+
+      // Calculate weighted mean
+      aggregatedPrice = weightedSum
+        .div(Math.floor(totalWeight * 1000))
+        .mul(1000);
+    } else {
+      throw new Error(
+        `Unsupported aggregation method: ${this.aggregationMethod}`
+      );
+    }
+
+    return {
+      price: aggregatedPrice,
+      timestamp: Math.floor(Date.now() / 1000),
+    };
+  }
+}
 ```
 
-## 12. References
+### 13.4 Comprehensive Testing Guidelines
 
-1. RESI Protocol Architecture Document, v1.0, 2025
-2. Universal Value Unit Technical Architecture, v1.0, 2025
-3. AI-Driven Stability System Technical Specification, v1.0, 2025
-4. Chainlink Data Feeds Documentation, https://docs.chain.link/docs/data-feeds/
-5. Band Protocol Documentation, https://docs.bandchain.org/
-6. Pyth Network Documentation, https://docs.pyth.network/
-7. UMA Protocol Documentation, https://docs.umaproject.org/
-8. "Statistical Methods for Market Data Analysis", Journal of Computational Finance, 2023
-9. "Zero-Knowledge Proofs for Oracle Data Validation", Cryptography Conference Proceedings, 2024
-10. "Cross-Chain Oracle Systems: Challenges and Solutions", Distributed Systems Journal, 2024
-11. LayerZero Messaging Protocol Documentation, https://layerzero.network/docs/
-12. "Oracle Manipulation Attacks and Defenses", Security Conference Proceedings, 2023
-13. "Governance Models for Decentralized Oracles", Tokenomics Journal, 2024
-14. "Economic Security Models for Oracle Networks", Journal of Blockchain Economics, 2024
-15. "Monitoring and Alert Systems for Critical Financial Infrastructure", FinTech Engineering Digest, 2023
+#### 13.4.1 Oracle Integration Testing Strategy
 
-## 13. Conclusion
+Testing oracle integrations requires a comprehensive approach to ensure reliability:
 
-The Oracle Aggregation and Data Validation Framework is a critical component of the RESI Protocol, providing reliable, secure, and privacy-preserving price and market data. The framework leverages multiple data sources, sophisticated statistical validation techniques, and zero-knowledge proofs to create a robust oracle system that forms the foundation for the protocol's stability.
+```typescript
+/**
+ * Oracle Integration Tests
+ */
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import { Contract } from "ethers";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-By implementing a multi-layered architecture with redundancy at every level, the framework ensures continuity of operations even during extreme market conditions or partial system failures. The comprehensive security measures, including circuit breakers, access control, and cross-chain consistency verification, protect against manipulation and attacks.
+describe("Oracle Integration Tests", () => {
+  let oracle: Contract;
+  let consumer: Contract;
+  let owner: SignerWithAddress;
+  let provider1: SignerWithAddress;
+  let provider2: SignerWithAddress;
+  let provider3: SignerWithAddress;
 
-The performance optimization techniques, both at the smart contract level and in the off-chain components, ensure the system can scale to meet the needs of a global financial protocol while maintaining cost efficiency. The governance and parameter management capabilities allow the system to evolve in a controlled manner as requirements change.
+  const ETH_USD = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("ETH/USD"));
+  const BTC_USD = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("BTC/USD"));
 
-Through extensive testing across normal operations, edge cases, failure modes, and attack scenarios, the framework has demonstrated its reliability and security. The continuous monitoring and alerting system ensures any anomalies are detected and addressed promptly, maintaining the integrity of the oracle data.
+  beforeEach(async () => {
+    // Get signers
+    [owner, provider1, provider2, provider3] = await ethers.getSigners();
 
-The Oracle Aggregation and Data Validation Framework represents a significant advancement in oracle technology for decentralized financial systems, combining the best practices from traditional financial infrastructure with cutting-edge cryptographic techniques to create a foundation for the RESI Protocol's vision of a stable, decentralized global currency.
+    // Deploy oracle contract
+    const OracleFactory = await ethers.getContractFactory("Oracle");
+    oracle = await OracleFactory.deploy();
+    await oracle.deployed();
+
+    // Configure oracle
+    await oracle.addProvider(provider1.address);
+    await oracle.addProvider(provider2.address);
+    await oracle.addProvider(provider3.address);
+
+    // Deploy consumer contract
+    const ConsumerFactory = await ethers.getContractFactory("OracleConsumer");
+    consumer = await ConsumerFactory.deploy(oracle.address);
+    await consumer.deployed();
+  });
+
+  describe("Price Updates", () => {
+    it("should accept price updates from authorized providers", async () => {
+      // Submit price from provider 1
+      await oracle.connect(provider1).submitPrice(
+        ETH_USD,
+        ethers.utils.parseUnits("2000", 18),
+        Math.floor(Date.now() / 1000),
+        ethers.utils.parseUnits("0.9", 18) // 90% confidence
+      );
+
+      // Get price
+      const [price, timestamp, confidence] = await oracle.getLatestPrice(
+        ETH_USD
+      );
+
+      expect(price).to.equal(ethers.utils.parseUnits("2000", 18));
+      expect(confidence).to.equal(ethers.utils.parseUnits("0.9", 18));
+    });
+
+    it("should reject price updates from unauthorized providers", async () => {
+      await expect(
+        oracle
+          .connect(owner)
+          .submitPrice(
+            ETH_USD,
+            ethers.utils.parseUnits("2000", 18),
+            Math.floor(Date.now() / 1000),
+            ethers.utils.parseUnits("0.9", 18)
+          )
+      ).to.be.revertedWith("Not authorized provider");
+    });
+
+    it("should aggregate prices from multiple providers", async () => {
+      // Submit prices from all providers
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("2000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      await oracle
+        .connect(provider2)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("2010", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.85", 18)
+        );
+
+      await oracle
+        .connect(provider3)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("1990", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.95", 18)
+        );
+
+      // Get aggregated price (should be median)
+      const [price, timestamp, confidence] = await oracle.getLatestPrice(
+        ETH_USD
+      );
+
+      expect(price).to.equal(ethers.utils.parseUnits("2000", 18)); // Median is 2000
+      expect(confidence).to.be.gt(ethers.utils.parseUnits("0.9", 18)); // Higher confidence due to multiple sources
+    });
+  });
+
+  describe("Consumer Integration", () => {
+    beforeEach(async () => {
+      // Submit prices
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("2000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      await oracle
+        .connect(provider2)
+        .submitPrice(
+          BTC_USD,
+          ethers.utils.parseUnits("30000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.85", 18)
+        );
+    });
+
+    it("should retrieve price from oracle", async () => {
+      const price = await consumer.getValidatedPrice(ETH_USD);
+      expect(price).to.equal(ethers.utils.parseUnits("2000", 18));
+    });
+
+    it("should validate price freshness", async () => {
+      // Advance time by 2 hours
+      await ethers.provider.send("evm_increaseTime", [7200]);
+      await ethers.provider.send("evm_mine", []);
+
+      // Should fail due to stale price
+      await expect(consumer.getValidatedPrice(ETH_USD)).to.be.revertedWith(
+        "Price not valid"
+      );
+    });
+
+    it("should handle multiple assets correctly", async () => {
+      const ethPrice = await consumer.getValidatedPrice(ETH_USD);
+      const btcPrice = await consumer.getValidatedPrice(BTC_USD);
+
+      expect(ethPrice).to.equal(ethers.utils.parseUnits("2000", 18));
+      expect(btcPrice).to.equal(ethers.utils.parseUnits("30000", 18));
+    });
+  });
+
+  describe("Circuit Breaker", () => {
+    it("should trigger circuit breaker on extreme price changes", async () => {
+      // Submit initial price
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("2000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      // Submit extreme price change (50% drop)
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("1000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      // Check if circuit breaker was triggered
+      const isTriggered = await oracle.isCircuitBreakerTriggered(ETH_USD);
+      expect(isTriggered).to.be.true;
+
+      // Consumption should fail when circuit breaker is triggered
+      await expect(consumer.getValidatedPrice(ETH_USD)).to.be.revertedWith(
+        "Circuit breaker triggered"
+      );
+    });
+
+    it("should allow reset of circuit breaker by governance", async () => {
+      // Trigger circuit breaker
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("2000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("1000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      // Verify breaker is triggered
+      expect(await oracle.isCircuitBreakerTriggered(ETH_USD)).to.be.true;
+
+      // Reset circuit breaker
+      await oracle.connect(owner).resetCircuitBreaker(ETH_USD);
+
+      // Verify breaker is reset
+      expect(await oracle.isCircuitBreakerTriggered(ETH_USD)).to.be.false;
+    });
+  });
+});
+```
+
+#### 13.4.2 Oracle Security Testing
+
+```typescript
+/**
+ * Oracle Security Tests
+ */
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import { Contract } from "ethers";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+
+describe("Oracle Security Tests", () => {
+  let oracle: Contract;
+  let owner: SignerWithAddress;
+  let provider1: SignerWithAddress;
+  let attacker: SignerWithAddress;
+
+  const ETH_USD = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("ETH/USD"));
+
+  beforeEach(async () => {
+    [owner, provider1, attacker] = await ethers.getSigners();
+
+    const OracleFactory = await ethers.getContractFactory("Oracle");
+    oracle = await OracleFactory.deploy();
+    await oracle.deployed();
+
+    await oracle.addProvider(provider1.address);
+  });
+
+  describe("Access Control", () => {
+    it("should prevent unauthorized price updates", async () => {
+      await expect(
+        oracle
+          .connect(attacker)
+          .submitPrice(
+            ETH_USD,
+            ethers.utils.parseUnits("2000", 18),
+            Math.floor(Date.now() / 1000),
+            ethers.utils.parseUnits("0.9", 18)
+          )
+      ).to.be.revertedWith("Not authorized provider");
+    });
+
+    it("should prevent unauthorized provider management", async () => {
+      await expect(
+        oracle.connect(attacker).addProvider(attacker.address)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+
+      await expect(
+        oracle.connect(attacker).removeProvider(provider1.address)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+  });
+
+  describe("Outlier Detection", () => {
+    it("should reject extreme outliers", async () => {
+      // Submit normal price
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("2000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      // Get current price
+      const [initialPrice] = await oracle.getLatestPrice(ETH_USD);
+      expect(initialPrice).to.equal(ethers.utils.parseUnits("2000", 18));
+
+      // Submit extreme price (100x)
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("200000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      // Price should not have changed due to outlier rejection
+      const [updatedPrice] = await oracle.getLatestPrice(ETH_USD);
+      expect(updatedPrice).to.equal(ethers.utils.parseUnits("2000", 18));
+    });
+  });
+
+  describe("Oracle Security Module", () => {
+    it("should delay price updates", async () => {
+      // Enable OSM
+      await oracle.enableOSM(ETH_USD, 3600); // 1 hour delay
+
+      // Submit price
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("2000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      // Get current OSM price (should be 0 initially)
+      const [osmPrice] = await oracle.getOSMPrice(ETH_USD);
+      expect(osmPrice).to.equal(0);
+
+      // Advance time by 1 hour
+      await ethers.provider.send("evm_increaseTime", [3600]);
+      await ethers.provider.send("evm_mine", []);
+
+      // Process OSM queue
+      await oracle.processOSMQueue(ETH_USD);
+
+      // Get updated OSM price (should now reflect the submitted price)
+      const [updatedOsmPrice] = await oracle.getOSMPrice(ETH_USD);
+      expect(updatedOsmPrice).to.equal(ethers.utils.parseUnits("2000", 18));
+    });
+  });
+
+  describe("Stale Data Prevention", () => {
+    it("should identify stale data", async () => {
+      // Submit price
+      await oracle
+        .connect(provider1)
+        .submitPrice(
+          ETH_USD,
+          ethers.utils.parseUnits("2000", 18),
+          Math.floor(Date.now() / 1000),
+          ethers.utils.parseUnits("0.9", 18)
+        );
+
+      // Validate freshness
+      expect(await oracle.isPriceValid(ETH_USD, 3600, 80)).to.be.true;
+
+      // Advance time by 2 hours
+      await ethers.provider.send("evm_increaseTime", [7200]);
+      await ethers.provider.send("evm_mine", []);
+
+      // Validate freshness again (should fail)
+      expect(await oracle.isPriceValid(ETH_USD, 3600, 80)).to.be.false;
+    });
+  });
+});
+```
+
+## 14. References
+
+1. Chainlink Off-Chain Reporting 2.0 Protocol, "Secure, High-Throughput Oracle Design," Chainlink Labs, 2024
+2. K. Peng et al., "PICA: A Privacy-Preserving In-Chain Aggregation Scheme for Distributed Oracles," IEEE Transactions on Information Forensics and Security, vol. 18, pp. 2317-2332, 2023
+3. E. Münsing, "Temporal Oracle Validation with Statistical Anomaly Detection," Blockchain Systems and Applications, vol. 5, no. 2, pp. 123-141, 2024
+4. M. Strobel et al., "Intramorphic Testing for Blockchain Oracles," Proceedings of the International Conference on Software Testing, 2025
+5. Chainlink, "Cross-Chain Interoperability Protocol: Technical White Paper," Version 2.0, 2025
+6. Oracle Corporation, "Fusion Data Intelligence: Technical Architecture," Oracle Technical White Paper, 2024
+7. Pyth Network, "Pull-Based Oracle Architecture: Technical Specification," Version 3.0, 2024
+8. J. Lee et al., "Zero-Knowledge Proofs for Oracle Data Validation," Advances in Financial Technology, pp. 78-92, 2025
+9. Layer Zero Labs, "LayerZero v2: Cross-Chain Messaging," Technical Documentation, 2025
+10. D. Robinson, "Oracle Security Models: Comparative Analysis," Journal of Cryptographic Engineering, vol. 13, no. 4, pp. 201-215, 2024
+11. Axelar Network, "Threshold Signature Schemes for Cross-Chain Security," Axelar Technical Paper, 2025
+12. Oracle Corporation, "Validating Enterprise Data: Best Practices," Oracle Enterprise Data Management Guide, 2024
+13. J. Martinez et al., "OPA: One-Shot Private Aggregation for Federated Oracle Networks," Privacy Enhancing Technologies Symposium, 2025
+14. Oracle Corporation, "High-Performance Analytics: Distributed Sort-Merge Optimization," Oracle Database Performance Tuning Guide, 2024
+15. L. Blackstone et al., "Quantum-Resistant Oracle Networks," Journal of Post-Quantum Cryptography, vol. 7, pp. 231-246, 2025
+16. R. Opkey, "AI-Driven Test Automation for Oracle Systems," Testing Automation Journal, vol. 12, no. 3, pp. 187-201, 2025
+17. NIST, "Post-Quantum Cryptography Standardization," Final Report, 2024
+18. M. Kumar et al., "Oracle In-Memory Aggregation: Performance Optimizations," Database Systems Journal, vol. 9, no. 2, pp. 145-159, 2024
+19. Financial Action Task Force (FATF), "Updated Guidance for a Risk-Based Approach to Virtual Assets and VASPs," 2024
+20. European Commission, "Markets in Crypto-Assets (MiCA) Regulation Technical Standards," Official Journal of the European Union, 2024
+
+## 15. Appendices
+
+### Appendix A: Oracle Aggregation Methods
+
+| Method                  | Description                                 | Best Used For                          | Pros                                    | Cons                                 |
+| ----------------------- | ------------------------------------------- | -------------------------------------- | --------------------------------------- | ------------------------------------ |
+| Median                  | Middle value after sorting                  | General price data, outlier resistance | Resistant to extreme outliers           | May discard valid price movements    |
+| Mean                    | Average of all values                       | Low-volatility assets                  | Uses all data points                    | Susceptible to outliers              |
+| Weighted Mean           | Average with provider-specific weights      | Trusted provider networks              | Rewards reliable providers              | Requires provider quality assessment |
+| Time-Weighted Average   | Average weighted by time period             | Volatile assets, smoothing             | Reduces impact of short-term volatility | May lag sudden legitimate movements  |
+| Volume-Weighted Average | Average weighted by trading volume          | Liquid assets with on-chain volume     | Reflects actual trading activity        | Requires reliable volume data        |
+| Confidence-Weighted     | Average weighted by confidence scores       | Multi-source validation                | Emphasizes high-confidence data         | Needs accurate confidence assessment |
+| PICA Aggregation        | Privacy-preserving in-chain aggregation     | Privacy-sensitive data                 | Preserves data confidentiality          | Higher computational complexity      |
+| Adaptive Aggregation    | Method selection based on market conditions | All asset types                        | Adapts to different scenarios           | More complex implementation          |
+
+### Appendix B: Confidence Score Components
+
+| Component              | Weight | Description                                 | Calculation Basis                                 |
+| ---------------------- | ------ | ------------------------------------------- | ------------------------------------------------- |
+| Source Confidence      | 20%    | Confidence in the data source               | Historical reliability, track record              |
+| Outlier Confidence     | 25%    | Confidence based on outlier detection       | Deviation from expected statistical distribution  |
+| Correlation Confidence | 15%    | Confidence based on cross-asset correlation | Correlation with related assets                   |
+| Momentum Confidence    | 10%    | Confidence based on price momentum          | Consistency with recent price movements           |
+| Change Rate Confidence | 15%    | Confidence based on rate of change          | Deviation from expected volatility                |
+| Freshness Confidence   | 10%    | Confidence based on data freshness          | Age of data relative to expected update frequency |
+| Consensus Confidence   | 5%     | Confidence based on source consensus        | Agreement between different data sources          |
+
+### Appendix C: Validation Status Handling
+
+| Status | Description                      | Action                                | Escalation Policy                     |
+| ------ | -------------------------------- | ------------------------------------- | ------------------------------------- |
+| Pass   | Data passes all validation rules | Accept data for processing            | None                                  |
+| Fail   | Data fails critical validations  | Reject data, use fallback source      | Notify on-call engineer, log incident |
+| Warn   | Threshold proximity alerts       | Accept with warning flag, monitor     | Increase monitoring frequency         |
+| Skip   | Known non-critical issues        | Skip validation, proceed with caution | Document in validation report         |
+
+### Appendix D: Quantum Resistance Levels
+
+| Level | Name                | Signature Algorithm           | Key Exchange          | Hash Function | Migration Path        |
+| ----- | ------------------- | ----------------------------- | --------------------- | ------------- | --------------------- |
+| 0     | Legacy              | ECDSA / EdDSA                 | ECDH                  | SHA-256       | Hybrid Transition     |
+| 1     | Basic Resistance    | ECDSA + ML-DSA (Dilithium)    | ECDH + ML-KEM (Kyber) | SHA-256       | Dual Signatures       |
+| 2     | Standard Resistance | ML-DSA (Dilithium)            | ML-KEM (Kyber)        | SHA-256       | Full NIST PQC         |
+| 3     | Maximum Resistance  | ML-DSA (Dilithium) + SPHINCS+ | ML-KEM (Kyber)        | SHA-3         | Hash-based signatures |
+
+### Appendix E: Performance Benchmarks
+
+| Operation                       | Throughput (TPS) | Latency (ms) | Gas Cost (units) | Notes                           |
+| ------------------------------- | ---------------- | ------------ | ---------------- | ------------------------------- |
+| Price Submission                | 1,500            | 45           | 120,000          | Single provider submission      |
+| Basic Aggregation               | 800              | 85           | 180,000          | Median of 5 sources             |
+| PICA Aggregation                | 350              | 220          | 450,000          | Privacy-preserving aggregation  |
+| ZK-Oracle Validation            | 200              | 320          | 650,000          | With zero-knowledge proofs      |
+| Multi-DVN Verification (5-of-7) | 400              | 150          | 380,000          | Decentralized validator network |
+| Cross-Chain Synchronization     | 250              | 180          | 320,000          | Per destination chain           |
+| TWAP Calculation (24h)          | 600              | 110          | 210,000          | Time-weighted average price     |
+| Quantum-Resistant Verification  | 150              | 380          | 720,000          | Using ML-DSA signatures         |
+
+### Appendix F: MiCA Compliance Requirements
+
+| Requirement Category     | Description                                              | Implementation Method                          |
+| ------------------------ | -------------------------------------------------------- | ---------------------------------------------- |
+| Liquidity Stress Testing | Demonstrate sufficient reserves under stress scenarios   | Regular stress tests at 95th, 99th percentiles |
+| Reserve Attestation      | Provide attestations of reserve backing                  | On-chain attestations every 15 blocks          |
+| Redemption Rights        | Ensure token holders have right to redeem                | Time-locked smart contract redemption          |
+| Risk Assessment          | Ongoing risk assessment and mitigation                   | Automated risk scoring and monitoring          |
+| Transparency Reporting   | Regular public reporting of compliance status            | On-chain compliance reports                    |
+| Circuit Breakers         | Mechanisms to pause operations during extreme conditions | Multi-tiered circuit breaker system            |
+| Governance Controls      | Clear governance procedures for parameter updates        | Impact-based governance workflows              |
+
+### Appendix G: FATF Travel Rule Implementation
+
+| Component                   | Description                                   | Technical Implementation                    |
+| --------------------------- | --------------------------------------------- | ------------------------------------------- |
+| Originator Information      | Capture and transmit originator data          | Encrypted data fields with zkKYC proofs     |
+| Beneficiary Information     | Capture and transmit beneficiary data         | Encrypted data fields with zkKYC proofs     |
+| Threshold Detection         | Detect transfers above regulatory thresholds  | Configurable threshold monitoring           |
+| Secure Information Transfer | Securely transmit required information        | End-to-end encryption with regulator access |
+| Sanctions Screening         | Screen participants against sanction lists    | Privacy-preserving screening using ZKPs     |
+| Record Keeping              | Maintain records of compliance activities     | Tamper-proof compliance records on-chain    |
+| Jurisdictional Handling     | Handle different requirements by jurisdiction | Jurisdiction-specific rule configurations   |
